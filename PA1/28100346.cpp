@@ -10,21 +10,21 @@ struct Inventory
     int quantity;
 };
 
-struct Order
-{
-    string orderType;
-    int amount;
-};
+// struct Order
+// {
+//     string orderType;
+//     int amount;
+// };
 
 // Funxtion Prototypes
 int MainMenu();
 void PrintMenu();
 void AddProduct(Inventory* inventory, int &inventorySize);
-void AddOrder(Order* orders, int &ordersAmount);
+void AddOrder(Inventory* orders, int &ordersAmount);
 void UpdateProduct(Inventory* inventory);
-void UpdateOrder(Order* orders);
-void DoOrder(Order* orders, int &ordersAmount, Inventory* inventory, int &inventorySize);
-void DoStatusReport(Order* orders, int ordersAmount, Inventory* inventory, int inventorySize);
+void UpdateOrder(Inventory* orders);
+void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &inventorySize);
+void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventorySize);
 Inventory UserQuery();
 
 
@@ -37,7 +37,7 @@ int main()
     Inventory inventory[100];
     int inventorySize = 2;
 
-    Order orders[100];
+    Inventory orders[100];
     int ordersAmount = 2;
 
 
@@ -108,7 +108,7 @@ void PrintMenu()
 }
 
 
-void DoStatusReport(Order* orders, int ordersAmount, Inventory* inventory, int inventorySize)
+void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventorySize)
 {
     cout << "-- Inventory --\n" << endl;
 
@@ -125,8 +125,8 @@ void DoStatusReport(Order* orders, int ordersAmount, Inventory* inventory, int i
 
     for (int i = 0; i < ordersAmount; i++)
     {
-        cout << "-> Order Type: " << orders[i].orderType << endl;
-        cout << "-> Order Amount: " << orders[i].amount << endl;
+        cout << "-> Order Type: " << orders[i].productType << endl;
+        cout << "-> Order Amount: " << orders[i].quantity << endl;
         cout << endl;
     }
 
@@ -164,6 +164,46 @@ void AddProduct(Inventory* inventory, int &inventorySize)
     
     
 
+    
+}
+
+
+Inventory UserQuery()
+{
+    Inventory query;
+    bool dataStored = false;
+
+    do
+    {
+        cout << "Enter Product Type: ";
+        
+        if (!(cin >> query.productType))
+        {
+            cout << "Enter A Valid Option" << endl;
+            cin.clear();  // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore invalid input
+            dataStored = false;
+        }
+        else dataStored = true;
+
+    } while (!dataStored);
+    
+
+    do
+    {
+        cout << "Enter Product Quantity: ";
+
+        if (!(cin >> query.quantity) || query.quantity < 1)
+        {
+            cout << "Enter A Valid Option" << endl;
+            cin.clear();  // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore invalid input
+            dataStored = false;
+        }
+        
+    } while (!dataStored || query.quantity < 1);
+
+    return query;
     
 }
 
