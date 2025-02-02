@@ -21,7 +21,7 @@ int MainMenu();
 void PrintMenu();
 
 // Function Used to Add an "Inventory" type variable to an Array
-void AddUserQuery(Inventory* array, int &arrayUsed);
+void AddUserQuery(Inventory* array, int &arrayUsed, bool addExisting);
 
 // Function Used to Update an "Inventory" Type Varriable in an Array
 void UpdateUserQuery(Inventory* array, int arrayUsed);
@@ -41,14 +41,13 @@ int main()
     inventory->productType = {""};
     inventory->quantity = 0;
 
-    int inventoryUsed = 2;
+    int inventoryUsed = 0;
 
     Inventory orders[999];
     orders->productType = {""};
     orders->quantity = 0;
 
-    int ordersAmount = 2;
-
+    int ordersAmount = 0;
 
     while (!quit)
     {
@@ -57,11 +56,11 @@ int main()
         switch (choice)
         {
         case 1:
-            AddUserQuery(inventory, inventoryUsed);
+            AddUserQuery(inventory, inventoryUsed, true);
             break;
 
         case 2:
-            AddUserQuery(orders, ordersAmount);
+            AddUserQuery(orders, ordersAmount, false);
             break;
 
         case 3:
@@ -75,7 +74,7 @@ int main()
             break;
 
         case 5:
-
+            DoOrder(orders, ordersAmount, inventory, inventoryUsed);
             break;
 
         case 6:
@@ -163,12 +162,12 @@ void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, i
 }
 
 
-void AddUserQuery(Inventory* array, int &arrayUsed)
+void AddUserQuery(Inventory* array, int &arrayUsed, bool addExisting)
 {
     // Check if the Array is Full
     bool full = true;
 
-    for (int i = 0; i < arrayUsed; i++)
+    for (int i = 0; i < 999; i++)
     {
         if (array[i].productType == "")
         {
@@ -178,11 +177,28 @@ void AddUserQuery(Inventory* array, int &arrayUsed)
     
     if (full)
     {
-        // TODO
+        cout << "Storage Space is Full" << endl;
+        cout << "Entry was Not Stored" << endl;
         return;
     }
+
+    Inventory query = UserQuery();
+
+    if (addExisting)
+    {
+        for (int i = 0; i < 999; i++)
+        {
+            if (query.productType == array[i].productType)
+            {
+                array[i].quantity += query.quantity;
+                return;
+            }
+            
+        }
+        
+    }
     
-    array[arrayUsed] = UserQuery();
+    array[arrayUsed] = query;
     arrayUsed++;
     
 }
@@ -226,21 +242,30 @@ void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &in
 
     if (!productAvalible)
     {
-        // TODO: Implement Failure Message
+        // Implement Failure Message
+        cout << "Error: Product Not Found in DataBase" << endl;
+        return;
     }
-    else if (inventory[index].quantity = 0)
+    else if (inventory[index].quantity == 0)
     {
-        // TODO: Implement Failure Message
+        //  Implement Failure Message
+        cout << "Product Out of Stock" << endl;
+        cout << "Order Could Not be Processed" << endl;
+        return;
     }
 
     if (orders[0].quantity > inventory[index].quantity)
     {
-        // TODO: Partial completion
+        // Partial completion
+
+        orders[0].quantity -= inventory[index].quantity;
+        inventory[index].quantity = 0;
+        cout << "Earliest Order Partially Completed" << endl;
+        cout << orders[0].quantity << " - More Product Required" << endl;
+        return;
     }
 
     inventory[index].quantity -= orders[0].quantity;
-    
-    cout << "Earliest Order Completed Successfully" << endl;
 
     // Moving the Entire Order List Up
 
@@ -252,6 +277,8 @@ void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &in
     orders[ordersAmount].productType = "";
     orders[ordersAmount].quantity = 0;
     ordersAmount--;
+
+    cout << "Earliest Order Completed Successfully" << endl;
     
 }
 
@@ -281,7 +308,7 @@ Inventory UserQuery()
     {
         cout << "Enter Product Quantity: ";
 
-        if (!(cin >> query.quantity) || query.quantity < -1)
+        if (!(cin >> query.quantity) || query.quantity < 0)
         {
             cout << "Enter A Valid Option" << endl;
             cin.clear();  // Clear the error flag
@@ -289,7 +316,7 @@ Inventory UserQuery()
             dataStored = false;
         }
         
-    } while (!dataStored || query.quantity < -1);
+    } while (!dataStored || query.quantity < 0);
 
     return query;
     
