@@ -209,8 +209,49 @@ void UpdateUserQuery(Inventory* array, int arrayUsed)
 }
 
 
-void DoOrder(Inventory* orders, int &ordersAmount, Inventory* array, int &arrayUsed)
+void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &inventoryUsed)
 {
+    bool productAvalible = false;
+    int index;
+
+    for (int i = 0; i < inventoryUsed; i++)
+    {
+        if (orders[0].productType == inventory[i].productType)
+        {
+            productAvalible = true;
+            index = i;
+            break;
+        }  
+    }
+
+    if (!productAvalible)
+    {
+        // TODO: Implement Failure Message
+    }
+    else if (inventory[index].quantity = 0)
+    {
+        // TODO: Implement Failure Message
+    }
+
+    if (orders[0].quantity > inventory[index].quantity)
+    {
+        // TODO: Partial completion
+    }
+
+    inventory[index].quantity -= orders[0].quantity;
+    
+    cout << "Earliest Order Completed Successfully" << endl;
+
+    // Moving the Entire Order List Up
+
+    for (int i = 0; i < ordersAmount - 1; i++)
+    {
+        orders[i] = orders[i + 1];
+    }
+
+    orders[ordersAmount].productType = "";
+    orders[ordersAmount].quantity = 0;
+    ordersAmount--;
     
 }
 
