@@ -19,12 +19,15 @@ struct Inventory
 // Funxtion Prototypes
 int MainMenu();
 void PrintMenu();
-void AddProduct(Inventory* inventory, int &inventoryUsed);
-void AddOrder(Inventory* orders, int &ordersAmount);
-void UpdateProduct(Inventory* inventory);
-void UpdateOrder(Inventory* orders);
-void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &inventoryUsed);
-void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventoryUsed);
+
+// Function Used to Add an "Inventory" type variable to an Array
+void AddUserQuery(Inventory* array, int &arrayUsed);
+
+// Function Used to Update an "Inventory" Type Varriable in an Array
+void UpdateUserQuery(Inventory* array, int arrayUsed);
+
+void DoOrder(Inventory* orders, int &ordersAmount, Inventory* array, int &arrayUsed);
+void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* array, int arrayUsed);
 Inventory UserQuery();
 
 
@@ -40,7 +43,7 @@ int main()
 
     int inventoryUsed = 2;
 
-    Inventory* orders = new Inventory[2];
+    Inventory orders[999];
     orders->productType = {""};
     orders->quantity = 0;
 
@@ -54,7 +57,25 @@ int main()
         switch (choice)
         {
         case 1:
-            AddProduct(inventory, inventoryUsed);
+            AddUserQuery(inventory, inventoryUsed);
+            break;
+
+        case 2:
+            AddUserQuery(orders, ordersAmount);
+            break;
+
+        case 3:
+            cout << "Enter Info for Updated Product-" << endl;
+            UpdateUserQuery( inventory, inventoryUsed);
+            break;
+
+        case 4:
+            cout << "Enter Info for Updated Oder-" << endl;
+            UpdateUserQuery( orders, ordersAmount);
+            break;
+
+        case 5:
+
             break;
 
         case 6:
@@ -142,14 +163,14 @@ void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, i
 }
 
 
-void AddProduct(Inventory* inventory, int &inventoryUsed)
+void AddUserQuery(Inventory* array, int &arrayUsed)
 {
     // Check if the Array is Full
     bool full = true;
 
-    for (int i = 0; i < inventoryUsed; i++)
+    for (int i = 0; i < arrayUsed; i++)
     {
-        if (inventory[i].productType == "")
+        if (array[i].productType == "")
         {
             full = false;
         }
@@ -161,8 +182,35 @@ void AddProduct(Inventory* inventory, int &inventoryUsed)
         return;
     }
     
-    inventory[inventoryUsed] = UserQuery();
-    inventoryUsed++;
+    array[arrayUsed] = UserQuery();
+    arrayUsed++;
+    
+}
+
+
+void UpdateUserQuery(Inventory* array, int arrayUsed)
+{
+    Inventory query;
+
+    query = UserQuery();
+
+    for (int i = 0; i < arrayUsed; i++)
+    {
+        if (array[i].productType == query.productType)
+        {
+            array[i] = query;
+            return;
+        }
+        
+    }
+
+    // TODO: Implement Failure Message
+
+}
+
+
+void DoOrder(Inventory* orders, int &ordersAmount, Inventory* array, int &arrayUsed)
+{
     
 }
 
