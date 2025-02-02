@@ -19,12 +19,12 @@ struct Inventory
 // Funxtion Prototypes
 int MainMenu();
 void PrintMenu();
-void AddProduct(Inventory* inventory, int &inventorySize);
+void AddProduct(Inventory* inventory, int &inventoryUsed);
 void AddOrder(Inventory* orders, int &ordersAmount);
 void UpdateProduct(Inventory* inventory);
 void UpdateOrder(Inventory* orders);
-void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &inventorySize);
-void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventorySize);
+void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &inventoryUsed);
+void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventoryUsed);
 Inventory UserQuery();
 
 
@@ -34,10 +34,16 @@ int main()
     bool quit = false;
     int choice = -1;
 
-    Inventory inventory[100];
-    int inventorySize = 2;
+    Inventory inventory[999];
+    inventory->productType = {""};
+    inventory->quantity = 0;
 
-    Inventory orders[100];
+    int inventoryUsed = 2;
+
+    Inventory* orders = new Inventory[2];
+    orders->productType = {""};
+    orders->quantity = 0;
+
     int ordersAmount = 2;
 
 
@@ -48,11 +54,11 @@ int main()
         switch (choice)
         {
         case 1:
-            // TODO
+            AddProduct(inventory, inventoryUsed);
             break;
 
         case 6:
-            DoStatusReport(orders, ordersAmount, inventory, inventorySize);
+            DoStatusReport(orders, ordersAmount, inventory, inventoryUsed);
             break;
 
         case 7:
@@ -66,6 +72,7 @@ int main()
 
     cout << endl;
     cout << "-- GoodBye :) --" << endl;
+    cout << endl;
 
     return 0;
 }
@@ -108,11 +115,11 @@ void PrintMenu()
 }
 
 
-void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventorySize)
+void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, int inventoryUsed)
 {
     cout << "-- Inventory --\n" << endl;
 
-    for (int i = 0; i < inventorySize; i++)
+    for (int i = 0; i < inventoryUsed; i++)
     {
         cout << "-> Product Type: " << inventory[i].productType << endl;
         cout << "-> Product Quantity: " << inventory[i].quantity << endl;
@@ -135,14 +142,14 @@ void DoStatusReport(Inventory* orders, int ordersAmount, Inventory* inventory, i
 }
 
 
-void AddProduct(Inventory* inventory, int &inventorySize)
+void AddProduct(Inventory* inventory, int &inventoryUsed)
 {
     // Check if the Array is Full
     bool full = true;
 
-    for (int i = 0; i < inventorySize; i++)
+    for (int i = 0; i < inventoryUsed; i++)
     {
-        if (inventory[i].productType == "<NONE>")
+        if (inventory[i].productType == "")
         {
             full = false;
         }
@@ -150,20 +157,12 @@ void AddProduct(Inventory* inventory, int &inventorySize)
     
     if (full)
     {
-        // Realocate Memory
-    }
-
-    for (int i = 0; i < inventorySize; i++)
-    {
-        if (inventory[i].productType == "<NONE>")
-        {
-            // Add New Product
-            break;
-        }
+        // TODO
+        return;
     }
     
-    
-
+    inventory[inventoryUsed] = UserQuery();
+    inventoryUsed++;
     
 }
 
@@ -193,7 +192,7 @@ Inventory UserQuery()
     {
         cout << "Enter Product Quantity: ";
 
-        if (!(cin >> query.quantity) || query.quantity < 1)
+        if (!(cin >> query.quantity) || query.quantity < -1)
         {
             cout << "Enter A Valid Option" << endl;
             cin.clear();  // Clear the error flag
@@ -201,7 +200,7 @@ Inventory UserQuery()
             dataStored = false;
         }
         
-    } while (!dataStored || query.quantity < 1);
+    } while (!dataStored || query.quantity < -1);
 
     return query;
     
