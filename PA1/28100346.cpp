@@ -10,12 +10,6 @@ struct Inventory
     int quantity;
 };
 
-// struct Order
-// {
-//     string orderType;
-//     int amount;
-// };
-
 // Funxtion Prototypes
 int MainMenu();
 void PrintMenu();
@@ -220,7 +214,7 @@ void UpdateUserQuery(Inventory* array, int arrayUsed)
         
     }
 
-    // TODO: Implement Failure Message
+    cout << "Error: Product Not Found" << endl;
 
 }
 
@@ -260,6 +254,16 @@ void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &in
 
         orders[0].quantity -= inventory[index].quantity;
         inventory[index].quantity = 0;
+
+        for (int i = index; i < inventoryUsed - 1; i++)
+        {
+            inventory[i] = inventory[i + 1];
+        }
+
+        inventory[inventoryUsed].productType = "";
+        inventory[inventoryUsed].quantity = 0;
+        inventoryUsed--;
+
         cout << "Earliest Order Partially Completed" << endl;
         cout << orders[0].quantity << " - More Product Required" << endl;
         return;
@@ -277,6 +281,18 @@ void DoOrder(Inventory* orders, int &ordersAmount, Inventory* inventory, int &in
     orders[ordersAmount].productType = "";
     orders[ordersAmount].quantity = 0;
     ordersAmount--;
+
+    if (inventory[index].quantity == 0)
+    {
+        for (int i = index; i < inventoryUsed - 1; i++)
+        {
+            inventory[i] = inventory[i + 1];
+        }
+    }
+
+    inventory[inventoryUsed].productType = "";
+    inventory[inventoryUsed].quantity = 0;
+    inventoryUsed--;
 
     cout << "Earliest Order Completed Successfully" << endl;
     
