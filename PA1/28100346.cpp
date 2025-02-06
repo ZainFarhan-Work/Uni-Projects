@@ -10,7 +10,7 @@ struct Inventory
     int quantity;
 };
 
-// Funxtion Prototypes
+// Function Prototypes
 int MainMenu();
 void PrintMenu();
 
@@ -307,11 +307,12 @@ Inventory UserQuery()
 
     cin.clear();
 
+    // I Don't think I need validation here but just in case.
     do
     {
-        cout << "Enter Product Type: ";
+        cout << "Enter Product Type [CAPS Sensitive and No Spaces]: ";
         
-        if (!getline(cin, query.productType))
+        if (!(cin >> query.productType))
         {
             cout << "Enter A Valid Option" << endl;
             cin.clear();  // Clear the error flag
@@ -320,15 +321,12 @@ Inventory UserQuery()
         }
         else
         {
-            dataStored = true;
-            
-            // Remove White Space
-
-            
-            
+            dataStored = true; 
         }
 
     } while (!dataStored);
+
+    cin.clear();
     
 
     do
