@@ -180,8 +180,9 @@ void AddUserQuery(Inventory* array, int &arrayUsed, bool addExisting)
 
     if (addExisting)
     {
-        for (int i = 0; i < 999; i++)
+        for (int i = 0; i < arrayUsed; i++)
         {
+
             if (query.productType == array[i].productType)
             {
                 array[i].quantity += query.quantity;
@@ -304,18 +305,28 @@ Inventory UserQuery()
     Inventory query;
     bool dataStored = false;
 
+    cin.clear();
+
     do
     {
         cout << "Enter Product Type: ";
         
-        if (!(cin >> query.productType))
+        if (!getline(cin, query.productType))
         {
             cout << "Enter A Valid Option" << endl;
             cin.clear();  // Clear the error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignore invalid input
             dataStored = false;
         }
-        else dataStored = true;
+        else
+        {
+            dataStored = true;
+            
+            // Remove White Space
+
+            
+            
+        }
 
     } while (!dataStored);
     
