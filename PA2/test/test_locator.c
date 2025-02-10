@@ -150,35 +150,34 @@ int testGet(Locator* map, char* identifiers[], void* addresses[]){
     return marks;
 }
 
-int test_clearMap() {
-    size_t map_size = 3;
-    Locator map[map_size];
+int test_clearMap(char* identifiers[], void* addresses[] ) {
     int marks = 0;
 
-    for (size_t i = 0; i < map_size; i++) {
-        map[i].identifier = "SomeIdentifier";
-        map[i].address = (uintptr_t)&map[i];
+    Locator* map = initializeMap(3, addresses[0], identifiers[0]);
+    for(int i = 1; i < 4; i++){
+        makeEntry(&map, addresses[i], identifiers[i]);
     }
-
     clearMap(map);
-
-    for (size_t i = 0; i < map_size; i++) {
-        if (map[i].identifier != NULL || map[i].address != 0) {
-            marks += 0;
-            printf(" %d/%d\n", marks, 3);
-            return marks;
+    int not_null = -1;
+    for(int i = 0; i < 4; i++){
+        uintptr_t j = getAddress(map, i);
+        if (j){
+            not_null = 1;
+        }
+        char* k = getIdentifier(map, i);
+        if (k){
+            not_null = 1;
         }
     }
 
-    if (map_size != 3) {
-        marks += 0;
-        printf(" %d/%d\n", marks, 3);
-        return marks;
+    if (not_null == -1){
+        marks +=3 ;
     }
-
-    marks += 3;
+    
     printf(" %d/%d\n", marks, 3);
+    releaseMap(map);
     return marks;
+    
 }
 
 int main(){
@@ -207,7 +206,7 @@ int main(){
     total += testGet(map, identifiers_test, addresses_test);
 
     printf("\033[35mTesting clear map:\033[0m");
-    total += test_clearMap();
+    total += test_clearMap(identifiers, addresses);
 
     printf("\033[33musing release_map() at the end\033[0m\n");
 

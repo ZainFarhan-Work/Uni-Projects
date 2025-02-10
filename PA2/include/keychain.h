@@ -19,7 +19,7 @@ KeyChain* findKeyChain(KeyChain* origin, int index);
 
 void keyChainMoveData(KeyChain* src, KeyChain* dest);
 
-void keyChainClearData(KeyChain* key_chain);
+void keyChainClearData(KeyChain* origin);
 
 void keyChainCompleteRelease(KeyChain* origin);
 

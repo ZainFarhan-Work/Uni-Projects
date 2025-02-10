@@ -15,7 +15,7 @@ void keyStoreData(Key* key, void* data);
 
 void keyAccessData(Key* key, void* var, DataType type, int units);
 
-int getSize(Key* key);
+int getKeySize(Key* key);
 
 void* getLocker(Key* key);
 

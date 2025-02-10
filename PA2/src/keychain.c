@@ -10,47 +10,47 @@ typedef struct KeyChain{
 } KeyChain;
 
 KeyChain* initializeKeyChain(DataType type, int units, void* data){
-
+    
 }
 
 KeyChain* keyChainMalloc(DataType type, int units, KeyChain* origin){
-
+    
 }
 
 void keyChainFree(KeyChain* key_chain, KeyChain* origin){
-   
+    
 }
 
 void keyChainStoreData(KeyChain* key_chain, void* data){
-
+    
 }
 
 void keyChainAccessData(KeyChain* key_chain, void* dest){
     
 }
 
-KeyChain* findKeyChain(KeyChain* origin, int index){
-
+KeyChain* findKeyChain(KeyChain* origin, int index) {
+    
 }
 
-void keyChainMoveData(KeyChain* src, KeyChain* dest){
-
+void keyChainMoveData(KeyChain* src, KeyChain* dest) {
+   
 }
 
 KeyChain* getNext(KeyChain* key_chain){
-    
+   
 }
 
 KeyChain* getPrevious(KeyChain* key_chain, KeyChain* origin){
-    
-}
-
-void keyChainClearData(KeyChain* key_chain){
-
-}
-
-void keyChainCompleteRelease(KeyChain* origin){
    
+}
+
+void keyChainClearData(KeyChain* origin) {
+    // clear the whole linked list
+}
+
+void keyChainCompleteRelease(KeyChain* origin) {
+    
 }
 
 /*

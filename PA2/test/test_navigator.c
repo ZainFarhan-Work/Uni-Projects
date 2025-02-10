@@ -1,4 +1,5 @@
 #include "../src/navigator.c"
+#include "../src/escape.c"
 
 int testInitialize(VaultNavigator* v_ptr, char* identifier, int units){
     int marks = 0;  
@@ -216,6 +217,8 @@ int testFree(VaultNavigator* v_ptr, char* identifiers[]){
     if(valid){
         marks += 4;
     }
+    
+    completeDeallocation(&v_ptr);
 
     printf(" %d/%d\n", marks, 4);
     return marks;

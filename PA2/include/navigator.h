@@ -4,7 +4,10 @@
 #include "../include/keychain.h"
 #include "../include/locator.h"
 
-typedef struct VaultNavigator VaultNavigator;
+typedef struct VaultNavigator{
+    KeyChain* key_chain;
+    Locator* map;
+} VaultNavigator;
 
 VaultNavigator* initializeNavigator(int num_allocations);
 
