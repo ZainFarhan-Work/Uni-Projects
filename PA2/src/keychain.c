@@ -11,31 +11,20 @@ typedef struct KeyChain{
 
 KeyChain* initializeKeyChain(DataType type, int units, void* data)
 {
-    printf("Initializing KeyChain...\n");
 
     KeyChain* origin = (KeyChain*) malloc(sizeof(KeyChain));
 
     if (origin == NULL)
     {
-        printf("Memory allocation failed for KeyChain!\n");
         return NULL;
     }
-
-    printf("Key initialized.\n");
 
     origin->key = initializeKey(type, units, data);
 
-    if (origin->key == NULL) {
-        printf("Failed to initialize Key!\n");
-        free(origin);
-        return NULL;
-    }
-
+    origin->type = type;
     origin->units = units;
     origin->index = 0;
     origin->next = NULL;
-
-    printf("KeyChain initialized successfully.\n");
     
     return origin;
 
@@ -44,24 +33,24 @@ KeyChain* initializeKeyChain(DataType type, int units, void* data)
 KeyChain* keyChainMalloc(DataType type, int units, KeyChain* origin)
 {
     KeyChain* new = (KeyChain*) malloc(sizeof(KeyChain));
-    // int index = 0;
+    int index = 0;
 
-    // new->key = initializeKey(type, units, NULL);
-    // new->units = units;
-    // new->next = NULL;
+    new->key = initializeKey(type, units, NULL);
+    new->units = units;
+    new->next = NULL;
 
-    // KeyChain* temp;
+    KeyChain* temp;
 
-    // temp = origin;
+    temp = origin;
 
-    // while (temp->next != NULL)
-    // {
-    //     temp = temp->next;
-    //     index++;
-    // }
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+        index++;
+    }
 
-    // // temp->next = new;
-    // new->index = index;
+    // temp->next = new;
+    new->index = index;
 
     return new;
     
