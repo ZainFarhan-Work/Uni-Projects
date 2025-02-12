@@ -33,11 +33,18 @@ KeyChain* initializeKeyChain(DataType type, int units, void* data)
 KeyChain* keyChainMalloc(DataType type, int units, KeyChain* origin)
 {
     KeyChain* new = (KeyChain*) malloc(sizeof(KeyChain));
-    int index = 0;
+    int index = 1;
 
     new->key = initializeKey(type, units, NULL);
+    new->type = type;
     new->units = units;
+    new->index = 0;
     new->next = NULL;
+
+    if (origin == NULL)
+    {
+        return NULL;
+    }
 
     KeyChain* temp;
 
@@ -49,46 +56,140 @@ KeyChain* keyChainMalloc(DataType type, int units, KeyChain* origin)
         index++;
     }
 
-    // temp->next = new;
     new->index = index;
+    temp->next = new;
 
     return new;
     
 }
 
-void keyChainFree(KeyChain* key_chain, KeyChain* origin){
+void keyChainFree(KeyChain* key_chain, KeyChain* origin)
+{
+    if (origin == NULL)
+    {
+        return;
+    }
+    
+    keyFree(key_chain->key);
+    KeyChain* temp = origin;    
+
+    while (temp->next != key_chain)
+    {
+        temp = temp->next;
+    }
+
+    temp->next = key_chain->next;
+    free(key_chain);
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+        temp->index--;
+    }
     
 }
 
-void keyChainStoreData(KeyChain* key_chain, void* data){
+void keyChainStoreData(KeyChain* key_chain, void* data)
+{
+    keyStoreData(key_chain->key, data);
     
 }
 
-void keyChainAccessData(KeyChain* key_chain, void* dest){
+void keyChainAccessData(KeyChain* key_chain, void* dest)
+{
+    keyAccessData(key_chain->key, dest, key_chain->type, key_chain->units);  
+}
+
+KeyChain* findKeyChain(KeyChain* origin, int index)
+{
+    if (origin == NULL || index < 0)
+    {
+        return NULL;
+    }
+    
+    KeyChain* temp = origin;
+
+    while (temp->next != NULL && temp->index != index)
+    {
+        temp = temp->next;
+    }
+
+    if (temp->index == index)
+    {
+        return temp;
+    }
+    
+
+    return NULL;
     
 }
 
-KeyChain* findKeyChain(KeyChain* origin, int index) {
-    
+void keyChainMoveData(KeyChain* src, KeyChain* dest)
+{
+    void* src_data = malloc(src->units * sizeof(getSize(src->type)));
+
+    keyChainAccessData( src, src_data);
+
+    keyStoreData(dest->key, (void*) src_data);
+
+    free(src_data);
 }
 
-void keyChainMoveData(KeyChain* src, KeyChain* dest) {
+KeyChain* getNext(KeyChain* key_chain)
+{
+    KeyChain* temp = findKeyChain(key_chain, key_chain->index + 1);
+
+    return temp;
    
 }
 
-KeyChain* getNext(KeyChain* key_chain){
-   
+KeyChain* getPrevious(KeyChain* key_chain, KeyChain* origin)
+{
+    KeyChain* temp = findKeyChain(origin, key_chain->index - 1);
+
+    return temp;
 }
 
-KeyChain* getPrevious(KeyChain* key_chain, KeyChain* origin){
-   
-}
-
-void keyChainClearData(KeyChain* origin) {
+void keyChainClearData(KeyChain* origin)
+{
     // clear the whole linked list
+
+    if (origin == NULL)
+    {
+        return;
+    }
+    
+    KeyChain* temp = origin;
+
+    while (temp != NULL)
+    {
+        temp->units = 0;
+        temp = temp->next;
+    }
+    
 }
 
-void keyChainCompleteRelease(KeyChain* origin) {
+void keyChainCompleteRelease(KeyChain* origin)
+{
+    if (origin == NULL)
+    {
+        return;
+    }
+    
+    KeyChain* temp = origin;
+    KeyChain* temp2;
+
+    do
+    {
+        temp2 = temp;
+
+        keyFree(temp2->key);
+        free(temp2);
+        
+        temp = temp->next;
+
+    } while (temp != NULL);
+    
     
 }
 
