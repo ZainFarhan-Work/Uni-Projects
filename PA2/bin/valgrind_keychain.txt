@@ -1,80 +1,80 @@
-==126== Memcheck, a memory error detector
-==126== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==126== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==126== Command: ./bin/test_keychain
-==126== 
-==126== Invalid read of size 1
-==126==    at 0x10951E: keyStoreData (key.c:98)
-==126==    by 0x1098FA: keyChainMoveData (keychain.c:139)
-==126==    by 0x10A2AC: testMoveData (test_keychain.c:218)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126==  Address 0x4a8b144 is 0 bytes after a block of size 4 alloc'd
-==126==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x1098CD: keyChainMoveData (keychain.c:135)
-==126==    by 0x10A2AC: testMoveData (test_keychain.c:218)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126== 
-==126== Invalid read of size 1
-==126==    at 0x484FBF0: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x10A2F8: testMoveData (test_keychain.c:224)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126==  Address 0x4a8a734 is 0 bytes after a block of size 4 alloc'd
-==126==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x109351: initializeKey (key.c:41)
-==126==    by 0x1096C4: keyChainMalloc (keychain.c:49)
-==126==    by 0x10A6AF: main (test_keychain.c:317)
-==126== 
-==126== Invalid write of size 1
-==126==    at 0x1095A6: keyAccessData (key.c:110)
-==126==    by 0x109836: keyChainAccessData (keychain.c:106)
-==126==    by 0x1098E4: keyChainMoveData (keychain.c:137)
-==126==    by 0x10A334: testMoveData (test_keychain.c:229)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126==  Address 0x4a8b308 is 0 bytes after a block of size 8 alloc'd
-==126==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x1098CD: keyChainMoveData (keychain.c:135)
-==126==    by 0x10A334: testMoveData (test_keychain.c:229)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126== 
-==126== Invalid read of size 1
-==126==    at 0x10951E: keyStoreData (key.c:98)
-==126==    by 0x1098FA: keyChainMoveData (keychain.c:139)
-==126==    by 0x10A334: testMoveData (test_keychain.c:229)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126==  Address 0x4a8b308 is 0 bytes after a block of size 8 alloc'd
-==126==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x1098CD: keyChainMoveData (keychain.c:135)
-==126==    by 0x10A334: testMoveData (test_keychain.c:229)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126== 
-==126== Invalid read of size 1
-==126==    at 0x484FBF0: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x10A380: testMoveData (test_keychain.c:235)
-==126==    by 0x10A7D5: main (test_keychain.c:335)
-==126==  Address 0x4a8a840 is 0 bytes after a block of size 16 alloc'd
-==126==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x109351: initializeKey (key.c:41)
-==126==    by 0x1096C4: keyChainMalloc (keychain.c:49)
-==126==    by 0x10A6C6: main (test_keychain.c:318)
-==126== 
-==126== Invalid read of size 8
-==126==    at 0x1099F8: keyChainCompleteRelease (keychain.c:195)
-==126==    by 0x10A835: main (test_keychain.c:343)
-==126==  Address 0x4a8a498 is 24 bytes inside a block of size 32 free'd
-==126==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x1099F3: keyChainCompleteRelease (keychain.c:193)
-==126==    by 0x10A835: main (test_keychain.c:343)
-==126==  Block was alloc'd at
-==126==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==126==    by 0x109606: initializeKeyChain (keychain.c:15)
-==126==    by 0x10A668: main (test_keychain.c:313)
-==126== 
-==126== 
-==126== HEAP SUMMARY:
-==126==     in use at exit: 0 bytes in 0 blocks
-==126==   total heap usage: 45 allocs, 45 frees, 6,584 bytes allocated
-==126== 
-==126== All heap blocks were freed -- no leaks are possible
-==126== 
-==126== For lists of detected and suppressed errors, rerun with: -s
-==126== ERROR SUMMARY: 185 errors from 6 contexts (suppressed: 0 from 0)
+==140== Memcheck, a memory error detector
+==140== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==140== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==140== Command: ./bin/test_keychain
+==140== 
+==140== Invalid read of size 1
+==140==    at 0x10951E: keyStoreData (key.c:98)
+==140==    by 0x1098FA: keyChainMoveData (keychain.c:139)
+==140==    by 0x10A2AC: testMoveData (test_keychain.c:218)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140==  Address 0x4a8b144 is 0 bytes after a block of size 4 alloc'd
+==140==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x1098CD: keyChainMoveData (keychain.c:135)
+==140==    by 0x10A2AC: testMoveData (test_keychain.c:218)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140== 
+==140== Invalid read of size 1
+==140==    at 0x484FBF0: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x10A2F8: testMoveData (test_keychain.c:224)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140==  Address 0x4a8a734 is 0 bytes after a block of size 4 alloc'd
+==140==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x109351: initializeKey (key.c:41)
+==140==    by 0x1096C4: keyChainMalloc (keychain.c:49)
+==140==    by 0x10A6AF: main (test_keychain.c:317)
+==140== 
+==140== Invalid write of size 1
+==140==    at 0x1095A6: keyAccessData (key.c:110)
+==140==    by 0x109836: keyChainAccessData (keychain.c:106)
+==140==    by 0x1098E4: keyChainMoveData (keychain.c:137)
+==140==    by 0x10A334: testMoveData (test_keychain.c:229)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140==  Address 0x4a8b308 is 0 bytes after a block of size 8 alloc'd
+==140==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x1098CD: keyChainMoveData (keychain.c:135)
+==140==    by 0x10A334: testMoveData (test_keychain.c:229)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140== 
+==140== Invalid read of size 1
+==140==    at 0x10951E: keyStoreData (key.c:98)
+==140==    by 0x1098FA: keyChainMoveData (keychain.c:139)
+==140==    by 0x10A334: testMoveData (test_keychain.c:229)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140==  Address 0x4a8b308 is 0 bytes after a block of size 8 alloc'd
+==140==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x1098CD: keyChainMoveData (keychain.c:135)
+==140==    by 0x10A334: testMoveData (test_keychain.c:229)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140== 
+==140== Invalid read of size 1
+==140==    at 0x484FBF0: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x10A380: testMoveData (test_keychain.c:235)
+==140==    by 0x10A7D5: main (test_keychain.c:335)
+==140==  Address 0x4a8a840 is 0 bytes after a block of size 16 alloc'd
+==140==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x109351: initializeKey (key.c:41)
+==140==    by 0x1096C4: keyChainMalloc (keychain.c:49)
+==140==    by 0x10A6C6: main (test_keychain.c:318)
+==140== 
+==140== Invalid read of size 8
+==140==    at 0x1099F8: keyChainCompleteRelease (keychain.c:195)
+==140==    by 0x10A835: main (test_keychain.c:343)
+==140==  Address 0x4a8a498 is 24 bytes inside a block of size 32 free'd
+==140==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x1099F3: keyChainCompleteRelease (keychain.c:193)
+==140==    by 0x10A835: main (test_keychain.c:343)
+==140==  Block was alloc'd at
+==140==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==140==    by 0x109606: initializeKeyChain (keychain.c:15)
+==140==    by 0x10A668: main (test_keychain.c:313)
+==140== 
+==140== 
+==140== HEAP SUMMARY:
+==140==     in use at exit: 0 bytes in 0 blocks
+==140==   total heap usage: 45 allocs, 45 frees, 6,584 bytes allocated
+==140== 
+==140== All heap blocks were freed -- no leaks are possible
+==140== 
+==140== For lists of detected and suppressed errors, rerun with: -s
+==140== ERROR SUMMARY: 185 errors from 6 contexts (suppressed: 0 from 0)

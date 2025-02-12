@@ -10,7 +10,14 @@ typedef struct Locator {
 
 } Locator;
 
-Locator* initializeMap(int num_allocations, void* addr, char* identifier){
+Locator* initializeMap(int num_allocations, void* addr, char* identifier)
+{
+    Locator* map = (Locator*) malloc(num_allocations * sizeof(Locator));
+
+    map->identifier = identifier;
+    map->address = (uintptr_t) addr;
+
+    return map;
     
 }
 
@@ -18,7 +25,9 @@ void releaseMap(Locator* map){
     
 }
 
-void clearMap(Locator* map){
+void clearMap(Locator* map)
+{
+    // free(map);
     
 }
 
@@ -26,7 +35,9 @@ Locator* resizeMap(Locator* map, int new_num_allocs){
     
 }
 
-void makeEntry(Locator** map, void* addr, char* identifier){
+void makeEntry(Locator** map, void* addr, char* identifier)
+{
+    
     
 }
 
