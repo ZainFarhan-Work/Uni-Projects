@@ -33,6 +33,12 @@ KeyChain* initializeKeyChain(DataType type, int units, void* data)
 KeyChain* keyChainMalloc(DataType type, int units, KeyChain* origin)
 {
     KeyChain* new = (KeyChain*) malloc(sizeof(KeyChain));
+
+    if (new == NULL)
+    {
+        return NULL;
+    }
+    
     int index = 1;
 
     new->key = initializeKey(type, units, NULL);
@@ -126,13 +132,15 @@ KeyChain* findKeyChain(KeyChain* origin, int index)
 
 void keyChainMoveData(KeyChain* src, KeyChain* dest)
 {
-    void* src_data = malloc(src->units * sizeof(getSize(src->type)));
+    // keyStoreData(dest->key, getLocker(src->key));
 
-    keyChainAccessData( src, src_data);
+    // void* src_data = malloc(src->units * sizeof(getSize(src->type)));
 
-    keyStoreData(dest->key, (void*) src_data);
+    // keyChainAccessData( src, src_data);
 
-    free(src_data);
+    // keyStoreData(dest->key, (void*) src_data);
+
+    // free(src_data);
 }
 
 KeyChain* getNext(KeyChain* key_chain)
@@ -189,7 +197,6 @@ void keyChainCompleteRelease(KeyChain* origin)
         temp = temp->next;
 
     } while (temp != NULL);
-    
     
 }
 
