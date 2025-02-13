@@ -1,95 +1,64 @@
-==159== Memcheck, a memory error detector
-==159== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==159== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==159== Command: ./bin/test_map
-==159== 
-==159== Conditional jump or move depends on uninitialised value(s)
-==159==    at 0x109400: testInitialize (test_locator.c:12)
-==159==    by 0x109D86: main (test_locator.c:193)
-==159==  Uninitialised value was created by a heap allocation
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109290: initializeMap (locator.c:15)
-==159==    by 0x109D66: main (test_locator.c:192)
-==159== 
-==159== Conditional jump or move depends on uninitialised value(s)
-==159==    at 0x10941B: testInitialize (test_locator.c:12)
-==159==    by 0x109D86: main (test_locator.c:193)
-==159==  Uninitialised value was created by a heap allocation
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109290: initializeMap (locator.c:15)
-==159==    by 0x109D66: main (test_locator.c:192)
-==159== 
-==159== Invalid read of size 8
-==159==    at 0x1093F9: testInitialize (test_locator.c:12)
-==159==    by 0x109D86: main (test_locator.c:193)
-==159==  Address 0x4a8a4b8 is 8 bytes after a block of size 48 alloc'd
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109290: initializeMap (locator.c:15)
-==159==    by 0x109D66: main (test_locator.c:192)
-==159== 
-==159== Invalid read of size 8
-==159==    at 0x109415: testInitialize (test_locator.c:12)
-==159==    by 0x109D86: main (test_locator.c:193)
-==159==  Address 0x4a8a4b0 is 0 bytes after a block of size 48 alloc'd
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109290: initializeMap (locator.c:15)
-==159==    by 0x109D66: main (test_locator.c:192)
-==159== 
-==159== Use of uninitialised value of size 8
-==159==    at 0x484FBD4: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109510: testMake (test_locator.c:36)
-==159==    by 0x109DBD: main (test_locator.c:196)
-==159==  Uninitialised value was created by a heap allocation
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109290: initializeMap (locator.c:15)
-==159==    by 0x109D66: main (test_locator.c:192)
-==159== 
-==159== Invalid read of size 1
-==159==    at 0x484FBD4: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109510: testMake (test_locator.c:36)
-==159==    by 0x109DBD: main (test_locator.c:196)
-==159==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==159== 
-==159== 
-==159== Process terminating with default action of signal 11 (SIGSEGV): dumping core
-==159==  Access not within mapped region at address 0x0
-==159==    at 0x484FBD4: strcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109510: testMake (test_locator.c:36)
-==159==    by 0x109DBD: main (test_locator.c:196)
-==159==  If you believe this happened as a result of a stack
-==159==  overflow in your program's main thread (unlikely but
-==159==  possible), you can try to increase the size of the
-==159==  main thread stack using the --main-stacksize= flag.
-==159==  The main thread stack size used in this run was 8388608.
-==159== 
-==159== HEAP SUMMARY:
-==159==     in use at exit: 1,072 bytes in 2 blocks
-==159==   total heap usage: 2 allocs, 0 frees, 1,072 bytes allocated
-==159== 
-==159== 48 bytes in 1 blocks are still reachable in loss record 1 of 2
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x109290: initializeMap (locator.c:15)
-==159==    by 0x109D66: main (test_locator.c:192)
-==159== 
-==159== 1,024 bytes in 1 blocks are still reachable in loss record 2 of 2
-==159==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==159==    by 0x48DCBA3: _IO_file_doallocate (filedoalloc.c:101)
-==159==    by 0x48EBCDF: _IO_doallocbuf (genops.c:347)
-==159==    by 0x48EAF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
-==159==    by 0x48E96D4: _IO_new_file_xsputn (fileops.c:1243)
-==159==    by 0x48E96D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
-==159==    by 0x48D314C: outstring_func (vfprintf-internal.c:239)
-==159==    by 0x48D314C: __vfprintf_internal (vfprintf-internal.c:1263)
-==159==    by 0x48BE79E: printf (printf.c:33)
-==159==    by 0x109BB1: main (test_locator.c:184)
-==159== 
-==159== LEAK SUMMARY:
-==159==    definitely lost: 0 bytes in 0 blocks
-==159==    indirectly lost: 0 bytes in 0 blocks
-==159==      possibly lost: 0 bytes in 0 blocks
-==159==    still reachable: 1,072 bytes in 2 blocks
-==159==         suppressed: 0 bytes in 0 blocks
-==159== 
-==159== For lists of detected and suppressed errors, rerun with: -s
-==159== ERROR SUMMARY: 8 errors from 6 contexts (suppressed: 0 from 0)
+==87== Memcheck, a memory error detector
+==87== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==87== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==87== Command: ./bin/test_map
+==87== 
+==87== Use of uninitialised value of size 8
+==87==    at 0x1093C7: resizeMap (locator.c:58)
+==87==    by 0x10A008: main (test_locator.c:199)
+==87==  Uninitialised value was created by a stack allocation
+==87==    at 0x10935F: resizeMap (locator.c:48)
+==87== 
+==87== Invalid write of size 8
+==87==    at 0x1093C7: resizeMap (locator.c:58)
+==87==    by 0x10A008: main (test_locator.c:199)
+==87==  Address 0x400000001 is not stack'd, malloc'd or (recently) free'd
+==87== 
+==87== 
+==87== Process terminating with default action of signal 11 (SIGSEGV): dumping core
+==87==  Access not within mapped region at address 0x400000001
+==87==    at 0x1093C7: resizeMap (locator.c:58)
+==87==    by 0x10A008: main (test_locator.c:199)
+==87==  If you believe this happened as a result of a stack
+==87==  overflow in your program's main thread (unlikely but
+==87==  possible), you can try to increase the size of the
+==87==  main thread stack using the --main-stacksize= flag.
+==87==  The main thread stack size used in this run was 8388608.
+==87== 
+==87== HEAP SUMMARY:
+==87==     in use at exit: 1,216 bytes in 3 blocks
+==87==   total heap usage: 3 allocs, 0 frees, 1,216 bytes allocated
+==87== 
+==87== 80 bytes in 1 blocks are still reachable in loss record 1 of 3
+==87==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==87==    by 0x109293: initializeMap (locator.c:15)
+==87==    by 0x109FA6: main (test_locator.c:192)
+==87== 
+==87== 112 bytes in 1 blocks are still reachable in loss record 2 of 3
+==87==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==87==    by 0x109293: initializeMap (locator.c:15)
+==87==    by 0x109385: resizeMap (locator.c:49)
+==87==    by 0x10A008: main (test_locator.c:199)
+==87== 
+==87== 1,024 bytes in 1 blocks are still reachable in loss record 3 of 3
+==87==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==87==    by 0x48DCBA3: _IO_file_doallocate (filedoalloc.c:101)
+==87==    by 0x48EBCDF: _IO_doallocbuf (genops.c:347)
+==87==    by 0x48EAF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==87==    by 0x48E96D4: _IO_new_file_xsputn (fileops.c:1243)
+==87==    by 0x48E96D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==87==    by 0x48D314C: outstring_func (vfprintf-internal.c:239)
+==87==    by 0x48D314C: __vfprintf_internal (vfprintf-internal.c:1263)
+==87==    by 0x48BE79E: printf (printf.c:33)
+==87==    by 0x109DF1: main (test_locator.c:184)
+==87== 
+==87== LEAK SUMMARY:
+==87==    definitely lost: 0 bytes in 0 blocks
+==87==    indirectly lost: 0 bytes in 0 blocks
+==87==      possibly lost: 0 bytes in 0 blocks
+==87==    still reachable: 1,216 bytes in 3 blocks
+==87==         suppressed: 0 bytes in 0 blocks
+==87== 
+==87== For lists of detected and suppressed errors, rerun with: -s
+==87== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 Segmentation fault (core dumped)
