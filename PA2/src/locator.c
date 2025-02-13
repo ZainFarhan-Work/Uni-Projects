@@ -10,6 +10,7 @@ typedef struct Locator {
 
 } Locator;
 
+
 Locator* initializeMap(int num_allocations, void* addr, char* identifier)
 {
     Locator* map = (Locator*) malloc((num_allocations + 2) * sizeof(Locator));
@@ -34,15 +35,33 @@ Locator* initializeMap(int num_allocations, void* addr, char* identifier)
     
 }
 
-void releaseMap(Locator* map){
-    
+
+void releaseMap(Locator* map)
+{
+    free(map); 
 }
+
 
 void clearMap(Locator* map)
 {
-    // free(map);
-    
+    Locator* temp;
+    int count = -1;
+
+    do
+    {
+        count++;
+        temp = map + count;
+
+        if (strcmp(temp->identifier, "END"))
+        {
+            temp->identifier = NULL;
+            temp->address = (uintptr_t) NULL;   
+        }
+
+    } while (temp->identifier != "END");
+
 }
+
 
 Locator* resizeMap(Locator* map, int new_num_allocs)
 {
@@ -55,19 +74,20 @@ Locator* resizeMap(Locator* map, int new_num_allocs)
         count++;
         temp = map + count;
 
-        if (temp->identifier != "END")
+        if (strcmp(temp->identifier, "END"))
         {
             new_map[count] = *temp;
         }
         
 
-    } while (temp->identifier != "END");
+    } while (strcmp(temp->identifier, "END"));
 
-    clearMap(map);
+    releaseMap(map);
 
     return new_map;
     
 }
+
 
 void makeEntry(Locator** map, void* addr, char* identifier)
 {
@@ -79,7 +99,7 @@ void makeEntry(Locator** map, void* addr, char* identifier)
         count++;
         temp = *map + count;
 
-    } while (temp->identifier != NULL && temp->identifier != "END");
+    } while (temp->identifier != NULL && strcmp(temp->identifier, "END"));
 
     if (temp->identifier == "END")
     {
@@ -101,17 +121,107 @@ void makeEntry(Locator** map, void* addr, char* identifier)
     
 }
 
-void removeEntry(Locator* map, char* identifier){
+
+void removeEntry(Locator* map, char* identifier)
+{
+    Locator* temp;
+    int count = -1;
+
+    if (map[0].identifier == identifier)
+    {
+        // Check if the Rest of the Array is Empty
+        int empty = 1;
+
+        do
+        {
+            count++;
+            temp = map + count;
+
+            if (temp->identifier != NULL)
+            {
+                empty = 0;
+                break;
+            }
+
+        } while (temp->identifier != "END");
+
+        if (empty)
+        {
+            map[0].identifier = NULL;
+            map[0].address = (uintptr_t) NULL;
+            return;
+        }
+
+        return;
+        
+    }
+    
+    do
+    {
+        count++;
+        temp = map + count;
+
+    } while (temp->identifier != identifier && temp->identifier != "END");
+
+    if (temp->identifier == "END")
+    {
+        return;
+    }
+
+    do
+    {
+        if (map[count + 1].identifier != "END")
+        {
+            temp->identifier = map[count + 1].identifier;
+            temp->address = map[count + 1].address;
+        }
+        else
+        {
+            temp->identifier = NULL;
+            temp->address = (uintptr_t) NULL;
+        }
+        
+        count++;
+        temp = map + count;
+
+    } while (temp->identifier != "END");
      
 }
 
-void* getOrigin(Locator* map){
+
+void* getOrigin(Locator* map)
+{
+    if (map[0].identifier == NULL)
+    {
+        return NULL;
+    }
+
+    return (void*) map[0].address;
     
 }
 
-void* getPointer(Locator* map, char* identifier){
+
+void* getPointer(Locator* map, char* identifier)
+{
+    Locator* temp;
+    int count = -1;
+
+    do
+    {
+        count++;
+        temp = map + count;
+
+    } while (temp->identifier != identifier && temp->identifier != "END");
+
+    if (temp->identifier == "END")
+    {
+        return NULL;
+    }
+
+    return (void*) temp->address;
    
 }
+
 
 /*
 ------------------------------------------------------------------------------
