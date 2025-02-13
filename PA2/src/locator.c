@@ -52,7 +52,7 @@ void clearMap(Locator* map)
         count++;
         temp = map + count;
 
-        if (strcmp(temp->identifier, "END"))
+        if (temp->identifier != "END")
         {
             temp->identifier = NULL;
             temp->address = (uintptr_t) NULL;   
@@ -74,13 +74,13 @@ Locator* resizeMap(Locator* map, int new_num_allocs)
         count++;
         temp = map + count;
 
-        if (strcmp(temp->identifier, "END"))
+        if (temp->identifier != "END")
         {
             new_map[count] = *temp;
         }
         
 
-    } while (strcmp(temp->identifier, "END"));
+    } while (temp->identifier != "END");
 
     releaseMap(map);
 
@@ -99,7 +99,7 @@ void makeEntry(Locator** map, void* addr, char* identifier)
         count++;
         temp = *map + count;
 
-    } while (temp->identifier != NULL && strcmp(temp->identifier, "END"));
+    } while (temp->identifier != NULL && temp->identifier != "END");
 
     if (temp->identifier == "END")
     {
