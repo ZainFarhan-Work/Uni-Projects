@@ -22,7 +22,7 @@ Locator* initializeMap(int num_allocations, void* addr, char* identifier)
     for (int i = 0; i < num_allocations + 1; i++)
     {
         map[i].identifier = NULL;
-        map[i].address = NULL;
+        map[i].address = (uintptr_t) NULL;
     }
 
     map[0].identifier = identifier;
@@ -40,22 +40,20 @@ void releaseMap(Locator* map){
 
 void clearMap(Locator* map)
 {
-    free(map);
+    // free(map);
     
 }
 
 Locator* resizeMap(Locator* map, int new_num_allocs)
 {
     Locator* new_map = initializeMap(new_num_allocs, NULL, NULL);
-
     Locator* temp;
     int count = -1;
-    printf("Here");
     
     do
     {
         count++;
-        *temp = map[count];
+        temp = map + count;
 
         if (temp->identifier != "END")
         {
@@ -75,17 +73,16 @@ void makeEntry(Locator** map, void* addr, char* identifier)
 {
     int count = -1;
     Locator* temp;
-
+    
     do
     {
         count++;
         temp = *map + count;
 
-    } while (/*temp->identifier != NULL &&*/ temp->identifier != "END");
+    } while (temp->identifier != NULL && temp->identifier != "END");
 
     if (temp->identifier == "END")
     {
-        printf("Here: %d", count);
         *map = resizeMap(*map, (count - 1) * 2);
 
         count = -1;

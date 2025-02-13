@@ -1,64 +1,44 @@
-==87== Memcheck, a memory error detector
-==87== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==87== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==87== Command: ./bin/test_map
-==87== 
-==87== Use of uninitialised value of size 8
-==87==    at 0x1093C7: resizeMap (locator.c:58)
-==87==    by 0x10A008: main (test_locator.c:199)
-==87==  Uninitialised value was created by a stack allocation
-==87==    at 0x10935F: resizeMap (locator.c:48)
-==87== 
-==87== Invalid write of size 8
-==87==    at 0x1093C7: resizeMap (locator.c:58)
-==87==    by 0x10A008: main (test_locator.c:199)
-==87==  Address 0x400000001 is not stack'd, malloc'd or (recently) free'd
-==87== 
-==87== 
-==87== Process terminating with default action of signal 11 (SIGSEGV): dumping core
-==87==  Access not within mapped region at address 0x400000001
-==87==    at 0x1093C7: resizeMap (locator.c:58)
-==87==    by 0x10A008: main (test_locator.c:199)
-==87==  If you believe this happened as a result of a stack
-==87==  overflow in your program's main thread (unlikely but
-==87==  possible), you can try to increase the size of the
-==87==  main thread stack using the --main-stacksize= flag.
-==87==  The main thread stack size used in this run was 8388608.
-==87== 
-==87== HEAP SUMMARY:
-==87==     in use at exit: 1,216 bytes in 3 blocks
-==87==   total heap usage: 3 allocs, 0 frees, 1,216 bytes allocated
-==87== 
-==87== 80 bytes in 1 blocks are still reachable in loss record 1 of 3
-==87==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==87==    by 0x109293: initializeMap (locator.c:15)
-==87==    by 0x109FA6: main (test_locator.c:192)
-==87== 
-==87== 112 bytes in 1 blocks are still reachable in loss record 2 of 3
-==87==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==87==    by 0x109293: initializeMap (locator.c:15)
-==87==    by 0x109385: resizeMap (locator.c:49)
-==87==    by 0x10A008: main (test_locator.c:199)
-==87== 
-==87== 1,024 bytes in 1 blocks are still reachable in loss record 3 of 3
-==87==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==87==    by 0x48DCBA3: _IO_file_doallocate (filedoalloc.c:101)
-==87==    by 0x48EBCDF: _IO_doallocbuf (genops.c:347)
-==87==    by 0x48EAF5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
-==87==    by 0x48E96D4: _IO_new_file_xsputn (fileops.c:1243)
-==87==    by 0x48E96D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
-==87==    by 0x48D314C: outstring_func (vfprintf-internal.c:239)
-==87==    by 0x48D314C: __vfprintf_internal (vfprintf-internal.c:1263)
-==87==    by 0x48BE79E: printf (printf.c:33)
-==87==    by 0x109DF1: main (test_locator.c:184)
-==87== 
-==87== LEAK SUMMARY:
-==87==    definitely lost: 0 bytes in 0 blocks
-==87==    indirectly lost: 0 bytes in 0 blocks
-==87==      possibly lost: 0 bytes in 0 blocks
-==87==    still reachable: 1,216 bytes in 3 blocks
-==87==         suppressed: 0 bytes in 0 blocks
-==87== 
-==87== For lists of detected and suppressed errors, rerun with: -s
-==87== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
-Segmentation fault (core dumped)
+==185== Memcheck, a memory error detector
+==185== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==185== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==185== Command: ./bin/test_map
+==185== 
+==185== 
+==185== HEAP SUMMARY:
+==185==     in use at exit: 464 bytes in 4 blocks
+==185==   total heap usage: 7 allocs, 3 frees, 6,056 bytes allocated
+==185== 
+==185== 80 bytes in 1 blocks are definitely lost in loss record 1 of 4
+==185==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==185==    by 0x109273: initializeMap (locator.c:15)
+==185==    by 0x109F1F: main (test_locator.c:192)
+==185== 
+==185== 80 bytes in 1 blocks are definitely lost in loss record 2 of 4
+==185==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==185==    by 0x109273: initializeMap (locator.c:15)
+==185==    by 0x109C2B: test_clearMap (test_locator.c:156)
+==185==    by 0x10A070: main (test_locator.c:209)
+==185== 
+==185== 112 bytes in 1 blocks are definitely lost in loss record 3 of 4
+==185==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==185==    by 0x109273: initializeMap (locator.c:15)
+==185==    by 0x109355: resizeMap (locator.c:49)
+==185==    by 0x109FA4: main (test_locator.c:199)
+==185== 
+==185== 192 bytes in 1 blocks are definitely lost in loss record 4 of 4
+==185==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==185==    by 0x109273: initializeMap (locator.c:15)
+==185==    by 0x109355: resizeMap (locator.c:49)
+==185==    by 0x10945F: makeEntry (locator.c:86)
+==185==    by 0x10986F: testResize (test_locator.c:69)
+==185==    by 0x109FC8: main (test_locator.c:200)
+==185== 
+==185== LEAK SUMMARY:
+==185==    definitely lost: 464 bytes in 4 blocks
+==185==    indirectly lost: 0 bytes in 0 blocks
+==185==      possibly lost: 0 bytes in 0 blocks
+==185==    still reachable: 0 bytes in 0 blocks
+==185==         suppressed: 0 bytes in 0 blocks
+==185== 
+==185== For lists of detected and suppressed errors, rerun with: -s
+==185== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
