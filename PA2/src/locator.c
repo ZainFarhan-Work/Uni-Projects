@@ -32,7 +32,7 @@ Locator* initializeMap(int num_allocations, void* addr, char* identifier)
     map[0].identifier = identifier;
     map[0].address = (uintptr_t) addr;
 
-    map[num_allocations + 1].identifier = "END";
+    map[num_allocations + 1].identifier = "END\0";
 
     return map;
     
@@ -55,13 +55,13 @@ void clearMap(Locator* map)
         count++;
         temp = map + count;
 
-        if (temp->identifier != "END")
+        if (temp->identifier != "END\0")
         {
             temp->identifier = NULL;
             temp->address = (uintptr_t) NULL;   
         }
 
-    } while (temp->identifier != "END");
+    } while (temp->identifier != "END\0");
 
 }
 
@@ -77,13 +77,13 @@ Locator* resizeMap(Locator* map, int new_num_allocs)
         count++;
         temp = map + count;
 
-        if (temp->identifier != "END")
+        if (temp->identifier != "END\0")
         {
             new_map[count] = *temp;
         }
         
 
-    } while (temp->identifier != "END");
+    } while (temp->identifier != "END\0");
 
     releaseMap(map);
 
@@ -102,9 +102,9 @@ void makeEntry(Locator** map, void* addr, char* identifier)
         count++;
         temp = *map + count;
 
-    } while (temp->identifier != NULL && temp->identifier != "END");
+    } while (temp->identifier != NULL && temp->identifier != "END\0");
 
-    if (temp->identifier == "END")
+    if (temp->identifier == "END\0")
     {
         *map = resizeMap(*map, (count - 1) * 2);
 
@@ -115,7 +115,7 @@ void makeEntry(Locator** map, void* addr, char* identifier)
             count++;
             temp = *map + count;
 
-        } while (temp->identifier != NULL && temp->identifier != "END");
+        } while (temp->identifier != NULL && temp->identifier != "END\0");
 
     }
     
@@ -146,7 +146,7 @@ void removeEntry(Locator* map, char* identifier)
                 break;
             }
 
-        } while (temp->identifier != "END");
+        } while (temp->identifier != "END\0");
 
         if (empty)
         {
@@ -164,16 +164,16 @@ void removeEntry(Locator* map, char* identifier)
         count++;
         temp = map + count;
 
-    } while (temp->identifier != identifier && temp->identifier != "END");
+    } while (temp->identifier != identifier && temp->identifier != "END\0");
 
-    if (temp->identifier == "END")
+    if (temp->identifier == "END\0")
     {
         return;
     }
 
     do
     {
-        if (map[count + 1].identifier != "END")
+        if (map[count + 1].identifier != "END\0")
         {
             temp->identifier = map[count + 1].identifier;
             temp->address = map[count + 1].address;
@@ -187,7 +187,7 @@ void removeEntry(Locator* map, char* identifier)
         count++;
         temp = map + count;
 
-    } while (temp->identifier != "END");
+    } while (temp->identifier != "END\0");
      
 }
 
@@ -214,9 +214,9 @@ void* getPointer(Locator* map, char* identifier)
         count++;
         temp = map + count;
 
-    } while (temp->identifier != identifier && temp->identifier != "END");
+    } while (temp->identifier != identifier && temp->identifier != "END\0");
 
-    if (temp->identifier == "END")
+    if (temp->identifier == "END\0")
     {
         return NULL;
     }
