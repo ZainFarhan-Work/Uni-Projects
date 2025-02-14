@@ -11,6 +11,9 @@ typedef struct Locator {
 } Locator;
 
 
+// Curently Comparing String Literals Directly, Need to Change them with strcmp()
+
+
 Locator* initializeMap(int num_allocations, void* addr, char* identifier)
 {
     Locator* map = (Locator*) malloc((num_allocations + 2) * sizeof(Locator));
