@@ -28,14 +28,11 @@ int testMalloc(VaultNavigator* v_ptr, char* identifiers[], int units[], DataType
             valid = 0;
         }
 
-        printf("get key: %d\n", getKey(getAddress(v_ptr->map, i)));
-        printf("get key: %s\n", getLocker(getKey(getAddress(v_ptr->map, i))));
-        printf("get Pointer: %d\n", getPointer(v_ptr->map, identifiers[i]));
-        printf("get Pointer: %s\n", getLocker(getKey(getPointer(v_ptr->map, identifiers[i]))));
+
         
     }
 
-    printf("VALID: %d\n", valid);
+
 
     for(int i = 0; i < 11; i++){
         navigatorMalloc(v_ptr, types[i], units[i], identifiers[i]);
@@ -45,7 +42,7 @@ int testMalloc(VaultNavigator* v_ptr, char* identifiers[], int units[], DataType
         }
     }
 
-    printf("VALID: %d\n", valid);
+
 
     if(valid){
         marks += 2;
@@ -139,6 +136,7 @@ int testPointerOperations(VaultNavigator* v_ptr, char* identifiers[]){
 
         if(i < 10){
             incrementPointer(v_ptr);
+            printf("here");
         }
     }
 
