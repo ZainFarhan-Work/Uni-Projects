@@ -224,7 +224,9 @@ int testFree(VaultNavigator* v_ptr, char* identifiers[]){
     if(valid){
         marks += 4;
     }
-    
+
+    printf("Here\n");
+    printf("working?3\n");
     completeDeallocation(&v_ptr);
 
     printf(" %d/%d\n", marks, 4);
