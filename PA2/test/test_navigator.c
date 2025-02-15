@@ -126,7 +126,7 @@ int testPointerOperations(VaultNavigator* v_ptr, char* identifiers[]){
     int marks = 0;
 
     v_ptr->key_chain = getOrigin(v_ptr->map);
-
+    
     int valid = 1;
     for(int i = 0; i < 11; i++){
         if(v_ptr->key_chain != getPointer(v_ptr->map, identifiers[i])){
@@ -136,7 +136,6 @@ int testPointerOperations(VaultNavigator* v_ptr, char* identifiers[]){
 
         if(i < 10){
             incrementPointer(v_ptr);
-            printf("here");
         }
     }
 

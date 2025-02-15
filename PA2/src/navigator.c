@@ -48,8 +48,10 @@ void navigatorMalloc(VaultNavigator* v_ptr, DataType type, int units, char* iden
     v_ptr->key_chain = chain;
 }
 
-void navigatorFree(VaultNavigator* v_ptr, char* identifier){
-     
+void navigatorFree(VaultNavigator* v_ptr, char* identifier)
+{
+    keyChainFree((KeyChain*) getPointer(v_ptr->map, identifier), (KeyChain*) getPointer(v_ptr->map, "origin"));
+    removeEntry(v_ptr->map, identifier);
 }
 
 void storeData(VaultNavigator* v_ptr, char* identifier, void* data)
@@ -78,32 +80,30 @@ void incrementPointer(VaultNavigator* v_ptr)
 {
     int index = getIndex(v_ptr->key_chain);
 
-    printf("INDEX: %d", index);
-
     v_ptr->key_chain = (KeyChain*) getAddress(v_ptr->map, index + 1);
     
 }
 
 void decrementPointer(VaultNavigator* v_ptr)
 {
-    // int index = getIndex(v_ptr->key_chain);
+    int index = getIndex(v_ptr->key_chain);
 
-    // if (!strcmp(getIdentifier(v_ptr->map, index - 1), "origin"))
-    // {
-    //     return;
-    // }
+    if (!strcmp(getIdentifier(v_ptr->map, index - 1), "origin"))
+    {
+        return;
+    }
     
-    // v_ptr->key_chain = (KeyChain*) getAddress(v_ptr->map, index - 1);
+    v_ptr->key_chain = (KeyChain*) getAddress(v_ptr->map, index - 1);
     
 }
 
 void changePointer(VaultNavigator* v_ptr, char* identifier)
 {
-    // if (!strcmp("origin", identifier))
-    // {
-    //     return;
-    // }
+    if (!strcmp("origin", identifier))
+    {
+        return;
+    }
     
-    // v_ptr->key_chain = (KeyChain*) getPointer(v_ptr->map, identifier);
+    v_ptr->key_chain = (KeyChain*) getPointer(v_ptr->map, identifier);
     
 }

@@ -129,6 +129,8 @@ void removeEntry(Locator* map, char* identifier)
 {
     Locator* temp;
     int count = -1;
+    int match = 0;
+    int end = 0;
 
     if (map[0].identifier == identifier)
     {
@@ -142,11 +144,16 @@ void removeEntry(Locator* map, char* identifier)
 
             if (temp->identifier != NULL)
             {
-                empty = 0;
-                break;
+                end = !strcmp(temp->identifier, "END");
+
+                if (!end)
+                {
+                    empty = 0;
+                    break;
+                }
             }
 
-        } while (temp->identifier != "END\0");
+        } while (!end);
 
         if (empty)
         {
@@ -164,16 +171,27 @@ void removeEntry(Locator* map, char* identifier)
         count++;
         temp = map + count;
 
-    } while (temp->identifier != identifier && temp->identifier != "END\0");
+        if (temp->identifier != NULL)
+        {
+            match = !strcmp(temp->identifier, identifier);
+            end = !strcmp(temp->identifier, "END");
+        }
 
-    if (temp->identifier == "END\0")
+    } while (!match && !end);
+
+    if (end)
     {
         return;
     }
 
     do
     {
-        if (map[count + 1].identifier != "END\0")
+        if (map[count + 1].identifier != NULL)
+        {
+            end = !strcmp(map[count + 1].identifier, "END");
+        }
+
+        if (!end)
         {
             temp->identifier = map[count + 1].identifier;
             temp->address = map[count + 1].address;
@@ -187,7 +205,7 @@ void removeEntry(Locator* map, char* identifier)
         count++;
         temp = map + count;
 
-    } while (temp->identifier != "END\0");
+    } while (!end);
      
 }
 
@@ -208,15 +226,23 @@ void* getPointer(Locator* map, char* identifier)
 {
     Locator* temp;
     int count = -1;
+    int match = 0;
+    int end = 0;
 
     do
     {
         count++;
         temp = map + count;
 
-    } while (temp->identifier != identifier && temp->identifier != "END\0");
+        if (temp->identifier != NULL)
+        {
+            match = !strcmp(temp->identifier, identifier);
+            end = !strcmp(temp->identifier, "END");
+        }
 
-    if (temp->identifier == "END\0")
+    } while (!match && !end);
+
+    if (end)
     {
         return NULL;
     }
