@@ -22,7 +22,6 @@ typedef struct Locator {
 void completeDeallocation(VaultNavigator** v_ptr)
 {
     Locator* map = v_ptr[0]->map;
-    KeyChain* chain = v_ptr[0]->key_chain;
 
     keyChainCompleteRelease((KeyChain*) map->address);
     releaseMap(map);
@@ -52,7 +51,7 @@ int isFragmented(KeyChain* origin)
         
     } while (temp != NULL);
     
-    
+    return 0;
     
 }
 
