@@ -11,9 +11,6 @@ typedef struct Locator {
 } Locator;
 
 
-// Curently Comparing String Literals Directly, Need to Change them with strcmp()
-
-
 Locator* initializeMap(int num_allocations, void* addr, char* identifier)
 {
     Locator* map = (Locator*) malloc((num_allocations + 2) * sizeof(Locator));
@@ -49,19 +46,26 @@ void clearMap(Locator* map)
 {
     Locator* temp;
     int count = -1;
+    int end = 0;
 
     do
     {
         count++;
         temp = map + count;
 
-        if (temp->identifier != "END\0")
+        if (temp->identifier != NULL)
+        {
+            end = !strcmp(temp->identifier, "END");
+        }
+        
+
+        if (!end)
         {
             temp->identifier = NULL;
             temp->address = (uintptr_t) NULL;   
         }
 
-    } while (temp->identifier != "END\0");
+    } while (!end);
 
 }
 
@@ -71,19 +75,25 @@ Locator* resizeMap(Locator* map, int new_num_allocs)
     Locator* new_map = initializeMap(new_num_allocs, NULL, NULL);
     Locator* temp;
     int count = -1;
+    int end = 0;
     
     do
     {
         count++;
         temp = map + count;
 
-        if (temp->identifier != "END\0")
+        if (temp->identifier != NULL)
+        {
+            end = !strcmp(temp->identifier, "END");
+        }
+
+        if (!end)
         {
             new_map[count] = *temp;
         }
         
 
-    } while (temp->identifier != "END\0");
+    } while (!end);
 
     releaseMap(map);
 
@@ -96,15 +106,21 @@ void makeEntry(Locator** map, void* addr, char* identifier)
 {
     int count = -1;
     Locator* temp;
+    int end = 0;
     
     do
     {
         count++;
         temp = *map + count;
 
-    } while (temp->identifier != NULL && temp->identifier != "END\0");
+        if (temp->identifier != NULL)
+        {
+            end = !strcmp(temp->identifier, "END");
+        }
 
-    if (temp->identifier == "END\0")
+    } while (temp->identifier != NULL && !end);
+
+    if (end)
     {
         *map = resizeMap(*map, (count - 1) * 2);
 
@@ -115,7 +131,12 @@ void makeEntry(Locator** map, void* addr, char* identifier)
             count++;
             temp = *map + count;
 
-        } while (temp->identifier != NULL && temp->identifier != "END\0");
+            if (temp->identifier != NULL)
+            {
+                end = !strcmp(temp->identifier, "END");
+            }
+
+        } while (temp->identifier != NULL && !end);
 
     }
     
