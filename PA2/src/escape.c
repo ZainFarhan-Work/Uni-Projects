@@ -80,18 +80,18 @@ void printLocator(Locator* map)
 }
 
 
-int main()
-{
-    KeyChain* chain = initializeKeyChain(RED, 120, "Hey Hello my man");
-    Locator* map = initializeMap(20, chain, "origin");
+// int main()
+// {
+//     KeyChain* chain = initializeKeyChain(RED, 120, "Hey Hello my man");
+//     Locator* map = initializeMap(20, chain, "origin");
 
-    VaultNavigator* nav = initializeNavigator(20);
+//     VaultNavigator* nav = initializeNavigator(20);
 
-    navigatorMalloc(nav, RED, 120, "element1");
+//     navigatorMalloc(nav, RED, 120, "element1");
 
-    printLocator(map);
-    printf("Is Fragmented: %d\n", isFragmented(chain));
-}
+//     printLocator(map);
+//     // printf("Is Fragmented: %d\n", isFragmented(chain));
+// }
 
 
 // ---------------- Instructions for Test cases --------------//
