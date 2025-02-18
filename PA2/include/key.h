@@ -5,6 +5,8 @@
 
 typedef struct Key Key;
 
+int getSize(DataType type);
+
 Key* initializeKey(DataType type, int units, void* data);
 
 Key* keyMalloc(DataType type, int units);

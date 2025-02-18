@@ -59,7 +59,7 @@ void printLocator(Locator* map)
 {
     int index = 0;
 
-    printf("-------------\n");
+    printf("-----------------------------------\n");
 
     do
     {
@@ -75,8 +75,22 @@ void printLocator(Locator* map)
 
     } while (1);
 
-    printf("-------------\n");
+    printf("-----------------------------------\n");
         
+}
+
+
+int main()
+{
+    KeyChain* chain = initializeKeyChain(RED, 120, "Hey Hello my man");
+    Locator* map = initializeMap(20, chain, "origin");
+
+    VaultNavigator* nav = initializeNavigator(20);
+
+    navigatorMalloc(nav, RED, 120, "element1");
+
+    printLocator(map);
+    printf("Is Fragmented: %d\n", isFragmented(chain));
 }
 
 
@@ -96,3 +110,4 @@ And then:
 
 Delete your int main() afterwards, or comment it out because it will not let you test other files.
 */
+
