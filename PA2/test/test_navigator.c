@@ -232,6 +232,7 @@ int testFree(VaultNavigator* v_ptr, char* identifiers[]){
 }
 
 int main(){
+    
     printf("\033[1m\033[36m\nTesting Vault Navigator:\n\n\033[0m");
     int total = 0;
 

@@ -42,12 +42,12 @@ int isFragmented(KeyChain* origin)
 
     do
     {
-        temp = temp->next;
-
         if (temp->key == NULL)
         {
             return 1;
         }
+
+        temp = temp->next;
         
     } while (temp != NULL);
     
@@ -57,9 +57,17 @@ int isFragmented(KeyChain* origin)
 
 void printLocator(Locator* map)
 {
+    FILE* output = fopen("Output.txt", "w");
     int index = 0;
 
-    printf("-------------\n");
+    if (output == NULL)
+    {
+        printf("Error: File could not be Opened\n");
+        return;
+    }
+    
+
+    fprintf(output, "-----------------------------------\n");
 
     do
     {
@@ -71,12 +79,36 @@ void printLocator(Locator* map)
             break;
         }
 
-        printf("Index %d : %s : %ld\n", index, map->identifier, map->address);
+        fprintf(output, "Index %d : %s : %p\n", index, map->identifier, (void*) map->address);
 
     } while (1);
 
-    printf("-------------\n");
+    fprintf(output, "-----------------------------------\n");
+
+    fclose(output);
         
+}
+
+
+int main()
+{
+    VaultNavigator* nav = initializeNavigator(20);
+
+    navigatorMalloc(nav, RED, 9, "element1");
+    navigatorMalloc(nav, RED, 9, "element2");
+    navigatorMalloc(nav, RED, 9, "element3");
+    navigatorMalloc(nav, RED, 9, "element4");
+    navigatorMalloc(nav, RED, 9, "element5");
+    navigatorMalloc(nav, RED, 9, "element6");
+    navigatorMalloc(nav, RED, 9, "element7");
+    navigatorMalloc(nav, RED, 9, "element8");
+    navigatorMalloc(nav, RED, 9, "element9");
+
+    printLocator(nav->map);
+
+    // printf("Is Fragmented: %d\n", isFragmented((KeyChain*) nav->map->address));
+    // printf("Here2\n");
+
 }
 
 
@@ -96,3 +128,4 @@ And then:
 
 Delete your int main() afterwards, or comment it out because it will not let you test other files.
 */
+
