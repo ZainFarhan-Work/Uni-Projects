@@ -22,9 +22,6 @@ typedef struct Locator {
 void completeDeallocation(VaultNavigator** v_ptr)
 {
     Locator* map = v_ptr[0]->map;
-    printLocator(map);
-    printf("Is Fragmented: %d", isFragmented((KeyChain*) map->address));
-    printf("Here\n");
 
     keyChainCompleteRelease((KeyChain*) map->address);
     releaseMap(map);
@@ -74,7 +71,7 @@ void printLocator(Locator* map)
             break;
         }
 
-        printf("Index %d : %s : %ld\n", index, map->identifier, map->address);
+        printf("Index %d : %s : %p\n", index, map->identifier, (void*) map->address);
 
     } while (1);
 
@@ -83,18 +80,25 @@ void printLocator(Locator* map)
 }
 
 
-// int main()
-// {
-//     KeyChain* chain = initializeKeyChain(RED, 120, "Hey Hello my man");
-//     Locator* map = initializeMap(20, chain, "origin");
+int main()
+{
+    VaultNavigator* nav = initializeNavigator(20);
 
-//     VaultNavigator* nav = initializeNavigator(20);
+    navigatorMalloc(nav, RED, 9, "element1");
+    navigatorMalloc(nav, RED, 9, "element2");
+    navigatorMalloc(nav, RED, 9, "element4");
+    navigatorMalloc(nav, RED, 9, "element5");
+    navigatorMalloc(nav, RED, 9, "element6");
+    navigatorMalloc(nav, RED, 9, "element7");
+    navigatorMalloc(nav, RED, 9, "element8");
+    navigatorMalloc(nav, RED, 9, "element9");
 
-//     navigatorMalloc(nav, RED, 120, "element1");
+    printLocator(nav->map);
 
-//     // printLocator(map);
-//     // printf("Is Fragmented: %d\n", isFragmented(chain));
-// }
+    // printf("Is Fragmented: %d\n", isFragmented((KeyChain*) nav->map->address));
+    // printf("Here2\n");
+
+}
 
 
 // ---------------- Instructions for Test cases --------------//
