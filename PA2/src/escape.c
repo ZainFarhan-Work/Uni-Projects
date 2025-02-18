@@ -22,6 +22,9 @@ typedef struct Locator {
 void completeDeallocation(VaultNavigator** v_ptr)
 {
     Locator* map = v_ptr[0]->map;
+    printLocator(map);
+    printf("Is Fragmented: %d", isFragmented((KeyChain*) map->address));
+    printf("Here\n");
 
     keyChainCompleteRelease((KeyChain*) map->address);
     releaseMap(map);
@@ -42,12 +45,12 @@ int isFragmented(KeyChain* origin)
 
     do
     {
-        temp = temp->next;
-
         if (temp->key == NULL)
         {
             return 1;
         }
+
+        temp = temp->next;
         
     } while (temp != NULL);
     
@@ -89,7 +92,7 @@ void printLocator(Locator* map)
 
 //     navigatorMalloc(nav, RED, 120, "element1");
 
-//     printLocator(map);
+//     // printLocator(map);
 //     // printf("Is Fragmented: %d\n", isFragmented(chain));
 // }
 
