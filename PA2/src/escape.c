@@ -57,9 +57,17 @@ int isFragmented(KeyChain* origin)
 
 void printLocator(Locator* map)
 {
+    FILE* output = fopen("Output.txt", "w");
     int index = 0;
 
-    printf("-----------------------------------\n");
+    if (output == NULL)
+    {
+        printf("Error: File could not be Opened\n");
+        return;
+    }
+    
+
+    fprintf(output, "-----------------------------------\n");
 
     do
     {
@@ -71,11 +79,13 @@ void printLocator(Locator* map)
             break;
         }
 
-        printf("Index %d : %s : %p\n", index, map->identifier, (void*) map->address);
+        fprintf(output, "Index %d : %s : %p\n", index, map->identifier, (void*) map->address);
 
     } while (1);
 
-    printf("-----------------------------------\n");
+    fprintf(output, "-----------------------------------\n");
+
+    fclose(output);
         
 }
 
@@ -86,6 +96,7 @@ int main()
 
     navigatorMalloc(nav, RED, 9, "element1");
     navigatorMalloc(nav, RED, 9, "element2");
+    navigatorMalloc(nav, RED, 9, "element3");
     navigatorMalloc(nav, RED, 9, "element4");
     navigatorMalloc(nav, RED, 9, "element5");
     navigatorMalloc(nav, RED, 9, "element6");
