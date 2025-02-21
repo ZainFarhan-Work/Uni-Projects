@@ -188,11 +188,10 @@ void keyChainCompleteRelease(KeyChain* origin)
     do
     {
         temp2 = temp;
-
+        temp = temp->next;
+        
         keyFree(temp2->key);
         free(temp2);
-        
-        temp = temp->next;
 
     } while (temp != NULL);
     

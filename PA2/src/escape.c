@@ -21,6 +21,7 @@ typedef struct Locator {
 
 void completeDeallocation(VaultNavigator** v_ptr)
 {
+    // printf("Here");
     Locator* map = v_ptr[0]->map;
 
     keyChainCompleteRelease((KeyChain*) map->address);
@@ -57,7 +58,7 @@ int isFragmented(KeyChain* origin)
 
 void printLocator(Locator* map)
 {
-    FILE* output = fopen("Output.txt", "w");
+    FILE* output = fopen("../bin/locator.txt", "w");
     int index = 0;
 
     if (output == NULL)
