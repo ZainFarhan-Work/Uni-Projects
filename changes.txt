@@ -1,3 +1,5 @@
-This File is made Soley to test how changes effect the gitHub repo
+This File is Made Soley to Test How Changes Effect the GitHub Repo
 
 Change 1
+Change 2
+
