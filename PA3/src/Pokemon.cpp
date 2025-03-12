@@ -176,7 +176,7 @@ Move* Pokemon::getMoveAtIndex(int index)
 // Move management
 bool Pokemon::addMove(const Move& m)
 {
-    std::cout << "Here: " << m.getName();
+    // std::cout << "Here: " << m.getName();
 
     // Resizing Array
     if (++moveCount > moveCapacity)
@@ -189,12 +189,11 @@ bool Pokemon::addMove(const Move& m)
         }
 
         delete[] moves;
-        
+
         moveCapacity *= 2;
         moves = temp;
         
     }
-
 
     moves[moveCount - 1] = m;
     
@@ -203,44 +202,122 @@ bool Pokemon::addMove(const Move& m)
 
 bool Pokemon::removeMove(int index)
 {
-    return false;
+    if (index > moveCount - 1)
+    {
+        return false;
+    }
+
+    for (int i = index; i < moveCount - 1; i++)
+    {
+        moves[i] = moves[i + 1];
+    }
+
+    moveCount--;
+    
+    return true;
 }
 
 bool Pokemon::hasMove(const string& moveName) const 
 {
+    for (int i = 0; i < moveCount; i++)
+    {
+        if (moves[i].getName() == moveName)
+        {
+            return true;
+        }
+        
+    }
+    
     return false;
 }
 
 // Battle functionality
 void Pokemon::takeDamage(int amount)
 {
+    if (currentHP - amount <= 0)
+    {
+        currentHP = 0;
+        fainted = true;
+        return;
+    }
+
+    currentHP -= amount;
     return;
 }
 
 void Pokemon::heal(int amount)
 {
+    if (currentHP + amount > maxHP)
+    {
+        currentHP = maxHP;
+        return;
+    }
+
+    currentHP += amount;
+    
     return;
 }
 
 void Pokemon::equipArmor(const Armor& a)
 {
+    if (equippedArmor == NULL)
+    {
+        equippedArmor = new Armor;
+        *equippedArmor = a;
+        return;
+    }
+
+    *equippedArmor = a;
+    
     return;
 }
 
-void Pokemon::removeArmor(){
+void Pokemon::removeArmor()
+{
+    if (equippedArmor == NULL)
+    {
+        return;
+    }
+
+    delete equippedArmor;
+    equippedArmor = NULL;
+    
     return;
 }
 
 bool Pokemon::useMove(int moveIndex)
 {
-    return false;
+    if (moveIndex > moveCount - 1)
+    {
+        return false;
+    }
+
+    if (moves[moveIndex].getPP() - 1 <= 0)
+    {
+        return false;
+    }
+
+    moves[moveIndex].use();
+    
+    return true;
 }
 
 bool Pokemon::usePotion(const Potion& p)
 {
+    if (p.canUse())
+    {
+        heal(p.getHealAmount());
+        // p.use();
+
+        return true;
+    }
+    
     return false;
 }
 
-void Pokemon::resetHP(){
+void Pokemon::resetHP()
+{
+    currentHP = maxHP;
+    fainted = false;
     return;
 }

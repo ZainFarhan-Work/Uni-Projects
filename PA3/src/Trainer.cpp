@@ -49,7 +49,7 @@ Trainer::~Trainer()
 // Getters
 std::string Trainer::getName() const 
 { 
-
+    return "stub";
 }
 int Trainer::getPartyCount() const 
 { 
@@ -66,12 +66,12 @@ int Trainer::getMoney() const
 
 Pokemon *Trainer::getPokemonAtIndex(int index) const
 {
-    // return nullptr;
+    return nullptr;
 }
 
 Potion *Trainer::getPotionAtIndex(int index) const
 {
-    // return nullptr;
+    return nullptr;
 }
 
 // Pokemon management
