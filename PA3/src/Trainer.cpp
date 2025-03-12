@@ -7,12 +7,56 @@ using namespace std;
 // Helper to expand the party array
 void Trainer::expandParty()
 {
+    // Resize Array
+    Pokemon** temp = party;
+
+    party = new Pokemon*[partyCapacity * 2];
+
+    for (int i = 0; i < partyCapacity * 2; i++)
+    {
+        party[i] = new Pokemon;
+    }
+
+    // Copying data from Old Array into New
+
+    for (int i = 0; i < partyCount - 1; i++)
+    {
+        *party[i] = *temp[i];
+    }
+
+    // Deleting Old Array
+    for (int i = 0; i < partyCapacity; i++)
+    {
+        delete temp[i];
+    }
+
+    delete[] temp;
+
+    partyCapacity *= 2;
+
     return; 
 }
 
 // Helper to expand the potions array
 void Trainer::expandPotions()
 {
+    // Resize Array
+    Potion* temp = potions;
+
+    potions = new Potion[potionCapacity * 2];
+
+    // Copying data from Old Array into New
+
+    for (int i = 0; i < potionCount - 1; i++)
+    {
+        potions[i] = temp[i];
+    }
+
+    // Deleting Old Array
+    delete[] temp;
+
+    potionCapacity *= 2;
+
     return;
 }
 
@@ -149,13 +193,13 @@ void Trainer::copyFrom(const Trainer &other)
 // Destructor
 Trainer::~Trainer()
 {
-    for (int i = 0; i < partyCapacity; i++)
-    {
-        delete party[i];
-    }
+    // for (int i = 0; i < partyCapacity; i++)
+    // {
+    //     delete party[i];
+    // }
 
-    delete[] party;
-    delete[] potions;
+    // delete[] party;
+    // delete[] potions;
 }
 
 // Getters
@@ -178,23 +222,42 @@ int Trainer::getMoney() const
 
 Pokemon *Trainer::getPokemonAtIndex(int index) const
 {
-    return nullptr;
+    return party[index];
 }
 
 Potion *Trainer::getPotionAtIndex(int index) const
 {
-    return nullptr;
+    return (potions + index);
 }
 
 // Pokemon management
 bool Trainer::addPokemon(Pokemon *p)
 {
-    return false;
+    if (++partyCount > partyCapacity)
+    {
+        expandParty();
+    }
+
+    *party[partyCount - 1] = *p;
+    
+    return true;
 }
 
 bool Trainer::removePokemon(int index)
 {
-    return false;
+    if (index > partyCount - 1)
+    {
+        return false;
+    }
+
+    for (int i = index; i < partyCount - 1; i++)
+    {
+        *party[i] = *party[i + 1];
+    }
+
+    partyCount--;
+    
+    return true;
 }
 
 bool Trainer::hasPokemon(const std::string &pokeName) const
@@ -210,7 +273,14 @@ Pokemon *Trainer::getFirstNonFaintedPokemon() const
 // Potion management
 bool Trainer::addPotion(const Potion &p)
 {
-    return false;
+    if (++potionCount > potionCapacity)
+    {
+        expandPotions();
+    }
+
+    potions[potionCount - 1] = p;
+    
+    return true;
 }
 
 bool Trainer::removePotion(int index)
@@ -220,16 +290,27 @@ bool Trainer::removePotion(int index)
 
 bool Trainer::usePotion(int potionIndex, int pokemonIndex)
 {
-    return false;
+    party[pokemonIndex]->usePotion(potions[potionIndex]);
+    potions[potionIndex].use();
+
+    return true;
 }
 
 // Money management
 void Trainer::addMoney(int amount)
 {
+    money += amount;
     return;
 }
 
 bool Trainer::spendMoney(int amount)
 {
-    return false;
+    if (money - amount < 0)
+    {
+        return false;
+    }
+
+    money -= amount;
+    
+    return true;
 }

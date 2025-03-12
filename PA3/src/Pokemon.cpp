@@ -306,8 +306,8 @@ bool Pokemon::usePotion(const Potion& p)
 {
     if (p.canUse())
     {
+        // p.use(); This function is Used in the Trainer Class instead (usePotion Function).
         heal(p.getHealAmount());
-        // p.use();
 
         return true;
     }

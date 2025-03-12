@@ -111,7 +111,7 @@ int main(){
         delete p2;  // Already removed
         delete p1;
     }
-    
+
     // --- Money management ---
     {
         Trainer t("Brock");
@@ -131,6 +131,7 @@ int main(){
         }
         score += (enough && notEnough && moneyOk) ? 2 : 0;
     }
+
     
     // Test copy constructor and assignment operator for deep copy
     {
