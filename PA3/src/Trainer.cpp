@@ -12,23 +12,18 @@ void Trainer::expandParty()
 
     party = new Pokemon*[partyCapacity * 2];
 
-    for (int i = 0; i < partyCapacity * 2; i++)
-    {
-        party[i] = new Pokemon;
-    }
-
     // Copying data from Old Array into New
 
     for (int i = 0; i < partyCount - 1; i++)
     {
-        *party[i] = *temp[i];
+        party[i] = temp[i];
     }
 
     // Deleting Old Array
-    for (int i = 0; i < partyCapacity; i++)
-    {
-        delete temp[i];
-    }
+    // for (int i = 0; i < partyCapacity; i++)
+    // {
+    //     delete temp[i];
+    // }
 
     delete[] temp;
 
@@ -72,7 +67,6 @@ Trainer::Trainer()
     partyCapacity = 1;
 
     party = new Pokemon*[1];
-    party[0] = new Pokemon;
 
     potionCapacity = 1;
 
@@ -92,7 +86,6 @@ Trainer::Trainer(const string &name)
     partyCapacity = 1;
 
     party = new Pokemon*[1];
-    party[0] = new Pokemon;
 
     potionCapacity = 1;
 
@@ -103,10 +96,10 @@ Trainer::Trainer(const string &name)
 // Copy constructor (deep copy)
 Trainer::Trainer(const Trainer &other)
 {
-    this->name = name;
+    this->name = other.name;
     this->partyCount = other.partyCount;
     this->potionCount = other.partyCount;
-    this->money = money;
+    this->money = other.money;
 
     // Memory Management
 
@@ -114,14 +107,14 @@ Trainer::Trainer(const Trainer &other)
 
     party = new Pokemon*[other.partyCapacity];
 
-    for (int i = 0; i < other.partyCapacity; i++)
+    for (int i = 0; i < other.partyCount; i++)
     {
-        party[i] = new Pokemon;
+        // party[i] = new Pokemon;
 
         // Copies Pokemon
         if (i < other.partyCount)
         {
-            *party[i] = *(other.party[i]);
+            party[i] = (other.party[i]);
         }
         
     }
@@ -140,10 +133,10 @@ Trainer::Trainer(const Trainer &other)
 // Assignment operator (deep copy)
 void Trainer::copyFrom(const Trainer &other)
 {
-    this->name = name;
+    this->name = other.name;
     this->partyCount = other.partyCount;
     this->potionCount = other.partyCount;
-    this->money = money;
+    this->money = other.money;
 
     // Memory Management
 
@@ -152,10 +145,11 @@ void Trainer::copyFrom(const Trainer &other)
     /* This works because I allocate memory in all the constructors,
     So I know that some memory will always be allocated, and I don't need to
     check if the pointers are NULL. */
-    for (int i = 0; i < partyCapacity; i++)
-    {
-        delete party[i];
-    }
+    
+    // for (int i = 0; i < partyCapacity; i++)
+    // {
+    //     delete party[i];
+    // }
 
     delete[] party;
     delete[] potions;
@@ -166,14 +160,12 @@ void Trainer::copyFrom(const Trainer &other)
 
     party = new Pokemon*[other.partyCapacity];
 
-    for (int i = 0; i < other.partyCapacity; i++)
+    for (int i = 0; i < other.partyCount; i++)
     {
-        party[i] = new Pokemon;
-
         // Copies Pokemon
         if (i < other.partyCount)
         {
-            *party[i] = *(other.party[i]);
+            party[i] = (other.party[i]);
         }
         
     }
@@ -198,8 +190,8 @@ Trainer::~Trainer()
     //     delete party[i];
     // }
 
-    // delete[] party;
-    // delete[] potions;
+    delete[] party;
+    delete[] potions;
 }
 
 // Getters
@@ -238,7 +230,7 @@ bool Trainer::addPokemon(Pokemon *p)
         expandParty();
     }
 
-    *party[partyCount - 1] = *p;
+    party[partyCount - 1] = p;
     
     return true;
 }

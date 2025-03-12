@@ -51,6 +51,7 @@ int main(){
         Trainer t("Ash");
         Pokemon* p1 = new Pokemon("Pikachu", "Electric", 100);
         Pokemon* p2 = new Pokemon("Charmander", "Fire", 90);
+        cout << "Here\n";
         bool addP1 = t.addPokemon(p1);
         bool addP2 = t.addPokemon(p2);
         bool partyCountOk = (t.getPartyCount() == 2);
