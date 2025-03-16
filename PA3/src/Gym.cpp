@@ -9,6 +9,23 @@ void Gym::expandGym()
     // TODO: If you are using a dynamic array to store gym Pokémon,
     // expand the array by allocating a new array with larger capacity,
     // copy the existing pointers, then delete the old array.
+
+    // Resize Array
+    Pokemon** temp = gymPokemon;
+
+    gymPokemon = new Pokemon*[capacity * 2];
+
+    // Copying data from Old Array into New
+
+    for (int i = 0; i < pokemonCount - 1; i++)
+    {
+        gymPokemon[i] = temp[i];
+    }
+
+    delete[] temp;
+
+    capacity *= 2;
+
     return;
 }
 
@@ -22,18 +39,14 @@ Gym::Gym(Trainer *gymLeader, const string &badgeName, int difficulty)
 
     this->gymLeader = gymLeader;
 
-    pokemonCount = gymLeader->getPartyCount();
-    capacity = gymLeader->getPartyCount();
+    pokemonCount = 0;
+    capacity = 1;
 
-    this->gymPokemon = new Pokemon*[gymLeader->getPartyCount()];
-
-    for (int i = 0; i < gymLeader->getPartyCount(); i++)
-    {
-        gymPokemon[i] = gymLeader->getPokemonAtIndex(i);
-    }
+    this->gymPokemon = new Pokemon*[1];
 
     this->badgeName = badgeName;
     this->difficulty = difficulty;
+
     
 }
 
@@ -49,38 +62,58 @@ Gym::~Gym()
 // Getters
 string Gym::getBadgeName() const 
 { 
-    return "";
+    return badgeName;
 }
 int Gym::getDifficulty() const 
 { 
-    return -1;
+    return difficulty;
 }
 int Gym::getPokemonCount() const 
 { 
-    return -1;
+    return pokemonCount;
 }
 Trainer *Gym::getGymLeader() const 
 { 
-    return nullptr;
+    return gymLeader;
 }
 Pokemon *Gym::getGymPokemonAtIndex(int index) const
 {
-    return nullptr;
+    return gymPokemon[index];
 }
 BattleHistory Gym::getGymHistory() const
 {
     // TODO: Return a copy of the gym's BattleHistory
+    return gymHistory;
 }
 
 // Gym management
 void Gym::addGymPokemon(Pokemon *p)
 {
+    if (++pokemonCount > capacity)
+    {
+        expandGym();
+    }
+
+    gymPokemon[pokemonCount - 1] = p;
+    
     return;
 }
 
 bool Gym::removeGymPokemon(int index)
 {
-    return false;
+    if (index > pokemonCount - 1)
+    {
+        return false;
+    }
+
+    for (int i = index; i < pokemonCount - 1; i++)
+    {
+        gymPokemon[i] = gymPokemon[i + 1];
+    }
+
+    pokemonCount--;
+
+    return true;
 }
 
 // Battle functionality (There will be hidden test cases for this portion, to test multiple scenarios in both deterministic and non-deterministic methods)
@@ -90,10 +123,46 @@ bool Gym::battle(Trainer *challenger)
     // For now, this return value is a placeholder.
     // A proper implementation would involve simulating a battle using the Battle class
     // If your test case passes for the correct implementation.
+
+    while (true)
+    {
+        Pokemon *gymP = gymLeader->getFirstNonFaintedPokemon();
+        Pokemon *challengerP = challenger->getFirstNonFaintedPokemon();
+
+        // Challenger Wins
+        if (gymP == nullptr)
+        {
+            string his = gymHistory.getAllLogs();
+            cout << his << endl;
+            return true;
+        }
+        
+        // Gym Wins
+        if (challengerP == nullptr)
+        {
+            return false;
+        }
+        
+        Battle battle(*gymP, *challengerP);
+        battle.simulateFullBattle();
+
+        for (int i = 0; i < battle.getBattleHistory().getLogCount(); i++)
+        {
+            gymHistory.addLog(battle.getBattleHistory().getLogAt(i));
+        }
+                
+    }
+
     return false;
 }
 
 void Gym::healAllPokemon()
 {
+    for (int i = 0; i < pokemonCount; i++)
+    {
+        // Fully Heals all Pokemon
+        gymPokemon[i]->resetHP();
+    }
+    
     return;
 }

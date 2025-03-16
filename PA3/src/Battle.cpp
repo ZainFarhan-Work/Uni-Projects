@@ -29,7 +29,6 @@ Battle::Battle(Pokemon &p1, Pokemon &p2) : pokemon1(p1), pokemon2(p2)
     winner = new Pokemon;
     currentRound = 0;
 
-
     //Donot edit this condition ---------------------------------------------------
     if (!deterministic)
     {
@@ -55,11 +54,10 @@ bool Battle::simulateRound()
         return false;
     }
     
-
     Move move;
-
+    
     // First Pokemon Attacks
-
+    
     for (int i = 0; i < pokemon1.getMoveCount(); i++)
     {
         if (pokemon1.getMoveAtIndex(i)->getPP() > 0)
@@ -127,6 +125,8 @@ void Battle::simulateFullBattle()
         }   
     }
 
+    isFinished = true;
+
 }
 
 // getBattleHistory: Return a copy of the battle history
@@ -145,6 +145,26 @@ Pokemon *Battle::getWinner() const
 
 int Battle::calculateDamage(Pokemon &attacker, Pokemon &defender, Move &move)
 {
-    return 10; // Placeholder Value
+
+    if (!deterministic)
+    {
+        int randomValue = rand() % 11 - 5;
+
+        return move.getPower() + randomValue;
+    }
+
+    if (defender.getEquippedArmor() && !deterministic)
+    {
+        int randomValue = rand() % 11 - 5;
+
+        return move.getPower() - defender.getEquippedArmor()->getDefenseBonus() + randomValue;
+    }
+    
+    if (defender.getEquippedArmor() && deterministic)
+    {
+        return move.getPower() - defender.getEquippedArmor()->getDefenseBonus();
+    }
+    
+    return move.getPower();
 
 }
