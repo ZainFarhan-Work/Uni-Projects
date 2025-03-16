@@ -2,37 +2,111 @@
 
 using namespace std;
 
-class Car
+class Movie
 {
-    private:
 
-    int speed;
+private:
 
-    public:
+    string title;
+    string director;
+    string genre;
+    int duration;
 
-    Car(int s);
+public:
 
-    int getSpeed();
-    
+    Movie();
+    Movie(string title, string director, string genre, int duration);
+
+    void playMovie();
+    string getTitle();
+    string getDirector();
+    string getGenre();
+    int getDuration();
+
+    ~Movie();
 };
 
-Car::Car(int s)
+Movie::Movie()
 {
-    speed = s;
+    title = "<NULL>";
+    director = "<NULL>";
+    genre = "<NULL>";
+    duration = 0;
+}
+
+Movie::Movie(string title, string director, string genre, int duration)
+{
+    Movie::title = title;
+    Movie::director = director;
+    Movie::genre = genre;
+    Movie::duration = duration;
+}
+
+void Movie::playMovie()
+{
+    cout << "Title: " << title << endl;
+    cout << "Director: " << director << endl;
+    cout << "Genre: " << genre << endl;
+    cout << "Duration: " << duration << endl;
+}
+
+string Movie::getTitle()
+{
+    return title;
+}
+
+string Movie::getDirector()
+{
+    return director;
+}
+
+string Movie::getGenre()
+{
+    return genre;
+}
+
+int Movie::getDuration()
+{
+    return duration;
+}
+
+Movie::~Movie()
+{
+    cout << "Movie Destroyed?" << endl;
 }
 
 
-int Car::getSpeed()
+class MoviePlaylist
 {
-    return speed;
+
+private:
+
+    Movie** myPlaylist;
+    int movieCount;
+    int capacity;
+
+public:
+
+    MoviePlaylist();
+    ~MoviePlaylist();
+};
+
+MoviePlaylist::MoviePlaylist()
+{
+    // *myPlaylist = (Movie*) calloc(5, sizeof(Movie));
+
+    *myPlaylist = new Movie[5];
+
+    movieCount = 0;
+    capacity = 5;
+}
+
+MoviePlaylist::~MoviePlaylist()
+{
+    delete[] myPlaylist;
 }
 
 
-int main()
-{
-    Car alto(50);
 
-    cout << "Return: " << alto.getSpeed() << endl;
-}
 
 
