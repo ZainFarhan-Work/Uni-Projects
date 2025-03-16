@@ -19,6 +19,22 @@ Gym::Gym(Trainer *gymLeader, const string &badgeName, int difficulty)
     // - Set the gym leader pointer.
     // - Save the badge name and difficulty level.
     // - Initialize the storage for gym Pokémon
+
+    this->gymLeader = gymLeader;
+
+    pokemonCount = gymLeader->getPartyCount();
+    capacity = gymLeader->getPartyCount();
+
+    this->gymPokemon = new Pokemon*[gymLeader->getPartyCount()];
+
+    for (int i = 0; i < gymLeader->getPartyCount(); i++)
+    {
+        gymPokemon[i] = gymLeader->getPokemonAtIndex(i);
+    }
+
+    this->badgeName = badgeName;
+    this->difficulty = difficulty;
+    
 }
 
 // Destructor
@@ -26,6 +42,8 @@ Gym::~Gym()
 {
     // TODO: Clean up any dynamically allocated memory if the Gym owns the Pokémon.
     // If the Gym does not own them, be careful not to double-delete.
+
+    delete[] gymPokemon;
 }
 
 // Getters

@@ -244,7 +244,7 @@ bool Trainer::removePokemon(int index)
 
     for (int i = index; i < partyCount - 1; i++)
     {
-        *party[i] = *party[i + 1];
+        party[i] = party[i + 1];
     }
 
     partyCount--;
@@ -254,11 +254,29 @@ bool Trainer::removePokemon(int index)
 
 bool Trainer::hasPokemon(const std::string &pokeName) const
 {
+    for (int i = 0; i < partyCount; i++)
+    {
+        if (party[i]->getName() == pokeName)
+        {
+            return true;
+        }
+        
+    }
+    
     return false;
 }
 
 Pokemon *Trainer::getFirstNonFaintedPokemon() const
 {
+    for (int i = 0; i < partyCount; i++)
+    {
+        if (party[i]->isFainted() == false)
+        {
+            return party[i];
+        }
+        
+    }
+    
     return nullptr;
 }
 
@@ -277,7 +295,19 @@ bool Trainer::addPotion(const Potion &p)
 
 bool Trainer::removePotion(int index)
 {
-    return false;
+    if (index > potionCount - 1)
+    {
+        return false;
+    }
+
+    for (int i = index; i < potionCount - 1; i++)
+    {
+        potions[i] = potions[i + 1];
+    }
+
+    potionCount--;
+    
+    return true;
 }
 
 bool Trainer::usePotion(int potionIndex, int pokemonIndex)
