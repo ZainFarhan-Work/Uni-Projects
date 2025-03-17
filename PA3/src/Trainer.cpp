@@ -214,11 +214,21 @@ int Trainer::getMoney() const
 
 Pokemon *Trainer::getPokemonAtIndex(int index) const
 {
+    if (index < 0 || index > partyCount - 1)
+    {
+        return nullptr;
+    }
+    
     return party[index];
 }
 
 Potion *Trainer::getPotionAtIndex(int index) const
 {
+    if (index < 0 || index > potionCount - 1)
+    {
+        return nullptr;
+    }
+    
     return (potions + index);
 }
 
@@ -237,7 +247,7 @@ bool Trainer::addPokemon(Pokemon *p)
 
 bool Trainer::removePokemon(int index)
 {
-    if (index > partyCount - 1)
+    if (index < 0 || index > partyCount - 1)
     {
         return false;
     }
@@ -295,7 +305,7 @@ bool Trainer::addPotion(const Potion &p)
 
 bool Trainer::removePotion(int index)
 {
-    if (index > potionCount - 1)
+    if (index < 0 || index > potionCount - 1)
     {
         return false;
     }
@@ -312,6 +322,11 @@ bool Trainer::removePotion(int index)
 
 bool Trainer::usePotion(int potionIndex, int pokemonIndex)
 {
+    if (potionIndex < 0 || potionIndex > potionCount - 1 || pokemonIndex < 0 || pokemonIndex > partyCount - 1)
+    {
+        return false;
+    }
+
     party[pokemonIndex]->usePotion(potions[potionIndex]);
     potions[potionIndex].use();
 

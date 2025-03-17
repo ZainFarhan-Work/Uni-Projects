@@ -20,9 +20,9 @@ Pokemon::Pokemon()
     moveCount = 0;
     fainted = false;
 
-    moveCapacity = 0;
-    moves = NULL;
-    equippedArmor = NULL;
+    moveCapacity = 1;
+    moves = new Move[1];
+    equippedArmor = new Armor;
 }
 
 Pokemon::Pokemon(const string& name, const string& type, int hp)
@@ -38,7 +38,7 @@ Pokemon::Pokemon(const string& name, const string& type, int hp)
 
     moveCapacity = 1;
     moves = new Move[1];
-    equippedArmor = NULL;
+    equippedArmor = new Armor;
 
 }
 
@@ -62,16 +62,9 @@ Pokemon::Pokemon(const Pokemon& other)
         this->moves[i] = other.moves[i];
     }
 
-    
-    if (other.equippedArmor != NULL)
-    {
-        this->equippedArmor = new Armor;
-        this->equippedArmor[0] = other.equippedArmor[0];
-    }
-    else
-    {
-        this->equippedArmor = NULL;
-    }
+    this->equippedArmor = new Armor;
+    this->equippedArmor[0] = other.equippedArmor[0];
+
     
 }
 
@@ -85,17 +78,11 @@ void Pokemon::copyFrom(const Pokemon &other)
     this->moveCount = other.moveCount;
     fainted = other.fainted;
 
-    if (this->moves != NULL)
-    {
-        delete[] moves;
-        moves = NULL;
-    }
+    delete[] moves;
+    moves = NULL;
     
-    if (this->equippedArmor != NULL)
-    {
-        delete equippedArmor;
-        equippedArmor = NULL;
-    }
+    delete equippedArmor;
+    equippedArmor = NULL;
 
     this->moveCapacity = other.moveCapacity;
     this->moves = new Move[other.moveCapacity];
@@ -119,15 +106,9 @@ void Pokemon::copyFrom(const Pokemon &other)
 // Destructor
 Pokemon::~Pokemon()
 {
-    if (moves != NULL)
-    {
-        delete[] moves;
-    }
+    delete[] moves;
 
-    if (equippedArmor != NULL)
-    {
-        delete equippedArmor;
-    }
+    delete equippedArmor;
 
 }
 
@@ -159,17 +140,17 @@ bool Pokemon::isFainted() const
 
 Armor* Pokemon::getEquippedArmor() const 
 { 
-    if (equippedArmor != NULL)
-    {
-        return equippedArmor;
-    }
-
-    return NULL;
+    return equippedArmor;
     
 }
 
 Move* Pokemon::getMoveAtIndex(int index)
 {
+    if (index < 0 || index > moveCount - 1)
+    {
+        return nullptr;
+    }
+    
     return &moves[index];
 }
 
@@ -202,7 +183,7 @@ bool Pokemon::addMove(const Move& m)
 
 bool Pokemon::removeMove(int index)
 {
-    if (index > moveCount - 1)
+    if (index < 0 || index > moveCount - 1)
     {
         return false;
     }
@@ -260,34 +241,25 @@ void Pokemon::heal(int amount)
 
 void Pokemon::equipArmor(const Armor& a)
 {
-    if (equippedArmor == NULL)
-    {
-        equippedArmor = new Armor;
-        *equippedArmor = a;
-        return;
-    }
 
     *equippedArmor = a;
+    return;
     
     return;
 }
 
 void Pokemon::removeArmor()
 {
-    if (equippedArmor == NULL)
-    {
-        return;
-    }
 
     delete equippedArmor;
-    equippedArmor = NULL;
+    equippedArmor = new Armor;
     
     return;
 }
 
 bool Pokemon::useMove(int moveIndex)
 {
-    if (moveIndex > moveCount - 1)
+    if (moveIndex < 0 || moveIndex > moveCount - 1)
     {
         return false;
     }

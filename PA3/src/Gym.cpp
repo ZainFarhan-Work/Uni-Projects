@@ -46,7 +46,6 @@ Gym::Gym(Trainer *gymLeader, const string &badgeName, int difficulty)
 
     this->badgeName = badgeName;
     this->difficulty = difficulty;
-
     
 }
 
@@ -101,7 +100,7 @@ void Gym::addGymPokemon(Pokemon *p)
 
 bool Gym::removeGymPokemon(int index)
 {
-    if (index > pokemonCount - 1)
+    if (index < 0 || index > pokemonCount - 1)
     {
         return false;
     }
@@ -132,14 +131,18 @@ bool Gym::battle(Trainer *challenger)
         // Challenger Wins
         if (gymP == nullptr)
         {
-            string his = gymHistory.getAllLogs();
-            cout << his << endl;
+            gymHistory.addLog("\nChallenger Wins!\n");
+            // string his = gymHistory.getAllLogs();
+            // cout << his << endl;
             return true;
         }
         
         // Gym Wins
         if (challengerP == nullptr)
         {
+            gymHistory.addLog("\nGym Wins!\n");
+            // string his = gymHistory.getAllLogs();
+            // cout << his << endl;
             return false;
         }
         

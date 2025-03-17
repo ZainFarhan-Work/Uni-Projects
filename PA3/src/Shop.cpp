@@ -94,7 +94,7 @@ void Shop::addArmor(const Armor &a)
 
 bool Shop::removePotion(int index)
 {
-    if (index > potionCount - 1)
+    if (index < 0 || index > potionCount - 1)
     {
         return false;
     }
@@ -111,7 +111,7 @@ bool Shop::removePotion(int index)
 
 bool Shop::removeArmor(int index)
 {
-    if (index > armorCount - 1)
+    if (index < 0 || index > armorCount - 1)
     {
         return false;
     }
@@ -138,7 +138,7 @@ int Shop::getArmorCount() const
 
 Potion *Shop::getPotionAtIndex(int index) const
 {
-    if (index >= potionCapacity)
+    if (index < 0 || index >= potionCapacity)
     {
         return nullptr;
     }
@@ -148,7 +148,7 @@ Potion *Shop::getPotionAtIndex(int index) const
 
 Armor *Shop::getArmorAtIndex(int index) const
 {
-    if (index >= armorCapacity)
+    if (index < 0 || index >= armorCapacity)
     {
         return nullptr;
     }

@@ -53,6 +53,7 @@ int main()
     leader->addPokemon(p2);
 
     Gym gym(leader, "Rock Badge", 2);
+    
     gym.addGymPokemon(p1);
     gym.addGymPokemon(p2);
 

@@ -145,26 +145,27 @@ Pokemon *Battle::getWinner() const
 
 int Battle::calculateDamage(Pokemon &attacker, Pokemon &defender, Move &move)
 {
+    cout << defender.getName() << "  :  " << defender.getEquippedArmor() << endl;
+
+    // if (!deterministic)
+    // {
+    //     int randomValue = rand() % 11 - 5;
+
+    //     return move.getPower() + randomValue;
+    // }
 
     if (!deterministic)
-    {
-        int randomValue = rand() % 11 - 5;
-
-        return move.getPower() + randomValue;
-    }
-
-    if (defender.getEquippedArmor() && !deterministic)
     {
         int randomValue = rand() % 11 - 5;
 
         return move.getPower() - defender.getEquippedArmor()->getDefenseBonus() + randomValue;
     }
     
-    if (defender.getEquippedArmor() && deterministic)
-    {
-        return move.getPower() - defender.getEquippedArmor()->getDefenseBonus();
-    }
+    // if (defender.getEquippedArmor() && deterministic)
+    // {
+    //     return move.getPower() - defender.getEquippedArmor()->getDefenseBonus();
+    // }
     
-    return move.getPower();
+    return move.getPower() - defender.getEquippedArmor()->getDefenseBonus();
 
 }
