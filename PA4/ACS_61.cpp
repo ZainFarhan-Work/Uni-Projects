@@ -86,6 +86,15 @@ void Aircraft::land()
 
 }
 
+
+// Operators
+
+ostream& operator<<(ostream& out, const Aircraft& craft)
+{
+    return out;
+}
+
+
 // Getters
 
 string Aircraft::getIdentifier() { return identifier; }
@@ -112,11 +121,11 @@ CombatAircraft::CombatAircraft() : Aircraft()
 CombatAircraft::CombatAircraft(string identifier, int fuel, int health, AircraftStatus status, string weapon, int weapon_count, int weapon_strength)
 : Aircraft(identifier, fuel, health, status)
 {
-    if (weapon_count > MAX_AMOUNT)
-    {
-        weapon_count = MAX_AMOUNT;
-    }
-    else if (weapon_count < 0)
+    // if (weapon_count > MAX_AMOUNT)
+    // {
+    //     weapon_count = MAX_AMOUNT;
+    // }
+    if (weapon_count < 0)
     {
         weapon_count = 0;
     }
@@ -208,12 +217,7 @@ void StealthAircraft::land()
 
 void StealthAircraft::activateCloak()
 {
-    if (current_status == AircraftStatus::Crashed)
-    {
-        return;
-    }
-    
-    if (fuel_level - 15 < 0 || health - 10 < 0)
+    if (current_status == AircraftStatus::Crashed || (fuel_level - 15 < 0 || health - 10 < 0) || cloak_status == true)
     {
         return;
     }
@@ -260,8 +264,112 @@ bool StealthAircraft::getCloakStatus() { return cloak_status; }
 
 // AbductorCraft methods
 
+#pragma region Abductor Aircraft
+
+// Constructors
+
+AbductorCraft::AbductorCraft() : Aircraft(),  StealthAircraft()
+{
+    abductee_count = 0;
+    abductee_capacity = 0;
+}
+
+AbductorCraft::AbductorCraft(string identifier, int fuel, int health, AircraftStatus status, bool cloak, int abductee_count, int capacity) :
+Aircraft(identifier, fuel, health, status),
+StealthAircraft(identifier, fuel, health, status, cloak)
+{
+    if (abductee_count > MAX_AMOUNT)
+    {
+        abductee_count = MAX_AMOUNT;
+    }
+    else if (abductee_count < 0)
+    {
+        abductee_count = 0;
+    }
+
+    if (capacity > MAX_AMOUNT)
+    {
+        capacity = MAX_AMOUNT;
+    }
+    else if (capacity < 0)
+    {
+        capacity = abductee_count;
+    }
+
+    this->abductee_count = abductee_count;
+    this->abductee_capacity = capacity;
+}
+
+AbductorCraft::AbductorCraft(AbductorCraft& copy) :
+Aircraft(copy),
+StealthAircraft(copy)
+{
+    this->abductee_count = copy.abductee_count;
+    this->abductee_capacity = copy.abductee_capacity;
+}
+
+// Getters
+
+int AbductorCraft::getAbducteeCount() { return abductee_count; }
+int AbductorCraft::getAbducteeCapacity() { return abductee_capacity; }
+
+#pragma endregion
 
 
 // GuardianCraft methods
+
+
+#pragma region Guardian Aircraft
+
+// Constructors
+
+GuardianCraft::GuardianCraft() : Aircraft(), CombatAircraft(), StealthAircraft()
+{
+    kill_count = 0;
+}
+
+GuardianCraft::GuardianCraft(string identifier, int fuel, int health, AircraftStatus status,
+    string weapon, int weapon_count, int weapon_strength, bool cloak, int kill_count) :
+    Aircraft(identifier, fuel, health, status),
+    CombatAircraft(identifier, fuel, health, status, weapon, weapon_count, weapon_strength),
+    StealthAircraft(identifier, fuel, health, status, cloak)
+    {
+        if (kill_count > MAX_AMOUNT)
+        {
+            kill_count = MAX_AMOUNT;
+        }
+        else if (kill_count < 0)
+        {
+            kill_count = 0;
+        }
+        
+        
+        this->kill_count = kill_count;
+    }
+
+GuardianCraft::GuardianCraft(GuardianCraft& copy) :
+Aircraft(copy),
+CombatAircraft(copy),
+StealthAircraft(copy)
+{
+    if (kill_count > MAX_AMOUNT)
+    {
+        kill_count = MAX_AMOUNT;
+    }
+    else if (kill_count < 0)
+    {
+        kill_count = 0;
+    }
+    kill_count = copy.kill_count;
+}
+
+
+// Operators
+
+// Getters
+
+int GuardianCraft::getKillCount() { return kill_count; }
+
+#pragma endregion
 
 

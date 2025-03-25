@@ -43,10 +43,14 @@ class Aircraft
         Aircraft(Aircraft& copy);
 
         // Essential Functions
-        string getIdentifier();
-        int getFuelLevel();
-        int getHealth();
-        AircraftStatus getCurrentStatus();
+        virtual string getIdentifier();
+        virtual int getFuelLevel();
+        virtual int getHealth();
+        virtual AircraftStatus getCurrentStatus();
+
+        // Operator
+
+        friend ostream& operator<<(ostream& out, const Aircraft& craft);
 
         void takeOff();
         void land();
@@ -54,7 +58,7 @@ class Aircraft
 };
 
 // INHERITED CLASSES -- implement inheritance yourself.
-class CombatAircraft : public Aircraft
+class CombatAircraft : public virtual Aircraft
 {
     protected:
         string weapon_type;
@@ -65,7 +69,8 @@ class CombatAircraft : public Aircraft
 
         // Constructors
         CombatAircraft();
-        CombatAircraft(string identifier, int fuel, int health, AircraftStatus status, string weapon, int weapon_count, int weapon_strength); 
+        CombatAircraft(string identifier, int fuel, int health, AircraftStatus status,
+            string weapon, int weapon_count, int weapon_strength); 
         CombatAircraft(CombatAircraft& copy);
 
         // Essential Functions
@@ -75,9 +80,9 @@ class CombatAircraft : public Aircraft
 
 };
 
-class StealthAircraft : public Aircraft
+class StealthAircraft : public virtual Aircraft
 {
-    private:
+    protected:
         bool cloak_status;
     //
     public:
@@ -102,17 +107,44 @@ class StealthAircraft : public Aircraft
 
 };
 
-class AbductorCraft {
+class AbductorCraft : public StealthAircraft
+{
     private:
         int abductee_count;
         int abductee_capacity;    
     //
+
+    public:
+
+        // Constructors
+
+        AbductorCraft();
+        AbductorCraft(string identifier, int fuel, int health, AircraftStatus status, bool cloak, int abductee_count, int capacity);
+        AbductorCraft(AbductorCraft& copy);
+
+        // Getters
+
+        int getAbducteeCount();
+        int getAbducteeCapacity();
 };
 
-class GuardianCraft {
+class GuardianCraft : public virtual CombatAircraft, public virtual StealthAircraft
+{
     private:
         int kill_count;
     //
+    public:
+
+        // Constructors
+
+        GuardianCraft();
+        GuardianCraft(string identifier, int fuel, int health, AircraftStatus status,
+            string weapon, int weapon_count, int weapon_strength, bool cloak, int kill_count);
+        GuardianCraft(GuardianCraft& copy);
+
+        // Getters
+
+        int getKillCount();
 };
 
 #endif
