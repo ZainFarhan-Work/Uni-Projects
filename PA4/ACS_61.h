@@ -16,35 +16,90 @@ class Aeroplane {
 };
 */
 
-enum class AircraftStatus {
+enum class AircraftStatus
+{
     OnGround,
     Airborne,
     Crashed
 };
 
 // BASE CLASS
-class Aircraft {
-    private:
+class Aircraft
+{
+    protected:
         string identifier;
         int fuel_level;
         int health;
         AircraftStatus current_status;
+
+        int const MAX_AMOUNT = 100;
+
     //
+    public:
+
+        // Construcrors
+        Aircraft();
+        Aircraft(string identifier, int fuel, int health, AircraftStatus status);
+        Aircraft(Aircraft& copy);
+
+        // Essential Functions
+        string getIdentifier();
+        int getFuelLevel();
+        int getHealth();
+        AircraftStatus getCurrentStatus();
+
+        void takeOff();
+        void land();
+
 };
 
 // INHERITED CLASSES -- implement inheritance yourself.
-class CombatAircraft {
-    private:
+class CombatAircraft : public Aircraft
+{
+    protected:
         string weapon_type;
         int weapon_count;
         int weapon_strength;
     //
+    public:
+
+        // Constructors
+        CombatAircraft();
+        CombatAircraft(string identifier, int fuel, int health, AircraftStatus status, string weapon, int weapon_count, int weapon_strength); 
+        CombatAircraft(CombatAircraft& copy);
+
+        // Essential Functions
+        string getWeaponType();
+        int getWeaponCount();
+        int getWeaponStrength();
+
 };
 
-class StealthAircraft {
+class StealthAircraft : public Aircraft
+{
     private:
         bool cloak_status;
     //
+    public:
+
+        // Constructors
+
+        StealthAircraft();
+        StealthAircraft(string identifier, int fuel, int health, AircraftStatus status, bool cloak);
+        StealthAircraft(StealthAircraft& copy);
+
+        // Essential Functions
+
+        void takeOff();
+        void land();
+
+        void activateCloak();
+        void deactivateCloak();
+
+        // Getters
+
+        bool getCloakStatus();
+
 };
 
 class AbductorCraft {
