@@ -8,6 +8,32 @@ string Aeroplane::get_name() {
 }
 */
 
+// Aircraft Status
+
+ostream& operator<<(ostream& out, const AircraftStatus status)
+{
+    switch (status)
+    {
+    case AircraftStatus::OnGround:
+        out << "On Ground";
+        break;
+
+    case AircraftStatus::Airborne:
+        out << "Airborne";
+        break;
+
+    case AircraftStatus::Crashed:
+        out << "Crashed";
+        break;
+    
+    default:
+        out << "Unknown";
+        break;
+    }
+
+    return out;
+}
+
 
 // Aircraft methods
 
@@ -89,11 +115,118 @@ void Aircraft::land()
 
 // Operators
 
+Aircraft& Aircraft::operator+=(const int fuel)
+{
+    if (current_status != AircraftStatus::OnGround)
+    {
+        return *this;
+    }
+
+    fuel_level += fuel;
+
+    if (fuel_level > 100)
+    {
+        fuel_level = 100;
+    }
+
+    if (fuel_level < 0)
+    {
+        fuel_level = 0;
+    }
+    
+    return *this;
+    
+}
+
+Aircraft& Aircraft::operator-=(const int fuel)
+{
+    if (current_status != AircraftStatus::OnGround)
+    {
+        return *this;
+    }
+
+    fuel_level -= fuel;
+
+    if (fuel_level > 100)
+    {
+        fuel_level = 100;
+    }
+
+    if (fuel_level < 0)
+    {
+        fuel_level = 0;
+    }
+
+    return *this;
+}
+
+bool Aircraft::operator==(const Aircraft& other)
+{
+    if (identifier == other.identifier && fuel_level == other.fuel_level && health == other.health && current_status == other.current_status)
+    {
+        return true;
+    }
+    
+    return false;
+
+}
+
 ostream& operator<<(ostream& out, const Aircraft& craft)
 {
+    out << "Identifier: " << craft.identifier << endl;
+    out << "Fuel Level: " << craft.fuel_level << "%"  << endl;
+    out << "Health: " << craft.health << "%" << endl;
+    out << "Current Status: " << craft.current_status << endl;
     return out;
 }
 
+istream& operator>>(istream& in, Aircraft& craft)
+{
+    int status = 0;
+    
+    cout << "Identifier: ";
+    in >> craft.identifier;
+    cout << "Fuel Level: ";
+    in >> craft.fuel_level;
+    cout << "Health: ";
+    in >> craft.health;
+    cout << "Status [0-2]: ";
+    in >> status;
+
+    if (craft.fuel_level > 100)
+    {
+        craft.fuel_level = 100;
+    }
+    else if (craft.fuel_level < 0)
+    {
+        craft.fuel_level = 0;
+    }
+    
+    if (craft.health > 100)
+    {
+        craft.health = 100;
+    }
+    else if (craft.health < 0)
+    {
+        craft.health = 0;
+    }
+
+    switch (status)
+    {
+    default:
+    case 0:
+        craft.current_status = AircraftStatus::OnGround;
+        break;
+    case 1:
+        craft.current_status = AircraftStatus::Airborne;
+        break;
+    case 2:
+        craft.current_status = AircraftStatus::Crashed;
+        break;
+    }
+
+    return in;
+}
 
 // Getters
 
@@ -287,11 +420,11 @@ StealthAircraft(identifier, fuel, health, status, cloak)
         abductee_count = 0;
     }
 
-    if (capacity > MAX_AMOUNT)
-    {
-        capacity = MAX_AMOUNT;
-    }
-    else if (capacity < 0)
+    // if (capacity > MAX_AMOUNT)
+    // {
+    //     capacity = MAX_AMOUNT;
+    // }
+    if (capacity < 0)
     {
         capacity = abductee_count;
     }

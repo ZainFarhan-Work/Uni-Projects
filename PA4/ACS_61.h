@@ -21,7 +21,10 @@ enum class AircraftStatus
     OnGround,
     Airborne,
     Crashed
+
 };
+
+ostream& operator<<(ostream& out, const AircraftStatus status);
 
 // BASE CLASS
 class Aircraft
@@ -50,7 +53,12 @@ class Aircraft
 
         // Operator
 
+        virtual Aircraft& operator+=(const int fuel);
+        Aircraft& operator-=(const int fuel);
+        bool operator==(const Aircraft& other);
+
         friend ostream& operator<<(ostream& out, const Aircraft& craft);
+        friend istream& operator>>(istream& in, Aircraft& craft);
 
         void takeOff();
         void land();
@@ -107,7 +115,7 @@ class StealthAircraft : public virtual Aircraft
 
 };
 
-class AbductorCraft : public StealthAircraft
+class AbductorCraft : public virtual StealthAircraft
 {
     private:
         int abductee_count;

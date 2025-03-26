@@ -13,9 +13,24 @@ using namespace std;
 
 int main()
 {
-    GuardianCraft gc2("GRD1", 25, 69, AircraftStatus::Airborne, "Llamas", 10, 25, true, 2);
+    Aircraft a1("AIRCRFT1", 48, 93, AircraftStatus::OnGround);
+    AbductorCraft ac1("", 23, 100, AircraftStatus::OnGround, false, 0, 200);
+    GuardianCraft gc2("GRD1", 25, 69, AircraftStatus::OnGround, "Llamas", 10, 25, true, 2);
 
-    cout << gc2.getIdentifier() << endl;
-    cout << gc2.getHealth() << endl;
+    cout << ac1.getFuelLevel() << endl;
+    cout << gc2.getFuelLevel() << endl;
+
+    ac1 += 22;
+    gc2 += 25;
+
+    cin >> a1;
+
+    cout << a1;
+    // cout << endl;
+    // cout << ac1.getHealth() << endl;
+    // cout << ac1.getCurrentStatus() << endl;
+    // cout << ac1.getAbducteeCapacity() << endl;
+    // cout << ac1.getFuelLevel() << endl;
+    // cout << gc2.getFuelLevel() << endl;
 
 }
