@@ -183,7 +183,7 @@ ostream& operator<<(ostream& out, const Aircraft& craft)
 istream& operator>>(istream& in, Aircraft& craft)
 {
     int status = 0;
-    
+
     cout << "Identifier: ";
     in >> craft.identifier;
     cout << "Fuel Level: ";
@@ -285,7 +285,47 @@ CombatAircraft::CombatAircraft(CombatAircraft& copy) : Aircraft(copy)
 }
 
 
+// Operators
 
+CombatAircraft& CombatAircraft::operator++(int)
+{
+    if (current_status != AircraftStatus::OnGround)
+    {
+        return *this;
+    }
+
+    weapon_count++;
+
+    if (weapon_count < 0)
+    {
+        weapon_count = 0;
+    }
+    
+    return *this;
+}
+
+CombatAircraft& CombatAircraft::operator--()
+{
+    if (current_status != AircraftStatus::OnGround)
+    {
+        return *this;
+    }
+
+    weapon_count--;
+
+    if (weapon_count < 0)
+    {
+        weapon_count = 0;
+    }
+    
+    return *this;
+}
+
+ostream& operator<<(ostream& out, const CombatAircraft& craft)
+{
+    
+    return out;
+}
 
 // Getters
 

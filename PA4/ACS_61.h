@@ -46,23 +46,24 @@ class Aircraft
         Aircraft(Aircraft& copy);
 
         // Essential Functions
-        virtual string getIdentifier();
-        virtual int getFuelLevel();
-        virtual int getHealth();
-        virtual AircraftStatus getCurrentStatus();
+
+        void takeOff();
+        void land();
 
         // Operator
 
         virtual Aircraft& operator+=(const int fuel);
-        Aircraft& operator-=(const int fuel);
+        virtual Aircraft& operator-=(const int fuel);
         bool operator==(const Aircraft& other);
 
         friend ostream& operator<<(ostream& out, const Aircraft& craft);
         friend istream& operator>>(istream& in, Aircraft& craft);
 
-        void takeOff();
-        void land();
-
+        // Getters
+        virtual string getIdentifier();
+        virtual int getFuelLevel();
+        virtual int getHealth();
+        virtual AircraftStatus getCurrentStatus();
 };
 
 // INHERITED CLASSES -- implement inheritance yourself.
@@ -78,10 +79,17 @@ class CombatAircraft : public virtual Aircraft
         // Constructors
         CombatAircraft();
         CombatAircraft(string identifier, int fuel, int health, AircraftStatus status,
-            string weapon, int weapon_count, int weapon_strength); 
+        string weapon, int weapon_count, int weapon_strength); 
         CombatAircraft(CombatAircraft& copy);
 
-        // Essential Functions
+        // Operators
+
+        virtual CombatAircraft& operator++(int);
+        virtual CombatAircraft& operator--();
+
+        friend ostream& operator<<(ostream& out, const CombatAircraft& craft);
+
+        // Getters
         string getWeaponType();
         int getWeaponCount();
         int getWeaponStrength();
