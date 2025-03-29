@@ -43,7 +43,7 @@ class Aircraft
         // Construcrors
         Aircraft();
         Aircraft(string identifier, int fuel, int health, AircraftStatus status);
-        Aircraft(Aircraft& copy);
+        Aircraft(const Aircraft& copy);
 
         // Essential Functions
 
@@ -80,12 +80,12 @@ class CombatAircraft : public virtual Aircraft
         CombatAircraft();
         CombatAircraft(string identifier, int fuel, int health, AircraftStatus status,
         string weapon, int weapon_count, int weapon_strength); 
-        CombatAircraft(CombatAircraft& copy);
+        CombatAircraft(const CombatAircraft& copy);
 
         // Operators
 
-        virtual CombatAircraft& operator++(int);
-        virtual CombatAircraft& operator--();
+        CombatAircraft operator++(int);
+        CombatAircraft& operator--();
 
         friend ostream& operator<<(ostream& out, const CombatAircraft& craft);
 
@@ -107,7 +107,7 @@ class StealthAircraft : public virtual Aircraft
 
         StealthAircraft();
         StealthAircraft(string identifier, int fuel, int health, AircraftStatus status, bool cloak);
-        StealthAircraft(StealthAircraft& copy);
+        StealthAircraft(const StealthAircraft& copy);
 
         // Essential Functions
 
@@ -116,6 +116,12 @@ class StealthAircraft : public virtual Aircraft
 
         void activateCloak();
         void deactivateCloak();
+
+        // Operators
+
+        bool operator!();
+
+        friend ostream& operator<<(ostream& out, const StealthAircraft& craft);
 
         // Getters
 
@@ -136,7 +142,24 @@ class AbductorCraft : public virtual StealthAircraft
 
         AbductorCraft();
         AbductorCraft(string identifier, int fuel, int health, AircraftStatus status, bool cloak, int abductee_count, int capacity);
-        AbductorCraft(AbductorCraft& copy);
+        AbductorCraft(const AbductorCraft& copy);
+
+        // Operators
+        bool operator>(const AbductorCraft& other);
+        
+        AbductorCraft& operator+=(const int fuel);
+        AbductorCraft& operator-=(const int fuel);
+        
+        AbductorCraft& operator&(AbductorCraft& other);
+        
+        friend ostream& operator<<(ostream& out, const AbductorCraft& craft);
+
+        // Helper Functions
+
+        void setHealth(int num);
+        void decreaseHealth(int num);
+
+        void setStatus(AircraftStatus status);
 
         // Getters
 
@@ -156,7 +179,17 @@ class GuardianCraft : public virtual CombatAircraft, public virtual StealthAircr
         GuardianCraft();
         GuardianCraft(string identifier, int fuel, int health, AircraftStatus status,
             string weapon, int weapon_count, int weapon_strength, bool cloak, int kill_count);
-        GuardianCraft(GuardianCraft& copy);
+        GuardianCraft(const GuardianCraft& copy);
+
+        // Operators
+
+        bool operator*=(AbductorCraft& abductor);
+        bool operator*(AbductorCraft& abductor);
+
+        GuardianCraft operator++(int);
+        GuardianCraft& operator--();
+
+        friend ostream& operator<<(ostream& out, const GuardianCraft& craft);
 
         // Getters
 
