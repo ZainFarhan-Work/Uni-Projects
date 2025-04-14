@@ -18,29 +18,38 @@ Team::Team(string name, vector<string> playerNames)
     players = playerNames;
 }
 
-void Team::addWin(){
+void Team::addWin()
+{
+    wins++;
 }
 
-void Team::addMatch(){
+void Team::addMatch()
+{
+    totalMatches++;
 }
 
-bool Team::hasPlayer(const string& player) const {
+bool Team::hasPlayer(const string& player) const
+{
+    for (string name : players)
+    {
+        if (name == player)
+        {
+            return true;
+        }
+        
+    }
+    
 }
 
-const vector<string>& Team::getPlayers() const { 
-}
+const vector<string>& Team::getPlayers() const{ return players; }
 
-int Team::getWinPercentage() const {
-}
+int Team::getWinPercentage() const { return (float) wins / totalMatches * 100.0; }
 
-string Team::getName() const {
-}
+string Team::getName() const { return name; }
 
-int Team::getWins() const {
-}
+int Team::getWins() const { return wins; }
 
-int Team::getTotalMatches() const {
-}
+int Team::getTotalMatches() const { return totalMatches; }
 
 Match::Match(Team t1, Team t2, int y){ }
 
