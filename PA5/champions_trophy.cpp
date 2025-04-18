@@ -96,7 +96,7 @@ void Match::setWinner()
     
 }
 
-string Match::getWinner() const { return winner->getName(); }
+string Match::getWinner() const { /* if (winner == nullptr) return ""; return winner->getName(); */ }
 
 const Team& Match::getTeam1() const { return this->team1; }
 

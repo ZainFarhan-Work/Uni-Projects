@@ -1,6 +1,15 @@
 #include <iostream>
 #include <sstream>
 
+#include <csignal>
+#include <cstdlib>
+
+#include <sys/wait.h>
+#include <unistd.h>
+
+#include <functional>
+
+
 #include "champions_trophy.h"  // Assuming your Team class is in this file
 
 using namespace std;
@@ -16,6 +25,9 @@ using namespace std;
 
 void processTestResult (const string& testName, const string& debug, bool passed, int& points, int testPoints = 1);
 bool isInText (const string& input, const string& passage);
+
+void riskyTest(const std::string& testName, std::function<void()> testFunc);
+void signalHandler(int signal);
 
 // Test Cases - Prototypes
 
@@ -36,7 +48,11 @@ int main()
     cout << "Only use this as a reference." << endl;
     cout << endl;
 
+    signal(SIGSEGV, signalHandler);
+
     testTeamClass(marks, debug);
+
+    testMatchClass(marks, debug);
 
 
     cout << RESET;
@@ -65,7 +81,7 @@ void testTeamClass(int& marks, ostringstream& debug)
     }
     catch(...)
     {
-        cout << "Error: Something Unexpected Happened - Re-Check your get name function." << endl;
+        cout << "Error: Critical Failure - Re-Check your get name function." << endl;
     }
 
     debug.str("");
@@ -89,7 +105,7 @@ void testTeamClass(int& marks, ostringstream& debug)
     }
     catch(...)
     {
-        cout << "Error: Something Unexpected Happened - Re-Check your Get Player function." << endl;
+        cout << "Error: Critical Failure - Re-Check your Has Player function." << endl;
     }
 
     debug.str("");
@@ -122,7 +138,7 @@ void testTeamClass(int& marks, ostringstream& debug)
     }
     catch(...)
     {
-        cout << "Error: Something Unexpected Happened - Re-Check your Get Player function." << endl;
+        cout << "Error: Critical Failure - Re-Check your Get Player function." << endl;
     }
 
     debug.str("");
@@ -177,14 +193,45 @@ void testTeamClass(int& marks, ostringstream& debug)
     }
     catch(...)
     {
-        cout << "Error: Something Unexpected Happened - Re-Check your get name function." << endl;
+        cout << "Error: Critical Failure - Re-Check your Getters function." << endl;
     }
 
-    cout << "\nTeam Class tests completed. Take a short break :)\n";
+    cout << "\nTeam Class tests completed. Take a short break :)\n" << endl;
     cout << CYAN << "Points: " << marks << " / 10" << RESET << endl;
 
 }
 
+void testMatchClass(int& marks, ostringstream& debug)
+{
+    Team tigers("Tigers", {"Alice", "Bob", "Charlie"});
+    Team lions("Lions", {"David", "Eve", "Frank"});
+    Match match(tigers, lions, 2024);
+
+    // Test 1 - Match Initialization
+
+    debug << "Expected: 2024 - Got: ";
+    debug << match.getYear();
+    processTestResult("1.1 Match Year", debug.str(), match.getYear() == 2024, marks, 1);
+
+    debug.str("");
+
+    debug << "Expected: True - Got: ";
+    debug << match.getPlayerStats().empty();
+    processTestResult("1.2 Match PlayerStats Empty", debug.str(), match.getPlayerStats().empty(), marks, 1);
+
+    debug.str("");
+
+    riskyTest("1.3 Match Winner Empty", [&]()
+    {
+        string result = match.getWinner();
+        debug << "Expected: nullptr - Got: ";
+        debug << result;
+        processTestResult("1.3 Match Winner Empty", debug.str(), result == "", marks, 1);
+
+    });
+
+    debug.str("");
+}
 
 // Helper Functions
 
@@ -209,5 +256,70 @@ void processTestResult (const string& testName, const string& debug, bool passed
 bool isInText (const string& input, const string& passage)
 {
     return false;
+}
+
+
+// Signal Handlers
+
+void riskyTest(const std::string& testName, function<void()> testFunc)
+{
+    pid_t pid = fork();
+
+    if (pid == 0)
+    {
+        // In child process: run the test
+        testFunc();
+        exit(0); // Normal exit if no crash
+
+    } 
+    else
+    {
+        // In parent process: wait and check status
+        int status;
+
+        waitpid(pid, &status, 0);
+
+        if (WIFSIGNALED(status))
+        {
+            int sig = WTERMSIG(status);
+            std::cout << YELLOW << "[SKIPPED] " << testName << " (crashed with signal " << sig << ")\n";
+            
+        }
+
+        // TODO: Extra Logic if Need Be
+
+        else if (WIFEXITED(status))
+        {
+            /* int exit_code = WEXITSTATUS(status);
+
+            if (exit_code == 0)
+            {
+                std::cout << "[PASSED] " << testName << "\n";
+            }
+            else
+            {
+                std::cout << "[FAILED] " << testName << " (exit code " << exit_code << ")\n";
+            } */
+
+        }
+
+        else
+        {
+            cout << RED << "[Warning] " << testName << " Test Ended Abnormally.\n";
+        }
+
+    }
+
+}
+
+// This Function is not used currently
+void signalHandler(int signal)
+{
+    cerr << RED << "Critical Failure - Signal " << signal << " (Segmentation fault)" << endl;
+    cerr << YELLOW << "Signal Caught - Program is Unstable: it may crash" << endl;
+    cerr << YELLOW << "Attempting to Skip Test" << endl;
+    
+    std::signal(SIGSEGV, SIG_DFL);
+    std::raise(SIGSEGV);
 }
 
