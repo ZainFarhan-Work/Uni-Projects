@@ -141,7 +141,6 @@ bool CricketDatabase::addMatch(string team1, string team2, int year, const map<s
         temp.addPerformance(pair.first, pair.second.first, pair.second.first);
         playerPerformances[pair.first].push_back(pair.second);
     }
-    
 
     temp.setWinner();
     
@@ -152,9 +151,16 @@ bool CricketDatabase::addMatch(string team1, string team2, int year, const map<s
 
     else teams[team2].addWin();
 
-    Match temp2(teams[team1], teams[team2], year);
+    Match* temp2 = new Match(teams[team1], teams[team2], year);
 
-    matches.push_back(temp2);
+    for (auto pair : performances)
+    {
+        temp2->addPerformance(pair.first, pair.second.first, pair.second.first);
+    }
+
+    temp2->setWinner();
+
+    matches.push_back(*temp2);
 
     return true;
     

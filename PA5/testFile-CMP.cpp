@@ -38,7 +38,7 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug);
 int main()
 {
     int marks = 0;
-    int bonusMarks;
+    int bonusMarks = 0;
 
     ostringstream debug;
 
@@ -53,6 +53,8 @@ int main()
     testTeamClass(marks, debug);
 
     testMatchClass(marks, debug);
+
+    testCricketDatabase(marks, debug);
 
 
     cout << RESET;
@@ -203,7 +205,7 @@ void testTeamClass(int& totalMarks, ostringstream& debug)
 
     }, marks);
 
-    
+    totalMarks += marks;    
 
     cout << "\nTeam Class tests completed. Take a short break :)" << endl;
     cout << CYAN << "Points: " << marks << " / 10\n" << RESET << endl;
@@ -226,7 +228,7 @@ void testMatchClass(int& totalMarks, ostringstream& debug)
     {
         debug << "Expected: 2024 - Got: ";
         debug << match.getYear();
-        processTestResult(testName, debug.str(), match.getYear() == 2024, marks, 1);
+        processTestResult(testName, debug.str(), match.getYear() == 2024, childMarks, 1);
     }, marks);
 
     debug.str("");
@@ -235,7 +237,7 @@ void testMatchClass(int& totalMarks, ostringstream& debug)
     {
         debug << "Expected: True - Got: ";
         debug << match.getPlayerStats().empty();
-        processTestResult(testName, debug.str(), match.getPlayerStats().empty(), marks, 1);
+        processTestResult(testName, debug.str(), match.getPlayerStats().empty(), childMarks, 1);
     }, marks);
 
     
@@ -247,14 +249,14 @@ void testMatchClass(int& totalMarks, ostringstream& debug)
         string result = match.getWinner();
         debug << "Expected: nullptr - Got: ";
         debug << result;
-        processTestResult(testName, debug.str(), result == "", marks, 1);
+        processTestResult(testName, debug.str(), result == "", childMarks, 2);
     }, marks);
 
     debug.str("");
 
     // Test 2 - Adding Player Performances
 
-    match.addPerformance("Alice", 51, 1);
+    match.addPerformance("Alice", 50, 1);
     match.addPerformance("Bob", 30, 0);
     match.addPerformance("Charlie", 20, 2);
 
@@ -266,9 +268,199 @@ void testMatchClass(int& totalMarks, ostringstream& debug)
     {
         auto result = match.getPlayerStats();
         debug << "Expected: Runs = 50 and Wickets = 1 - Got: Runs = ";
-        debug << result["Alice"].first << " Wickets = " << result["Alice"].second;
-        processTestResult(testName, debug.str(), result["Alice"].first == 50 && result["Alice"].second == 1, marks, 1);
+        debug << result["Alice"].first << " and Wickets = " << result["Alice"].second;
+        processTestResult(testName, debug.str(), result["Alice"].first == 50 && result["Alice"].second == 1, childMarks, 1);
+
     }, marks);
+
+    debug.str("");
+
+    runTest("2.2 Player Frank Performance", [&](string testName, int& childMarks)
+    {
+        auto result = match.getPlayerStats();
+        debug << "Expected: Runs = 5 and Wickets = 3 - Got: Runs = ";
+        debug << result["Alice"].first << " and Wickets = " << result["Alice"].second;
+        processTestResult(testName, debug.str(), result["Frank"].first == 5 && result["Frank"].second == 3, childMarks, 1);
+        
+    }, marks);
+
+    debug.str("");
+
+    runTest("2.3 Player Performances Exist", [&](string testName, int& childMarks)
+    {
+        auto result = match.getPlayerStats();
+        debug << "Expected: 6 Performances - Got: ";
+        debug << result.size() << " Performances";
+        processTestResult(testName, debug.str(), result.size() == 6, childMarks, 1);
+        
+    }, marks);
+
+    debug.str("");
+
+    // Test 3 - The Winning Team
+
+    match.setWinner();
+
+    runTest("3.1 The Correct Winning Team", [&](string testName, int& childMarks)
+    {
+        string result = match.getWinner();
+        debug << "Expected: Tigers - Got: ";
+        debug << result;
+        processTestResult(testName, debug.str(), result == "Tigers", childMarks, 1);
+        
+    }, marks);
+
+    debug.str("");
+
+    Match tieMatch(tigers, lions, 2025);
+    tieMatch.addPerformance("Alice", 50, 0);
+    tieMatch.addPerformance("Bob", 20, 1);
+    tieMatch.addPerformance("Charlie", 30, 2);
+    tieMatch.addPerformance("David", 60, 1);
+    tieMatch.addPerformance("Eve", 30, 2);
+    tieMatch.addPerformance("Frank", 10, 0);
+    tieMatch.setWinner();
+
+    runTest("3.2 The Tie Match", [&](string testName, int& childMarks)
+    {
+        string result = tieMatch.getWinner();
+        debug << "Expected: Lions - Got: ";
+        debug << result;
+        processTestResult(testName, debug.str(), result == "Lions", childMarks, 2);
+        
+    }, marks);
+
+    debug.str("");
+
+    totalMarks += marks;
+
+    cout << "\nMatch Class tests completed. Take a short break :).\n";
+    cout << CYAN << "Points: " << marks << " / 10\n" << RESET << endl;
+
+}
+
+void testCricketDatabase(int& totalMarks, ostringstream& debug)
+{
+    cout << CYAN << "Running Cricket Database Test:\n" << endl;
+
+    int marks = 0;
+
+    vector<string> playerNames1 = {"Alice", "Bob"};
+    vector<string> playerNames2 = {"Charlie", "David"};
+
+    Team warriors("Warriors", playerNames1);
+    Team strikers("Strikers", playerNames2);
+
+    CricketDatabase db;
+    CricketDatabase db2;
+
+    // Test 1 - Adding Teams
+    db.addTeam(warriors.getName(), warriors.getPlayers());
+    db.addTeam(strikers.getName(), strikers.getPlayers());
+
+    runTest("1 Team Added", [&](string testName, int& childMarks)
+    {
+        bool pass = true;
+        auto teams = db.getTeams();
+        auto result = teams["Warriors"];
+
+        if (result.getName() != "Warriors")
+        {
+            pass = false;
+        }
+        
+
+        debug << "Expected: Warriors - Got: ";
+        debug << result.getName();
+        processTestResult(testName, debug.str(), pass, childMarks, 1);
+
+    }, marks);
+
+    debug.str("");
+
+    // Test 2 - Adding Match
+
+    map<string, pair<int, int>> match1Stats =
+    {
+        {"Alice", {40, 2}}, {"Bob", {30, 0}},
+        {"Charlie", {50, 1}}, {"David", {20, 2}}
+    };
+
+    db.addMatch("Warriors", "Strikers", 2024, match1Stats);
+
+    runTest("2.1 Match Successfully Added", [&](string testName, int& childMarks)
+    {
+        bool operation = db.addMatch("Warriors", "Strikers", 2018, match1Stats);
+        bool pass = true;
+
+        if (!operation)
+        {
+            debug << "Expected: Funtion to return True - Got: Function returned Flase";
+            processTestResult(testName, debug.str(), operation, childMarks, 1);
+            return;
+        }
+        
+        auto matches = db.getMatches();
+        
+        auto result = matches[1];
+
+        pass = (result.getTeam1().getName() == "Warriors") && (result.getTeam2().getName() == "Strikers") && (result.getYear() == 2018) && (result.getWinner() == "Strikers");
+        
+        debug << "Expected: Team 1 = Warriors, Team 2 = Strikers, Year = 2018, Winner = Strikers - Got: Team 1 = ";
+        debug << result.getTeam1().getName() << ", Team 2 = " << result.getTeam2().getName() << ", Year = " << result.getYear() << ", Winner = " << result.getWinner();
+
+        processTestResult(testName, debug.str(), pass && operation, childMarks, 2);
+
+    }, marks);
+
+    debug.str("");
+
+    runTest("2.2 Databases Teams Successfully Updated", [&](string testName, int& childMarks)
+    {
+        bool pass = true;
+        auto teams = db.getTeams();
+
+        pass = (teams["Warriors"].getWins() == 0) && (teams["Strikers"].getWins() == 1);
+
+        debug << "Expected: Warriors Wins = 0, Strikers Wins = 1 - Got: ";
+        debug << "Warriors Wins = " << teams["Warriors"].getWins() << ", Strikers Wins = " << teams["Strikers"].getWins();
+        processTestResult(testName, debug.str(), pass, childMarks, 1);
+
+    }, marks);
+
+    debug.str("");
+
+    runTest("2.3 Match Teams Successfully Updated", [&](string testName, int& childMarks)
+    {
+        bool pass = true;
+        auto matches = db.getMatches();
+
+        pass = (matches[0].getTeam1().getWins() == 0) && (matches[0].getTeam1().getWins() == 1);
+
+        debug << "Expected: Warriors Wins = 0, Strikers Wins = 1 - Got: ";
+        debug << "Warriors Wins = " << matches[0].getTeam1().getWins() << ", Strikers Wins = " << matches[0].getTeam1().getWins();
+        processTestResult(testName, debug.str(), pass, childMarks, 1);
+
+    }, marks);
+
+    runTest("2.4 Performances Successfully Added", [&](string testName, int& childMarks)
+    {
+        bool pass = true;
+        auto match = db.getMatches()[0];
+
+        auto result = match.getPlayerStats();
+
+        pass = (result == match1Stats);
+        
+        
+
+        debug << "Expected: Warriors - Got: ";
+        // debug << result.getName();
+        processTestResult(testName, debug.str(), pass, childMarks, 1);
+
+    }, marks);
+
+    
 }
 
 // Helper Functions
@@ -285,7 +477,7 @@ void processTestResult (const string& testName, const string& debug, bool passed
         cout << RED << "[FAILED] " << testName << " (0 points)" << RESET << endl;
 
         if (!debug.empty())
-            cout << YELLOW << "       Debug: " << debug << RESET << endl;
+            cout << YELLOW << "\tDebug -- " << debug << RESET << endl;
 
     }
 }
@@ -369,7 +561,6 @@ void runTest(const std::string& testName, function<void(string, int&)> testFunc,
 
 }
 
-// This Function is not used currently
 void signalHandler(int signal)
 {
     cerr << RED << "Critical Failure - Signal " << signal << " (Segmentation fault)" << endl;
