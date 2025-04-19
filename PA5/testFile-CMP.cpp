@@ -180,10 +180,21 @@ void testTeamClass(int& totalMarks, ostringstream& debug)
 
     debug.str("");
 
+    runTest("3.3 Win Percentage", [&](string testName, int& childMarks) 
+    {
+        debug << "Expected: Wins Percentage = 50 % - Got: ";
+        debug << warriors.getWinPercentage() << " %";
+ 
+        processTestResult(testName, debug.str(), warriors.getWinPercentage() == 50, childMarks, 1);
+
+    }, marks);
+
+    debug.str("");
+
     warriors.addMatch();
     warriors.addWin();
 
-    runTest("3.3 Updated Wins and Matches", [&](string testName, int& childMarks)
+    runTest("3.4 Updated Wins Percentage", [&](string testName, int& childMarks)
     {
         debug << "Expected: Wins Percentage = 66 % - Got: ";
         debug << warriors.getWinPercentage() << " %";
