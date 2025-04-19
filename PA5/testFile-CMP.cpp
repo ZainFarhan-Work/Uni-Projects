@@ -26,7 +26,7 @@ using namespace std;
 void processTestResult (const string& testName, const string& debug, bool passed, int& points, int testPoints = 1);
 bool isInText (const string& input, const string& passage);
 
-void riskyTest(const std::string& testName, std::function<void()> testFunc);
+void runTest(const std::string& testName, std::function<void()> testFunc);
 void signalHandler(int signal);
 
 // Test Cases - Prototypes
@@ -70,47 +70,48 @@ void testTeamClass(int& marks, ostringstream& debug)
     Team warriors("Warriors", playerNames);
 
     // Test 1 - Team Name
-    try
+
+    runTest("1 Team Name Retrieval", [&]()
     {
         string result = warriors.getName();
         debug << "Expected: \"Warriors\" - Got: ";
         debug << result;
         
         processTestResult("1 Team Name Retrieval", debug.str(), result == "Warriors", marks, 1);
-
-    }
-    catch(...)
-    {
-        cout << "Error: Critical Failure - Re-Check your get name function." << endl;
-    }
+    });
 
     debug.str("");
 
     // Test 2 - Team Players
 
-    try
+    runTest("2.1 Player Exists - Alice", [&]()
     {
-        
         debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
         processTestResult("2.1 Player Exists - Alice", debug.str(), warriors.hasPlayer("Alice"), marks, 1);
-        debug.str("");
 
+    });
+    
+    debug.str("");
+
+    runTest("2.2 Player Exists - Charlie", [&]()
+    {
         debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
         processTestResult("2.2 Player Exists - Charlie", debug.str(), warriors.hasPlayer("Charlie"), marks, 1);
-        debug.str("");
 
-        debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
-        processTestResult("2.3 Player Does Not Exist - Eve", debug.str(), !warriors.hasPlayer("Eve"), marks, 1);
-
-    }
-    catch(...)
-    {
-        cout << "Error: Critical Failure - Re-Check your Has Player function." << endl;
-    }
+    });
 
     debug.str("");
 
-    try
+    runTest("2.3 Player Does Not Exist - Eve", [&]()
+    {
+        debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
+        processTestResult("2.3 Player Does Not Exist - Eve", debug.str(), !warriors.hasPlayer("Eve"), marks, 1);
+
+    });
+
+    debug.str("");
+
+    runTest("2.4 Team Player Names Retrieval", [&]()
     {
         bool pass = true;
         string expected = "";
@@ -135,11 +136,7 @@ void testTeamClass(int& marks, ostringstream& debug)
         
         processTestResult("2.4 Team Player Names Retrieval", debug.str(), pass, marks, 2);
 
-    }
-    catch(...)
-    {
-        cout << "Error: Critical Failure - Re-Check your Get Player function." << endl;
-    }
+    });
 
     debug.str("");
 
@@ -209,25 +206,32 @@ void testMatchClass(int& marks, ostringstream& debug)
 
     // Test 1 - Match Initialization
 
-    debug << "Expected: 2024 - Got: ";
-    debug << match.getYear();
-    processTestResult("1.1 Match Year", debug.str(), match.getYear() == 2024, marks, 1);
+    runTest("1.1 Match Year", [&]()
+    {
+        debug << "Expected: 2024 - Got: ";
+        debug << match.getYear();
+        processTestResult("1.1 Match Year", debug.str(), match.getYear() == 2024, marks, 1);
+    });
 
     debug.str("");
 
-    debug << "Expected: True - Got: ";
-    debug << match.getPlayerStats().empty();
-    processTestResult("1.2 Match PlayerStats Empty", debug.str(), match.getPlayerStats().empty(), marks, 1);
+    runTest("1.2 Match PlayerStats Empty", [&]() 
+    {
+        debug << "Expected: True - Got: ";
+        debug << match.getPlayerStats().empty();
+        processTestResult("1.2 Match PlayerStats Empty", debug.str(), match.getPlayerStats().empty(), marks, 1);
+    });
 
+    
     debug.str("");
 
-    riskyTest("1.3 Match Winner Empty", [&]()
+
+    runTest("1.3 Match Winner Empty", [&]()
     {
         string result = match.getWinner();
         debug << "Expected: nullptr - Got: ";
         debug << result;
         processTestResult("1.3 Match Winner Empty", debug.str(), result == "", marks, 1);
-
     });
 
     debug.str("");
@@ -261,7 +265,7 @@ bool isInText (const string& input, const string& passage)
 
 // Signal Handlers
 
-void riskyTest(const std::string& testName, function<void()> testFunc)
+void runTest(const std::string& testName, function<void()> testFunc)
 {
     pid_t pid = fork();
 
