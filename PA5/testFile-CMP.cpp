@@ -26,14 +26,14 @@ using namespace std;
 void processTestResult (const string& testName, const string& debug, bool passed, int& points, int testPoints = 1);
 bool isInText (const string& input, const string& passage);
 
-void runTest(const std::string& testName, std::function<void()> testFunc);
+void runTest(const std::string& testName, function<void(string, int&)> testFunc, int& marks);
 void signalHandler(int signal);
 
 // Test Cases - Prototypes
 
-void testTeamClass(int& marks, ostringstream& debug);
-void testMatchClass(int& marks, ostringstream& debug);
-void testCricketDatabase(int& marks, ostringstream& debug);
+void testTeamClass(int& totalMarks, ostringstream& debug);
+void testMatchClass(int& totalMarks, ostringstream& debug);
+void testCricketDatabase(int& totalMarks, ostringstream& debug);
 
 int main()
 {
@@ -60,9 +60,11 @@ int main()
     return 0;
 }
 
-void testTeamClass(int& marks, ostringstream& debug)
+void testTeamClass(int& totalMarks, ostringstream& debug)
 {
     cout << CYAN << "Running Team class tests:\n" << endl;
+
+    int marks = 0;
 
     // Team 1
     vector<string> playerNames = {"Alice", "Bob", "Charlie", "David"};
@@ -71,47 +73,47 @@ void testTeamClass(int& marks, ostringstream& debug)
 
     // Test 1 - Team Name
 
-    runTest("1 Team Name Retrieval", [&]()
+    runTest("1 Team Name Retrieval", [&](string testName, int& childMarks)
     {
         string result = warriors.getName();
         debug << "Expected: \"Warriors\" - Got: ";
         debug << result;
         
-        processTestResult("1 Team Name Retrieval", debug.str(), result == "Warriors", marks, 1);
-    });
+        processTestResult(testName, debug.str(), result == "Warriors", childMarks, 1);
+    }, marks);
 
     debug.str("");
 
     // Test 2 - Team Players
 
-    runTest("2.1 Player Exists - Alice", [&]()
+    runTest("2.1 Player Exists - Alice", [&](string testName, int& childMarks)
     {
         debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
-        processTestResult("2.1 Player Exists - Alice", debug.str(), warriors.hasPlayer("Alice"), marks, 1);
+        processTestResult(testName, debug.str(), warriors.hasPlayer("Alice"), childMarks, 1);
 
-    });
+    }, marks);
     
     debug.str("");
 
-    runTest("2.2 Player Exists - Charlie", [&]()
+    runTest("2.2 Player Exists - Charlie", [&](string testName, int& childMarks)
     {
         debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
-        processTestResult("2.2 Player Exists - Charlie", debug.str(), warriors.hasPlayer("Charlie"), marks, 1);
+        processTestResult(testName, debug.str(), warriors.hasPlayer("Charlie"), childMarks, 1);
 
-    });
+    }, marks);
 
     debug.str("");
 
-    runTest("2.3 Player Does Not Exist - Eve", [&]()
+    runTest("2.3 Player Does Not Exist - Eve", [&](string testName, int& childMarks)
     {
         debug << "Expected: True - Got: " << warriors.hasPlayer("Alice");
-        processTestResult("2.3 Player Does Not Exist - Eve", debug.str(), !warriors.hasPlayer("Eve"), marks, 1);
+        processTestResult(testName, debug.str(), !warriors.hasPlayer("Eve"), childMarks, 1);
 
-    });
+    }, marks);
 
     debug.str("");
 
-    runTest("2.4 Team Player Names Retrieval", [&]()
+    runTest("2.4 Team Player Names Retrieval", [&](string testName, int& childMarks)
     {
         bool pass = true;
         string expected = "";
@@ -134,15 +136,15 @@ void testTeamClass(int& marks, ostringstream& debug)
         debug << "- Got: ";
         debug << got;
         
-        processTestResult("2.4 Team Player Names Retrieval", debug.str(), pass, marks, 2);
+        processTestResult(testName, debug.str(), pass, childMarks, 2);
 
-    });
+    }, marks);
 
     debug.str("");
 
     // Test 3 - Wins and Match Count
 
-    try
+    runTest("3.1 Initial Wins and Matches", [&](string testName, int& childMarks)
     {
         int result1 = warriors.getWins();
         int result2 = warriors.getTotalMatches();
@@ -152,89 +154,110 @@ void testTeamClass(int& marks, ostringstream& debug)
         debug << " and Total Matches = ";
         debug << warriors.getTotalMatches();
         
-        processTestResult("3.1 Initial Wins and Matches", debug.str(), result1 == 0 && result2 == 0, marks, 1);
+        processTestResult(testName, debug.str(), result1 == 0 && result2 == 0, childMarks, 1);
 
-        debug.str("");
+    }, marks);
 
-        warriors.addMatch();
-        warriors.addMatch();
-        warriors.addWin();  // 1 win out of 2 matches
+    debug.str("");
 
-        result1 = warriors.getWins();
-        result2 = warriors.getTotalMatches();
+    warriors.addMatch();
+    warriors.addMatch();
+    warriors.addWin();  // 1 win out of 2 matches
+
+    runTest("3.2 Updated Wins and Matches", [&](string testName, int& childMarks)
+    {
+        int result1 = warriors.getWins();
+        int result2 = warriors.getTotalMatches();
         debug << "Expected: Wins = 0 and Total Matches = 0 - Got: ";
         debug << "Wins = ";
         debug << warriors.getWins();
         debug << " and Total Matches = ";
         debug << warriors.getTotalMatches();
         
-        processTestResult("3.2 Updated Wins and Matches", debug.str(), result1 == 1 && result2 == 2, marks, 1);
+        processTestResult(testName, debug.str(), result1 == 1 && result2 == 2, childMarks, 1);
 
-        debug.str("");
+    }, marks);
 
-        debug << "Expected: Wins Percentage = 50 % - Got: ";
-        debug << warriors.getWinPercentage() << " %";
+    debug.str("");
 
-        processTestResult("3.3 Win Percentage", debug.str(), warriors.getWinPercentage() == 50, marks, 1);
+    warriors.addMatch();
+    warriors.addWin();
 
-        warriors.addMatch();
-        warriors.addWin();
-
-        debug.str("");
-
+    runTest("3.3 Updated Wins and Matches", [&](string testName, int& childMarks)
+    {
         debug << "Expected: Wins Percentage = 66 % - Got: ";
         debug << warriors.getWinPercentage() << " %";
 
-        processTestResult("3.3 Updated Wins and Matches", debug.str(), warriors.getWinPercentage() == 66, marks, 1);
+        processTestResult(testName, debug.str(), warriors.getWinPercentage() == 66, childMarks, 1);
 
-    }
-    catch(...)
-    {
-        cout << "Error: Critical Failure - Re-Check your Getters function." << endl;
-    }
+    }, marks);
 
-    cout << "\nTeam Class tests completed. Take a short break :)\n" << endl;
-    cout << CYAN << "Points: " << marks << " / 10" << RESET << endl;
+    
+
+    cout << "\nTeam Class tests completed. Take a short break :)" << endl;
+    cout << CYAN << "Points: " << marks << " / 10\n" << RESET << endl;
 
 }
 
-void testMatchClass(int& marks, ostringstream& debug)
+void testMatchClass(int& totalMarks, ostringstream& debug)
 {
+    cout << CYAN << "Running Match Class Test:\n" << endl;
+
     Team tigers("Tigers", {"Alice", "Bob", "Charlie"});
     Team lions("Lions", {"David", "Eve", "Frank"});
     Match match(tigers, lions, 2024);
 
+    int marks = 0;
+
     // Test 1 - Match Initialization
 
-    runTest("1.1 Match Year", [&]()
+    runTest("1.1 Match Year", [&](string testName, int& childMarks)
     {
         debug << "Expected: 2024 - Got: ";
         debug << match.getYear();
-        processTestResult("1.1 Match Year", debug.str(), match.getYear() == 2024, marks, 1);
-    });
+        processTestResult(testName, debug.str(), match.getYear() == 2024, marks, 1);
+    }, marks);
 
     debug.str("");
 
-    runTest("1.2 Match PlayerStats Empty", [&]() 
+    runTest("1.2 Match PlayerStats Empty", [&](string testName, int& childMarks) 
     {
         debug << "Expected: True - Got: ";
         debug << match.getPlayerStats().empty();
-        processTestResult("1.2 Match PlayerStats Empty", debug.str(), match.getPlayerStats().empty(), marks, 1);
-    });
+        processTestResult(testName, debug.str(), match.getPlayerStats().empty(), marks, 1);
+    }, marks);
 
     
     debug.str("");
 
 
-    runTest("1.3 Match Winner Empty", [&]()
+    runTest("1.3 Match Winner Empty", [&](string testName, int& childMarks)
     {
         string result = match.getWinner();
         debug << "Expected: nullptr - Got: ";
         debug << result;
-        processTestResult("1.3 Match Winner Empty", debug.str(), result == "", marks, 1);
-    });
+        processTestResult(testName, debug.str(), result == "", marks, 1);
+    }, marks);
 
     debug.str("");
+
+    // Test 2 - Adding Player Performances
+
+    match.addPerformance("Alice", 51, 1);
+    match.addPerformance("Bob", 30, 0);
+    match.addPerformance("Charlie", 20, 2);
+
+    match.addPerformance("David", 60, 0);
+    match.addPerformance("Eve", 10, 1);
+    match.addPerformance("Frank", 5, 3);
+
+    runTest("2.1 Player Alice Performance", [&](string testName, int& childMarks)
+    {
+        auto result = match.getPlayerStats();
+        debug << "Expected: Runs = 50 and Wickets = 1 - Got: Runs = ";
+        debug << result["Alice"].first << " Wickets = " << result["Alice"].second;
+        processTestResult(testName, debug.str(), result["Alice"].first == 50 && result["Alice"].second == 1, marks, 1);
+    }, marks);
 }
 
 // Helper Functions
@@ -265,23 +288,42 @@ bool isInText (const string& input, const string& passage)
 
 // Signal Handlers
 
-void runTest(const std::string& testName, function<void()> testFunc)
+void runTest(const std::string& testName, function<void(string, int&)> testFunc, int& marks)
 {
+    int pipeArr[2]; // pipe[0] = Read End, pipe[1] == Write End
+    pipe(pipeArr);
+
     pid_t pid = fork();
 
     if (pid == 0)
     {
         // In child process: run the test
-        testFunc();
+
+        close(pipeArr[0]);
+
+        int childMarks = 0;
+        testFunc(testName, childMarks);
+
+        write(pipeArr[1], &childMarks, sizeof(int)); // Send to parent
+        close(pipeArr[1]);
+
         exit(0); // Normal exit if no crash
 
     } 
     else
     {
+        close(pipeArr[1]);
+
         // In parent process: wait and check status
         int status;
 
         waitpid(pid, &status, 0);
+
+        int receivedMarks = 0;
+        read(pipeArr[0], &receivedMarks, sizeof(int));
+        close(pipeArr[0]);
+
+        marks += receivedMarks; // Update parent's marks
 
         if (WIFSIGNALED(status))
         {
