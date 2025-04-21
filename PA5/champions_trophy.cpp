@@ -20,6 +20,11 @@ Team::Team(string name, vector<string> playerNames)
 
 void Team::addWin()
 {
+    if (wins + 1 > totalMatches)
+    {
+        return;
+    }
+    
     wins++;
 }
 
@@ -134,6 +139,7 @@ bool CricketDatabase::addMatch(string team1, string team2, int year, const map<s
     
     teams[team1].addMatch();
     teams[team2].addMatch();
+    
     Match temp(teams[team1], teams[team2], year);
 
     for (auto pair : performances)
@@ -151,16 +157,24 @@ bool CricketDatabase::addMatch(string team1, string team2, int year, const map<s
 
     else teams[team2].addWin();
 
-    Match* temp2 = new Match(teams[team1], teams[team2], year);
+    // Team* t1 = new Team(teams[team1]); 
+    // Team* t2 = new Team(teams[team2]); 
+    // Match* temp2 = new Match(*t1, *t2, year);
+
+    Match temp2(teams[team1], teams[team2], year);
 
     for (auto pair : performances)
     {
-        temp2->addPerformance(pair.first, pair.second.first, pair.second.second);
+        temp2.addPerformance(pair.first, pair.second.first, pair.second.second);
     }
 
-    temp2->setWinner();
+    temp2.setWinner();
 
-    matches.push_back(*temp2);
+    matches.push_back(temp2);
+
+    // cout << "\n\n" << teams[team2].getWins() << "\n";
+    // cout << "\n" << temp2.getTeam2().getWins() << "\n";
+    // cout << "\n" << matches.back().getTeam2().getWins() << "\n\n";    
 
     return true;
     
@@ -231,7 +245,8 @@ string CricketDatabase::findBestBowler() const
         {
             if (record.second == max)
             {
-                best += " " + player.first;
+                // best += " " + player.first;
+                best = " " + player.first;
                 break;
             }
             
@@ -325,7 +340,8 @@ string CricketDatabase::findMostRunsScorer() const
 
         if (current == max)
         {
-            best += " " + player.first;
+            // best += " " + player.first;
+            best = " " + player.first;
         }
         
     }
@@ -479,7 +495,7 @@ vector<Match> CricketDatabase::getClosestMatches() const
 
             else if (match.getTeam2().hasPlayer(player.first))
             {
-                team1 += player.second.first;
+                team2 += player.second.first;
             }
             
         }
@@ -493,7 +509,7 @@ vector<Match> CricketDatabase::getClosestMatches() const
     // Sort
 
     sort(temp2.begin(), temp2.end(), [](const pair<Match, int>& a, const pair<Match, int>& b) {
-        return a.second > b.second;  // Compare the second element for descending order
+        return a.second < b.second;  // Compare the second element for descending order
     });
 
     for (auto pair : temp2)

@@ -50,6 +50,7 @@ int main()
     cout << endl;
 
     signal(SIGSEGV, signalHandler);
+    signal(SIGILL, signalHandler);
 
     testTeamClass(marks, debug);
 
@@ -76,22 +77,26 @@ int main()
     if (marks + bonusMarks == 100) // == 100
     {
         cout << GREEN << "\t ~Perfect~ \t" << endl;
+        cout << endl;
     }
     else if (marks == 70) // == 70
     {
         cout << GREEN << "\t *Great* \t" << endl;
+        cout << endl;
     }
     else if (marks + bonusMarks >= 60) // >= 60
     {
         cout << YELLOW << "\t Good \t" << endl;
+        cout << endl;
     }
     else
     {
         cout << RED << "\t Bad \t" << endl;
+        cout << endl;
         cout << YELLOW << "Note: Skill Issue" << endl;
     }
 
-    cout << RESET << endl;
+    cout << RESET;
     
     return 0;
 }
@@ -388,7 +393,6 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
     Team falcon("Falcon", playerNames3);
 
     CricketDatabase db;
-    CricketDatabase db2;
 
     // Test 1 - Adding Teams
     db.addTeam(warriors.getName(), warriors.getPlayers());
@@ -438,12 +442,22 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
     db.addMatch("Warriors", "Strikers", 2024, match1Stats);
     db.addMatch("Warriors", "Strikers", 2025, match2Stats);
     db.addMatch("Falcon", "Strikers", 2024, match3Stats);
+    
+    // Print Statements for Debugging
+    cout << RED << "\n\n" << db.getMatches()[0].getTeam2().getWins() << RESET << "\n\n";
+    for (auto match : db.getMatches())
+    {
+        cout << "Team 1: " << match.getTeam1().getName() << " Wins = " << match.getTeam1().getWins() << endl;
+        cout << "Team 2: " << match.getTeam2().getName() << " Wins = " << match.getTeam2().getWins() << endl;
+        cout << "Year: " << match.getYear() << endl;
+        cout << endl;
+    }
 
     runTest("2.1 Match Successfully Added", [&](string testName, int& childMarks)
     {
         bool operation = db.addMatch("Warriors", "Strikers", 2018, match1Stats);
         bool pass = true;
-
+        
         if (!operation)
         {
             debug << "Expected: Funtion to return True - Got: Function returned Flase";
@@ -453,10 +467,11 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
         
         auto matches = db.getMatches();
         
-        auto result = matches[3];
+        auto result = matches.back();
+        result.setWinner();
 
         pass = (result.getTeam1().getName() == "Warriors") && (result.getTeam2().getName() == "Strikers") && (result.getYear() == 2018) && (result.getWinner() == "Strikers");
-        
+
         debug << "Expected: Team 1 = Warriors, Team 2 = Strikers, Year = 2018, Winner = Strikers - Got: Team 1 = ";
         debug << result.getTeam1().getName() << ", Team 2 = " << result.getTeam2().getName() << ", Year = " << result.getYear() << ", Winner = " << result.getWinner();
 
@@ -486,10 +501,10 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
         bool pass = true;
         auto matches = db.getMatches();
 
-        pass = (matches[0].getTeam1().getWins() == 0) && (matches[0].getTeam1().getWins() == 2);
+        pass = (matches[0].getTeam1().getWins() == 0) && (matches[0].getTeam2().getWins() == 1);
 
-        debug << "Expected: Warriors Wins = 0, Strikers Wins = 2 - Got: ";
-        debug << "Warriors Wins = " << matches[0].getTeam1().getWins() << ", Strikers Wins = " << matches[0].getTeam1().getWins();
+        debug << "Expected: Warriors Wins = 0, Strikers Wins = 1 - Got: ";
+        debug << "Warriors Wins = " << matches[0].getTeam1().getWins() << ", Strikers Wins = " << matches[2].getTeam2().getWins();
         processTestResult(testName, debug.str(), pass, childMarks, 4);
 
     }, marks);
@@ -766,7 +781,7 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
         for (int i = 0; i < 3; i++)
         {
             debug << result[i].getTeam1().getName() << " vs " <<  result[i].getTeam2().getName() << " " << result[i].getYear();
-            debug << " ";
+            debug << ", ";
         }
 
         pass = (result[0].getTeam1().getName() == "Warriors");
@@ -792,7 +807,7 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
 
 void bonusTests(int& totalMarks, ostringstream& debug)
 {
-    cout << CYAN << "Running Team class tests:\n" << endl;
+    cout << CYAN << "Running Bouns Tests:\n" << endl;
 
     int marks = 0;
 
@@ -910,7 +925,7 @@ void bonusTests(int& totalMarks, ostringstream& debug)
 
     totalMarks += marks;
 
-    cout << "\nAll tests completed. Take a short break :)\n";
+    cout << "\nAll tests completed, Congrats! :)\n";
     cout << CYAN << "Marks: " << marks << " / 30\n" << RESET << endl;
 }
 
@@ -982,7 +997,8 @@ void runTest(const std::string& testName, function<void(string, int&)> testFunc,
         if (WIFSIGNALED(status))
         {
             int sig = WTERMSIG(status);
-            std::cout << YELLOW << "[SKIPPED] " << testName << " (crashed with signal " << sig << ")\n";
+            cout << YELLOW << "[SKIPPED] " << testName << " (crashed with signal " << sig << ")\n";
+            cout << RESET;
             
         }
 
@@ -1006,6 +1022,7 @@ void runTest(const std::string& testName, function<void(string, int&)> testFunc,
         else
         {
             cout << RED << "[Warning] " << testName << " Test Ended Abnormally.\n";
+            cout << RESET;
         }
 
     }
@@ -1014,11 +1031,33 @@ void runTest(const std::string& testName, function<void(string, int&)> testFunc,
 
 void signalHandler(int signal)
 {
-    cerr << RED << "Critical Failure - Signal " << signal << " (Segmentation fault)" << endl;
-    cerr << YELLOW << "Signal Caught - Program is Unstable: it may crash" << endl;
-    cerr << YELLOW << "Attempting to Skip Test" << endl;
+    switch (signal)
+    {
+    case SIGSEGV:
+        
+        cerr << RED << "Critical Failure - Signal " << signal << " (Segmentation fault)" << endl;
+        cerr << YELLOW << "Signal Caught - Program is Unstable: it may crash" << endl;
+        cerr << YELLOW << "Attempting to Skip Test" << endl;
+        cerr << RESET;
+        
+        std::signal(SIGSEGV, SIG_DFL);
+        std::raise(SIGSEGV);
+        break;
+
+    case SIGILL:
     
-    std::signal(SIGSEGV, SIG_DFL);
-    std::raise(SIGSEGV);
+        cerr << RED << "Critical Failure - Signal " << signal << " (Illegal Operation)" << endl;
+        cerr << YELLOW << "Signal Caught - Program is Unstable: it may crash" << endl;
+        cerr << YELLOW << "Attempting to Skip Test" << endl;
+        cerr << "Note: Most Probably a FUnction is not Returning something when it should" << endl;
+        cerr << RESET;
+
+        std::signal(SIGILL, SIG_DFL);
+        std::raise(SIGILL);
+    
+    default:
+        break;
+    }
+    
 }
 
