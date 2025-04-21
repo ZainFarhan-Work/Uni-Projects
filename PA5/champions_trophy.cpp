@@ -155,7 +155,7 @@ bool CricketDatabase::addMatch(string team1, string team2, int year, const map<s
 
     for (auto pair : performances)
     {
-        temp2->addPerformance(pair.first, pair.second.first, pair.second.first);
+        temp2->addPerformance(pair.first, pair.second.first, pair.second.second);
     }
 
     temp2->setWinner();
@@ -239,7 +239,7 @@ string CricketDatabase::findBestBowler() const
         
     }
 
-    cout << "\n" << best << endl;
+    // cout << "\n" << best << endl;
 
     return best;
     
@@ -253,32 +253,41 @@ string CricketDatabase::findMostConsistentPlayer() const
 
     for (auto player : playerPerformances)
     {
+        int runs = 0;
+        int wickets = 0;
+
         for (auto record : player.second)
         {
-            if ((record.second * 25) + record.first > max_consistency)
-            {
-                max_consistency = (record.second * 25) + record.first;
-            }
-            
+            runs += record.first;
+            wickets += record.second;
         }
-        
+
+        if ((wickets * 25) + runs > max_consistency)
+        {
+            max_consistency = (wickets * 25) + runs;
+        }
     }
 
     for (auto player : playerPerformances)
     {
+        int runs = 0;
+        int wickets = 0;
+
         for (auto record : player.second)
         {
-            if ((record.second * 25) + record.first == max_consistency)
-            {
-                best += " " + player.first;
-                break;
-            }
-            
+            runs += record.first;
+            wickets += record.second;
+        }
+
+        if ((wickets * 25) + runs == max_consistency)
+        {
+            best += player.first;
+            break;
         }
         
     }
 
-    cout << "\n" << best << endl;
+    // cout << "\n" << best << endl;
 
     return best;
 }
@@ -321,7 +330,7 @@ string CricketDatabase::findMostRunsScorer() const
         
     }
 
-    cout << "\n" << best << endl;
+    // cout << "\n" << best << endl;
 
     return best;
 }
