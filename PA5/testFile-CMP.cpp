@@ -444,14 +444,14 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
     db.addMatch("Falcon", "Strikers", 2024, match3Stats);
     
     // Print Statements for Debugging
-    cout << RED << "\n\n" << db.getMatches()[0].getTeam2().getWins() << RESET << "\n\n";
-    for (auto match : db.getMatches())
-    {
-        cout << "Team 1: " << match.getTeam1().getName() << " Wins = " << match.getTeam1().getWins() << endl;
-        cout << "Team 2: " << match.getTeam2().getName() << " Wins = " << match.getTeam2().getWins() << endl;
-        cout << "Year: " << match.getYear() << endl;
-        cout << endl;
-    }
+    // cout << RED << "\n\n" << db.getMatches()[0].getTeam2().getWins() << RESET << "\n\n";
+    // for (auto match : db.getMatches())
+    // {
+    //     cout << "Team 1: " << match.getTeam1().getName() << " Wins = " << match.getTeam1().getWins() << endl;
+    //     cout << "Team 2: " << match.getTeam2().getName() << " Wins = " << match.getTeam2().getWins() << endl;
+    //     cout << "Year: " << match.getYear() << endl;
+    //     cout << endl;
+    // }
 
     runTest("2.1 Match Successfully Added", [&](string testName, int& childMarks)
     {
