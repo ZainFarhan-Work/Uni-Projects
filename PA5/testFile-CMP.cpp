@@ -844,9 +844,16 @@ void bonusTests(int& totalMarks, ostringstream& debug)
         {"Charlie", {20, 1}}, {"David", {0, 0}}
     };
 
+    map<string, pair<int, int>> match4Stats =
+    {
+        {"Yuki", {1, 0}}, {"Zack", {0, 0}},
+        {"Charlie", {0, 0}}, {"David", {0, 0}}
+    };
+
     db.addMatch("Warriors", "Strikers", 2024, match1Stats);
     db.addMatch("Warriors", "Strikers", 2025, match2Stats);
     db.addMatch("Falcon", "Strikers", 2024, match3Stats);
+    db.addMatch("Falcon", "Strikers", 2025, match4Stats);
     
 
     // Test 1 - Invalid Inputs
