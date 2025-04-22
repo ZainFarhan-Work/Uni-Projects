@@ -504,7 +504,7 @@ void testCricketDatabase(int& totalMarks, ostringstream& debug)
         pass = (matches[0].getTeam1().getWins() == 0) && (matches[0].getTeam2().getWins() == 1);
 
         debug << "Expected: Warriors Wins = 0, Strikers Wins = 1 - Got: ";
-        debug << "Warriors Wins = " << matches[0].getTeam1().getWins() << ", Strikers Wins = " << matches[2].getTeam2().getWins();
+        debug << "Warriors Wins = " << matches[0].getTeam1().getWins() << ", Strikers Wins = " << matches[0].getTeam2().getWins();
         processTestResult(testName, debug.str(), pass, childMarks, 4);
 
     }, marks);
