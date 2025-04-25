@@ -427,11 +427,15 @@ vector<string> CricketDatabase::getTopNBatters(int N) const
         return a.first > b.first;  // Compare the second element for descending order
     });
 
+    if (N > runs.size())
+    {
+        N = runs.size();
+    }
+
     for (int i = 0; i < N; i++)
     {
         temp.push_back(runs[i].second);
     }
-    
 
     // cout << runs[0].first << " " << runs[0].second << endl;
     // cout << runs[1].first << " " << runs[1].second << endl;
@@ -461,6 +465,11 @@ vector<string> CricketDatabase::getTopNBowlers(int N) const
     sort(wickets.begin(), wickets.end(), [](const pair<int, string>& a, const pair<int, string>& b) {
         return a.first > b.first;  // Compare the second element for descending order
     });
+
+    if (N > wickets.size())
+    {
+        N = wickets.size();
+    }
 
     for (int i = 0; i < N; i++)
     {
