@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage{graphicx,fancyhdr,amsmath,amssymb,amsthm,subfig,url,hyperref}
+\usepackage[margin=1in]{geometry}
+\newtheorem{theorem}{Theorem}
+
+
+%---------------- IMPORTANT: Student and Homework Information -------------
+
+%%% PLEASE FILL THIS OUT WITH YOUR INFORMATION
+\newcommand{\myname}{Zain Farhan}
+\newcommand{\myid}{28100346}
+\newcommand{\hwNo}{Homework 1}
+%%% END
+
+
+
+\fancypagestyle{plain}{}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO,LE]{\sffamily\bfseries\large LUMS}
+\fancyhead[LO,RE]{\sffamily\bfseries\large CS 210 Discrete Mathematics}
+\fancyfoot[LO,RE]{\sffamily\bfseries\large \myname: \myid @lums.edu.pk}
+\fancyfoot[RO,LE]{\sffamily\bfseries\thepage}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+%--------------------- This is the title of the document. DO NOT CHANGE IT ------------------------
+
+\title{CS 210 \hwNo}
+\author{\myname \qquad Student ID: \myid}
+\newcommand{\currentdate}{3 September 2025}
+\date{\currentdate}
+
+%--------------------------------- AFTER Entering the Student and Homework Information, write your answers below  ----------------------------------
+
+\begin{document}
+\maketitle
+
+\section*{Problem 1}
+\begin{enumerate}
+    \item %A
+    IF triangle ABC is isosceles THEN triangle ABC is equilateral
+    
+    \item %B
+    IF triangle ABC is NOT isosceles THEN triangle ABC is NOT equilateral
+    
+    \item %C
+    Triangle ABC is equilateral IF AND ONLY IF triangle ABC is equiangular
+
+    \item %D
+    Triangle ABC is isosceles AND triangle ABC is NOT equiangular
+
+    \item %E
+    IF triangle ABC is equiangular THEN triangle ABC is isosceles
+
+\end{enumerate}
+
+\section*{Problem 2}
+\begin{enumerate}
+    \item %A
+    
+    \leavevmode
+
+    \begin{center}
+        \subsection*{Truth Table}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $P$ & $Q$ & $R$ & $(P \oplus Q)$ & $((P \oplus Q) \iff R) = LHS$\\
+    \hline
+    F & F & F & F & T \\
+    F & F & T & F & F \\
+    F & T & F & T & F \\
+    F & T & T & T & T \\
+    T & F & F & T & F \\
+    T & F & T & T & T \\
+    T & T & F & F & T \\
+    T & T & T & F & F \\
+
+    \hline
+    \end{tabular}
+    \end{center}
+
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    $(P \iff R)$ & $(Q \iff R)$ & $(P \iff R) \oplus (Q \iff R)$ & $LHS \iff RHS$\\
+    \hline
+    T & T & F & F \\
+    F & F & F & T \\
+    T & F & T & F \\
+    F & T & T & T \\
+    F & T & T & F \\
+    T & F & T & T \\
+    F & F & F & F \\
+    T & T & F & T \\
+
+    \hline
+    \end{tabular}
+    \end{center}
+
+    Not a Tautology
+    
+    \item %B
+    
+    \item %C
+    
+    \item %D
+    
+    \item %E
+
+\end{enumerate}
+
+\end{document}
