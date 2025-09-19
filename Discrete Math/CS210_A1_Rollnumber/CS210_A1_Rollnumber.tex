@@ -101,13 +101,98 @@
     Not a Tautology
     
     \item %B
+    \begin{samepage}
+    \leavevmode
+
+    \begin{center}
+        \subsection*{Truth Table}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    $P$ & $Q$ & $\lnot P$ & $\lnot Q$ & $(P \lor Q)$ & $(P \to \lnot Q)$ & $(Q \to \lnot P)$ \\
+    \hline
+    F & F & T & T & F & T & T \\
+    F & T & T & F & T & T & T \\
+    T & F & F & T & T & T & T \\
+    T & T & F & F & T & F & F \\
+
+    \hline
+    \end{tabular}
+
+    \begin{tabular}{|c|c|}
+    \hline
+    $(P \to \lnot Q) \lor (Q \to \lnot P)$ & $(P \lor Q) \land (P \to \lnot Q) \lor (Q \to \lnot P)$ \\
+    \hline
+    T & F \\
+    T & T \\
+    T & T \\
+    F & F \\
+
+    \hline
+    \end{tabular}
+    \end{center}
+    \end{samepage}
     
     \item %C
     
+    \begin{align*}
+    (P \lor Q) \land ((\lnot P \lor \lnot Q) \lor (\lnot Q \lor \lnot P)) \\
+    (P \lor Q) \land (\lnot ( P \land Q) \lor \lnot ( Q \land P)) \\
+    (P \lor Q) \land \lnot (( P \land Q) \land ( Q \land P)) \\
+    (P \lor Q) \land \lnot ( P \land Q) \\
+    \end{align*}
+
+    P OR Q AND NOT (P AND Q) \newline
+    So, we can have either P or Q but not both, this is the XOR Operation.
+    
     \item %D
     
-    \item %E
+    Exclusive OR (XOR/$ \oplus $)
 
 \end{enumerate}
+
+\section*{Problem 3}
+\begin{enumerate}
+
+    \item %A
+    $P(x) \land Q(X) \to R(x)$
+    \item %B
+    $\lnot P(x) \land \lnot S(X) \to \lnot R(x)$
+    \item %C
+    $P(x) \land Q(X) \to \lnot R(x)$
+    \item %D
+    $\exists x \quad P(x) \land \lnot R(x)$
+    \item %E
+    $\forall x \quad S(x) \land Q(x) \to R(x)$
+    \item %F
+    $\exists x \quad \lnot P(x) \land \lnot Q(x) \to \lnot R(x)$
+    \item %G
+    $\forall x \quad P(x) \to Q(x)$
+    \item %H
+    $\forall G \: \exists x \quad \lnot P(x) \land R(x)$
+    
+\end{enumerate}
+
+\section*{Problem 4}
+\begin{enumerate}
+
+    \item %A
+    
+    \begin{align*}
+    \exists x \; \exists y \quad \lnot [\lnot (x > y) \lor (x - y > 0)] \\
+    \exists x \; \exists y \quad [(x > y) \land \lnot (x - y > 0)] \\
+    \exists x \; \exists y \quad [(x > y) \land (x - y \leq 0)]
+    \end{align*}
+
+    \item %B
+    
+    \begin{align*}
+    \exists x \; \exists y \quad \lnot [(x < y) \to \exists z \; (x < z < y)] \\
+    \exists x \; \exists y \quad \lnot [\lnot (x < y) \lor \exists z \; (x < z < y)] \\
+    \exists x \; \exists y \quad [(x < y) \land \lnot \exists z \; (x < z < y)] \\
+    \exists x \; \exists y \quad [(x < y) \land \forall z \; \lnot (x < z < y)]
+    \end{align*}
+    
+\end{enumerate}
+
 
 \end{document}
