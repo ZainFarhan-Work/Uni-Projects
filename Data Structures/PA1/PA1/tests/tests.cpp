@@ -197,59 +197,60 @@ public:
         runTest("PostPool::purge - reset counters", pool.totalAllocations() == 0 && pool.reuseCount() == 0);
     }
     
-    // void testIngestQueue() {
-    //     std::cout << "\n" << Color::YELLOW << "=== TESTING INGEST QUEUE ===" << Color::RESET << std::endl;
-    //     IngestQueue queue(5);
+    void testIngestQueue() {
+        std::cout << "\n" << Color::YELLOW << "=== TESTING INGEST QUEUE ===" << Color::RESET << std::endl;
+        IngestQueue queue(5);
         
-    //     PostPool pool;
+        PostPool pool;
         
-    //     runTest("IngestQueue::empty - initial state", queue.empty());
-    //     runTest("IngestQueue::size - initial size", queue.size() == 0);
+        runTest("IngestQueue::empty - initial state", queue.empty());
+        runTest("IngestQueue::size - initial size", queue.size() == 0);
         
-    //     std::vector<Post*> posts;
-    //     for (int i = 0; i < 3; ++i) {
-    //         posts.push_back(pool.allocPost());
-    //     }
+        std::vector<Post*> posts;
+        for (int i = 0; i < 3; ++i) {
+            posts.push_back(pool.allocPost());
+        }
         
-    //     bool enqueueSuccess = true;
-    //     for (auto* p : posts) {
-    //         if (!queue.enqueue(p)) {
-    //             enqueueSuccess = false;
-    //             break;
-    //         }
-    //     }
-    //     runTest("IngestQueue::enqueue - successful enqueues", enqueueSuccess);
-    //     runTest("IngestQueue::size - after enqueues", queue.size() == 3);
-    //     runTest("IngestQueue::empty - not empty", !queue.empty());
+        bool enqueueSuccess = true;
+        for (auto* p : posts) {
+            if (!queue.enqueue(p)) {
+                enqueueSuccess = false;
+                break;
+            }
+        }
+        runTest("IngestQueue::enqueue - successful enqueues", enqueueSuccess);
+        runTest("IngestQueue::size - after enqueues", queue.size() == 3);
+        runTest("IngestQueue::empty - not empty", !queue.empty());
         
-    //     for (int i = 0; i < 3; ++i) {
-    //         queue.enqueue(pool.allocPost());
-    //     }
-    //     bool fullResult = !queue.enqueue(pool.allocPost());
-    //     runTest("IngestQueue::enqueue - queue full handling", fullResult);
         
-    //     Post* dequeued = queue.dequeue();
-    //     runTest("IngestQueue::dequeue - successful dequeue", dequeued != nullptr);
-    //     runTest("IngestQueue::size - after dequeue", queue.size() == 4);
+        for (int i = 0; i < 3; ++i) {
+            queue.enqueue(pool.allocPost());
+        }
+        bool fullResult = !queue.enqueue(pool.allocPost());
+        runTest("IngestQueue::enqueue - queue full handling", fullResult);
         
-    //     Post* batchArray[3];
-    //     size_t batchCount = queue.dequeueBatch(batchArray, 3);
-    //     runTest("IngestQueue::dequeueBatch - correct count", batchCount == 3);
-    //     runTest("IngestQueue::size - after batch dequeue", queue.size() == 1);
+        Post* dequeued = queue.dequeue();
+        runTest("IngestQueue::dequeue - successful dequeue", dequeued != nullptr);
+        runTest("IngestQueue::size - after dequeue", queue.size() == 4);
         
-    //     for (int cycle = 0; cycle < 3; ++cycle) {
-    //         while (queue.size() < 5) {
-    //             queue.enqueue(pool.allocPost());
-    //         }
-    //         while (!queue.empty()) {
-    //             queue.dequeue();
-    //         }
-    //     }
-    //     runTest("IngestQueue - wrap-around functionality", queue.empty());
+        Post* batchArray[3];
+        size_t batchCount = queue.dequeueBatch(batchArray, 3);
+        runTest("IngestQueue::dequeueBatch - correct count", batchCount == 3);
+        runTest("IngestQueue::size - after batch dequeue", queue.size() == 1);
         
-    //     Post* emptyDequeue = queue.dequeue();
-    //     runTest("IngestQueue::dequeue - empty queue", emptyDequeue == nullptr);
-    // }
+        for (int cycle = 0; cycle < 3; ++cycle) {
+            while (queue.size() < 5) {
+                queue.enqueue(pool.allocPost());
+            }
+            while (!queue.empty()) {
+                queue.dequeue();
+            }
+        }
+        runTest("IngestQueue - wrap-around functionality", queue.empty());
+        
+        Post* emptyDequeue = queue.dequeue();
+        runTest("IngestQueue::dequeue - empty queue", emptyDequeue == nullptr);
+    }
     
     // void testUndoRedoManager() {
     //     std::cout << "\n" << Color::YELLOW << "=== TESTING UNDO/REDO MANAGER ===" << Color::RESET << std::endl;
@@ -355,7 +356,7 @@ public:
         
         testLinkedList();
         testPostPool();
-        // testIngestQueue();
+        testIngestQueue();
         // testUserManager();
         // testUndoRedoManager();
         // testAuxiliaryStructures();
