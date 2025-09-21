@@ -156,46 +156,46 @@ public:
     //     std::remove(testFile.c_str());
     // }
     
-    // void testPostPool() {
-    //     std::cout << "\n" << Color::YELLOW << "=== TESTING POST POOL ===" << Color::RESET << std::endl;
-    //     PostPool pool(4);
+    void testPostPool() {
+        std::cout << "\n" << Color::YELLOW << "=== TESTING POST POOL ===" << Color::RESET << std::endl;
+        PostPool pool(4);
         
-    //     Post* post1 = pool.allocPost();
-    //     runTest("PostPool::allocPost - basic allocation", post1 != nullptr);
+        Post* post1 = pool.allocPost();
+        runTest("PostPool::allocPost - basic allocation", post1 != nullptr);
         
-    //     runTest("PostPool::allocPost - default initialization", 
-    //             post1->postID == 0 && post1->category.empty() && post1->views == 0);
+        runTest("PostPool::allocPost - default initialization", 
+                post1->postID == 0 && post1->category.empty() && post1->views == 0);
         
-    //     std::vector<Post*> posts;
-    //     for (int i = 0; i < 10; ++i) {
-    //         posts.push_back(pool.allocPost());
-    //     }
+        std::vector<Post*> posts;
+        for (int i = 0; i < 10; ++i) {
+            posts.push_back(pool.allocPost());
+        }
         
-    //     bool allAllocated = true;
-    //     for (auto* p : posts) {
-    //         if (p == nullptr) {
-    //             allAllocated = false;
-    //             break;
-    //         }
-    //     }
-    //     runTest("PostPool::allocPost - multiple allocations", allAllocated);
+        bool allAllocated = true;
+        for (auto* p : posts) {
+            if (p == nullptr) {
+                allAllocated = false;
+                break;
+            }
+        }
+        runTest("PostPool::allocPost - multiple allocations", allAllocated);
         
-    //     size_t allocCount = pool.totalAllocations();
-    //     runTest("PostPool::totalAllocations - correct count", allocCount >= 3);
+        size_t allocCount = pool.totalAllocations();
+        runTest("PostPool::totalAllocations - correct count", allocCount >= 3);
         
-    //     pool.freePost(posts[0]);
-    //     pool.freePost(posts[1]);
+        pool.freePost(posts[0]);
+        pool.freePost(posts[1]);
         
-    //     Post* reused1 = pool.allocPost();
-    //     Post* reused2 = pool.allocPost();
+        Post* reused1 = pool.allocPost();
+        Post* reused2 = pool.allocPost();
         
-    //     size_t reuseCount = pool.reuseCount();
-    //     runTest("PostPool::freePost/allocPost - reuse functionality", reuseCount >= 2);
-    //     runTest("PostPool::reuseCount - correct tracking", reuseCount >= 2);
+        size_t reuseCount = pool.reuseCount();
+        runTest("PostPool::freePost/allocPost - reuse functionality", reuseCount >= 2);
+        runTest("PostPool::reuseCount - correct tracking", reuseCount >= 2);
         
-    //     pool.purge();
-    //     runTest("PostPool::purge - reset counters", pool.totalAllocations() == 0 && pool.reuseCount() == 0);
-    // }
+        pool.purge();
+        runTest("PostPool::purge - reset counters", pool.totalAllocations() == 0 && pool.reuseCount() == 0);
+    }
     
     // void testIngestQueue() {
     //     std::cout << "\n" << Color::YELLOW << "=== TESTING INGEST QUEUE ===" << Color::RESET << std::endl;
@@ -354,7 +354,7 @@ public:
         std::cout << Color::MAGENTA << "Starting Comprehensive Test Suite..." << Color::RESET << std::endl;
         
         testLinkedList();
-        // testPostPool();
+        testPostPool();
         // testIngestQueue();
         // testUserManager();
         // testUndoRedoManager();
