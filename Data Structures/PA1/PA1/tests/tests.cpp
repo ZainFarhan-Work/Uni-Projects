@@ -120,41 +120,41 @@ public:
         auto deletedUser = um.findUserByID(3);
         runTest("UserManager::deleteUser - user removed", deletedUser == nullptr);
         
-        // testCSVOperations(um);
+        testCSVOperations(um);
     }
     
-    // void testCSVOperations(UserManager& um) {
-    //     std::cout << "\n" << Color::YELLOW << "=== TESTING CSV OPERATIONS ===" << Color::RESET << std::endl;
+    void testCSVOperations(UserManager& um) {
+        std::cout << "\n" << Color::YELLOW << "=== TESTING CSV OPERATIONS ===" << Color::RESET << std::endl;
         
-    //     UserManager csvUm;
-    //     csvUm.createUser(10, "testuser1");
-    //     csvUm.createUser(11, "testuser2");
-    //     csvUm.follow(10, 11);
+        UserManager csvUm;
+        csvUm.createUser(10, "testuser1");
+        csvUm.createUser(11, "testuser2");
+        csvUm.follow(10, 11);
         
-    //     auto testUser = csvUm.findUserByID(10);
-    //     if (testUser) {
-    //         testUser->data.addPost(201, "test");
-    //     }
+        auto testUser = csvUm.findUserByID(10);
+        if (testUser) {
+            testUser->data.addPost(201, "test");
+        }
         
-    //     const std::string testFile = "test_export.csv";
-    //     csvUm.exportUsersCSV(testFile);
+        const std::string testFile = "test_export.csv";
+        csvUm.exportUsersCSV(testFile);
         
-    //     std::ifstream checkFile(testFile);
-    //     bool fileExists = checkFile.good();
-    //     checkFile.close();
-    //     runTest("UserManager::exportUsersCSV - file creation", fileExists);
+        std::ifstream checkFile(testFile);
+        bool fileExists = checkFile.good();
+        checkFile.close();
+        runTest("UserManager::exportUsersCSV - file creation", fileExists);
         
-    //     UserManager um2;
-    //     um2.importUsersCSV(testFile);
+        UserManager um2;
+        um2.importUsersCSV(testFile);
         
-    //     auto importedUser = um2.findUserByID(10);
-    //     runTest("UserManager::importUsersCSV - user restored", importedUser != nullptr);
+        auto importedUser = um2.findUserByID(10);
+        runTest("UserManager::importUsersCSV - user restored", importedUser != nullptr);
         
-    //     bool followRestored = um2.isFollowing(10, 11);
-    //     runTest("UserManager::importUsersCSV - follow restored", followRestored);
+        bool followRestored = um2.isFollowing(10, 11);
+        runTest("UserManager::importUsersCSV - follow restored", followRestored);
         
-    //     std::remove(testFile.c_str());
-    // }
+        std::remove(testFile.c_str());
+    }
     
     void testPostPool() {
         std::cout << "\n" << Color::YELLOW << "=== TESTING POST POOL ===" << Color::RESET << std::endl;
@@ -252,34 +252,34 @@ public:
         runTest("IngestQueue::dequeue - empty queue", emptyDequeue == nullptr);
     }
     
-    // void testUndoRedoManager() {
-    //     std::cout << "\n" << Color::YELLOW << "=== TESTING UNDO/REDO MANAGER ===" << Color::RESET << std::endl;
-    //     UserManager um;
-    //     PostPool pool;
-    //     UndoRedoManager urm(um, pool);
+    void testUndoRedoManager() {
+        std::cout << "\n" << Color::YELLOW << "=== TESTING UNDO/REDO MANAGER ===" << Color::RESET << std::endl;
+        UserManager um;
+        PostPool pool;
+        UndoRedoManager urm(um, pool);
         
-    //     urm.beginTransaction();
-    //     runTest("UndoRedoManager::beginTransaction - no crash", true);
+        urm.beginTransaction();
+        runTest("UndoRedoManager::beginTransaction - no crash", true);
         
-    //     OpFrame createFrame{OpType::CREATE_USER, 1, 0, "alice"};
-    //     urm.record(createFrame);
-    //     runTest("UndoRedoManager::record - no crash", true);
+        OpFrame createFrame{OpType::CREATE_USER, 1, 0, "alice"};
+        urm.record(createFrame);
+        runTest("UndoRedoManager::record - no crash", true);
         
-    //     urm.commitTransaction();
-    //     runTest("UndoRedoManager::commitTransaction - no crash", true);
+        urm.commitTransaction();
+        runTest("UndoRedoManager::commitTransaction - no crash", true);
         
-    //     urm.beginTransaction();
-    //     OpFrame testFrame{OpType::CREATE_USER, 2, 0, "bob"};
-    //     urm.record(testFrame);
-    //     urm.rollbackTransaction();
-    //     runTest("UndoRedoManager::rollbackTransaction - no crash", true);
+        urm.beginTransaction();
+        OpFrame testFrame{OpType::CREATE_USER, 2, 0, "bob"};
+        urm.record(testFrame);
+        urm.rollbackTransaction();
+        runTest("UndoRedoManager::rollbackTransaction - no crash", true);
         
-    //     bool undoResult = urm.undo();
-    //     runTest("UndoRedoManager::undo - empty stack handling", !undoResult);
+        bool undoResult = urm.undo();
+        runTest("UndoRedoManager::undo - empty stack handling", !undoResult);
         
-    //     bool redoResult = urm.redo();
-    //     runTest("UndoRedoManager::redo - empty stack handling", !redoResult);
-    // }
+        bool redoResult = urm.redo();
+        runTest("UndoRedoManager::redo - empty stack handling", !redoResult);
+    }
     
     void testLinkedList() {
         std::cout << "\n" << Color::YELLOW << "=== TESTING LINKED LIST ===" << Color::RESET << std::endl;
@@ -360,7 +360,7 @@ public:
         testPostPool();
         testIngestQueue();
         testUserManager();
-        // testUndoRedoManager();
+        testUndoRedoManager();
         testAuxiliaryStructures();
         
         printScore();

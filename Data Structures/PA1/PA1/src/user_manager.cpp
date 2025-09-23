@@ -187,7 +187,8 @@ bool UserManager::addPost(int userID, Post* post)
 
     if (u)
     {
-        u->data.posts.addPost(*post); // THis is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
+        // u->data.posts.addPost(*post); // THis is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
+        u->data.addPost(post->postID, post->category); // This just leaves the views and content blank for now
         return true;
     }
     
@@ -203,7 +204,7 @@ bool UserManager::deletePost(int userID, PostID postID)
 
     if (u)
     {
-        u->data.posts.removePost(postID); // THis is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
+        u->data.posts.removePost(postID);
         return true;
     }
     
@@ -258,6 +259,28 @@ LinkedList<User>::Node* UserManager::findUserByName(const string& username)
 
 void UserManager::exportUsersCSV(const string& path) const
 {
+    ofstream outputFile(path);
+
+    if (!outputFile.is_open())
+    {
+        return;
+    }
+
+    LinkedList<User>::Node* curr = users.head();
+
+    for (size_t i = 0; i < users.size(); i++)
+    {
+        outputFile << curr->data.userID << "," << curr->data.userName << ",";
+
+        // Print Followers
+
+        outputFile << ",";
+
+        // Print Posts
+
+        outputFile << "\n";
+    }
+    
     
 }
 
