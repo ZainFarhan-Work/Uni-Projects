@@ -108,16 +108,19 @@ void PostList::displayPosts() const
 
     while (node)
     {
+        cout << endl;
+
+
         cout << "ID: " << node->post->postID << endl;
         cout << "Category: " << node->post->category << endl;
         cout << "Views: " << node->post->views << endl;
         cout << "Content: " << node->post->content << endl;
 
+        cout << endl;
+
         node = node->next;
         
     }
-    
-    
 }
 
 bool PostList::isEmpty() const { return head == nullptr; }
