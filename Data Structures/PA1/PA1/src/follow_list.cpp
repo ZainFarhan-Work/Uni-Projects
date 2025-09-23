@@ -76,6 +76,7 @@ bool FollowList::removeFollowing(int userID)
 
 User* FollowList::findFollowing(int userID)
 {
+
     if (head == nullptr)
     {
         return nullptr;
@@ -85,6 +86,7 @@ User* FollowList::findFollowing(int userID)
 
     while (node && node->user->userID != userID)
     {
+        cout << "\nUserID in List: " << node->user->userID << "\n";
         node = node->next;
 
         if (node && node->user->userID == userID)

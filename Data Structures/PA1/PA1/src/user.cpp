@@ -15,7 +15,20 @@ User::User(const User& other)
     this->userName = other.userName;
     this->posts = other.posts;
 
-    this->following = other.following;
+    // deep copy here
+    this->following = new FollowList();
+
+    FollowNode* otherCurr = other.following->head;
+
+    while (otherCurr)
+    {
+        if (otherCurr)
+        {
+            this->following->addFollowing(otherCurr->user);
+        }
+
+        otherCurr = otherCurr->next;
+    }
 }
 
 // Copy assignment operator
@@ -35,7 +48,22 @@ User& User::operator=(const User& other)
         delete following;
     }
 
-    this->following = other.following;
+    // deep copy here
+    this->following = new FollowList();
+
+    FollowNode* otherCurr = other.following->head;
+    FollowNode* prev = nullptr;
+
+    while (otherCurr)
+    {
+        if (otherCurr)
+        {
+            this->following->addFollowing(otherCurr->user);
+        }
+
+        prev = otherCurr;
+        otherCurr = otherCurr->next;
+    }
     
     return *this;
     

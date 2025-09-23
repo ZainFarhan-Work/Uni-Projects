@@ -13,9 +13,10 @@ UserManager::~UserManager() {}
 
 LinkedList<User>::Node* UserManager::createUser(int userID, const string& username)
 {
+
     LinkedList<User>::Node* tempUser = users.find([userID, username](const User& usr) -> bool {
 
-        if (usr.userID == userID && usr.userName == username)
+        if (usr.userID == userID || usr.userName == username)
         {
             return true;
         }
@@ -61,6 +62,11 @@ bool UserManager::deleteUser(int userID)
 
 bool UserManager::follow(int followerID, int followeeID)
 {
+    if (followerID == followeeID)
+    {
+        return false;
+    }
+    
     LinkedList<User>::Node* follower = users.find([followerID](const User& usr) -> bool {
 
         if (usr.userID == followerID)
@@ -87,6 +93,12 @@ bool UserManager::follow(int followerID, int followeeID)
     {
         return false;
     }
+
+    if (follower->data.following->findFollowing(followee->data.userID))
+    {
+        return false;
+    }
+
 
     follower->data.followUser(&followee->data);
     
@@ -123,6 +135,11 @@ bool UserManager::unfollow(int followerID, int followeeID)
         return false;
     }
 
+    if (!follower->data.following->findFollowing(followee->data.userID))
+    {
+        return false;
+    }
+
     follower->data.following->removeFollowing(followeeID);
     
     return true;
@@ -131,13 +148,49 @@ bool UserManager::unfollow(int followerID, int followeeID)
 
 bool UserManager::isFollowing(int followerID, int followeeID) const
 {
+    auto& constUsers = const_cast<LinkedList<User>&>(users); // I hate that I have to do this, just to use the find function
+
+    LinkedList<User>::Node* follower = constUsers.find([followerID](const User& usr) -> bool {
+
+        if (usr.userID == followerID)
+        {
+            return true;
+        }
+
+        return false;
+
+    });
+
+    LinkedList<User>::Node* followee = constUsers.find([followeeID](const User& usr) -> bool {
+
+        if (usr.userID == followeeID)
+        {
+            return true;
+        }
+
+        return false;
+
+    });
+
+    if (follower && followee && follower->data.following->findFollowing(followee->data.userID))
+    {
+        return true;
+    }
     
     
-    return true;
+    return false;
 }
 
 bool UserManager::addPost(int userID, Post* post)
 {
+    LinkedList<User>::Node* u = findUserByID(userID);
+
+    if (u)
+    {
+        u->data.posts.addPost(*post); // THis is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
+        return true;
+    }
+    
 
     return false;
     
@@ -146,21 +199,61 @@ bool UserManager::addPost(int userID, Post* post)
 bool UserManager::deletePost(int userID, PostID postID)
 {
 
+    LinkedList<User>::Node* u = findUserByID(userID);
+
+    if (u)
+    {
+        u->data.posts.removePost(postID); // THis is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
+        return true;
+    }
+    
+
     return false;
     
 }
 
 LinkedList<User>::Node* UserManager::findUserByID(int userID)
 {
+    LinkedList<User>::Node* tempUser = users.find([userID](const User& usr) -> bool {
 
-    return nullptr;
+        if (usr.userID == userID)
+        {
+            return true;
+        }
+
+        return false;
+
+    });
+
+    if (tempUser == nullptr)
+    {
+        return nullptr;
+    }
+
+    return tempUser;
     
 }
 
 LinkedList<User>::Node* UserManager::findUserByName(const string& username)
 {
 
-    return nullptr;
+    LinkedList<User>::Node* tempUser = users.find([username](const User& usr) -> bool {
+
+        if (usr.userName == username)
+        {
+            return true;
+        }
+
+        return false;
+
+    });
+
+    if (tempUser == nullptr)
+    {
+        return nullptr;
+    }
+
+    return tempUser;
 }
 
 void UserManager::exportUsersCSV(const string& path) const
