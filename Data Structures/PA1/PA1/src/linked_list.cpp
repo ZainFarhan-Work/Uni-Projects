@@ -174,5 +174,5 @@ template class LinkedList<int>;
 template class LinkedList<string>;
 
 // // Forward declare User struct for template instantiation
-// struct User;
-// template class LinkedList<User>;
+struct User;
+template class LinkedList<User>;

@@ -94,7 +94,7 @@ User* FollowList::findFollowing(int userID)
         
     }
 
-    return nullptr;
+    return node->user;
     
 }
 

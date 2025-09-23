@@ -312,44 +312,50 @@ public:
         runTest("LinkedList::clear", list.size() == 0 && list.head() == nullptr);
     }
     
-    // void testAuxiliaryStructures() {
-    //     std::cout << "\n" << Color::YELLOW << "=== TESTING AUXILIARY STRUCTURES ===" << Color::RESET << std::endl;
+    void testAuxiliaryStructures() {
+        std::cout << "\n" << Color::YELLOW << "=== TESTING AUXILIARY STRUCTURES ===" << Color::RESET << std::endl;
         
-    //     User user(1, "testuser");
-    //     runTest("User::constructor", user.userID == 1 && user.userName == "testuser");
+        User user(1, "testuser");
+        runTest("User::constructor", user.userID == 1 && user.userName == "testuser");
         
-    //     user.addPost(101, "tech");
-    //     Post* foundPost = user.posts.findPost(101);
-    //     runTest("User::addPost", foundPost != nullptr && foundPost->category == "tech");
+        user.addPost(101, "tech");
+        Post* foundPost = user.posts.findPost(101);
         
-    //     User user2(2, "followee");
-    //     user.followUser(&user2);
-    //     User* foundFollowee = user.following->findFollowing(2);
-    //     runTest("User::followUser", foundFollowee != nullptr && foundFollowee->userID == 2);
+        runTest("User::addPost", foundPost != nullptr && foundPost->category == "tech");
         
-    //     bool removeResult = user.following->removeFollowing(2);
-    //     User* removedFollowee = user.following->findFollowing(2);
-    //     runTest("FollowList::removeFollowing", removeResult && removedFollowee == nullptr);
+        User user2(2, "followee");
+        user.followUser(&user2);
+        User* foundFollowee = user.following->findFollowing(2);
+
+        if (foundFollowee == nullptr)
+        {
+            user.following->displayFollowing();
+        }
+        runTest("User::followUser", foundFollowee != nullptr && foundFollowee->userID == 2);
         
-    //     PostList postList;
-    //     Post testPost(201, "test", 5);
-    //     postList.addPost(testPost);
-    //     Post* foundInList = postList.findPost(201);
-    //     runTest("PostList::addPost/findPost", foundInList != nullptr && foundInList->category == "test");
+        bool removeResult = user.following->removeFollowing(2);
+        User* removedFollowee = user.following->findFollowing(2);
+        runTest("FollowList::removeFollowing", removeResult && removedFollowee == nullptr);
         
-    //     bool postRemoved = postList.removePost(201);
-    //     Post* removedPost = postList.findPost(201);
-    //     runTest("PostList::removePost", postRemoved && removedPost == nullptr);
+        PostList postList;
+        Post testPost(201, "test", 5);
+        postList.addPost(testPost);
+        Post* foundInList = postList.findPost(201);
+        runTest("PostList::addPost/findPost", foundInList != nullptr && foundInList->category == "test");
         
-    //     FollowList followList;
-    //     User testUser3(3, "followtest");
-    //     followList.addFollowing(&testUser3);
-    //     User* foundInFollowList = followList.findFollowing(3);
-    //     runTest("FollowList::addFollowing", foundInFollowList != nullptr);
+        bool postRemoved = postList.removePost(201);
+        Post* removedPost = postList.findPost(201);
+        runTest("PostList::removePost", postRemoved && removedPost == nullptr);
         
-    //     followList.addFollowing(&testUser3);
-    //     runTest("FollowList::addFollowing - duplicate prevention", true);
-    // }
+        FollowList followList;
+        User testUser3(3, "followtest");
+        followList.addFollowing(&testUser3);
+        User* foundInFollowList = followList.findFollowing(3);
+        runTest("FollowList::addFollowing", foundInFollowList != nullptr);
+        
+        followList.addFollowing(&testUser3);
+        runTest("FollowList::addFollowing - duplicate prevention", true);
+    }
     
     void runAllTests() {
         std::cout << Color::MAGENTA << "Starting Comprehensive Test Suite..." << Color::RESET << std::endl;
@@ -359,7 +365,7 @@ public:
         testIngestQueue();
         // testUserManager();
         // testUndoRedoManager();
-        // testAuxiliaryStructures();
+        testAuxiliaryStructures();
         
         printScore();
     }

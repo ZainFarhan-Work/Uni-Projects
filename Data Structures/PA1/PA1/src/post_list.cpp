@@ -81,7 +81,7 @@ Post* PostList::findPost(int postID)
     }
 
     PostNode* node = head;
-
+    
     while (node && node->post->postID != postID)
     {
         node = node->next;
@@ -93,7 +93,7 @@ Post* PostList::findPost(int postID)
         
     }
 
-    return nullptr;
+    return node->post;
     
 }
 

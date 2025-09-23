@@ -3,41 +3,84 @@
 #include <iostream>
 using namespace std;
 
-User::User(int id, const string& name) {
-}
+User::User(int id, const string& name) : userID(id), userName(name) { following = new FollowList(); }
 
 // Copy constructor
-User::User(const User& other)  {
+User::User(const User& other)
+{
     // Don't copy the following relationships - they should be rebuilt separately
     // This prevents circular dependency issues and dangling pointers
+
+    this->userID = other.userID;
+    this->userName = other.userName;
+    this->posts = other.posts;
+
+    this->following = other.following;
 }
 
 // Copy assignment operator
-User& User::operator=(const User& other) {
+User& User::operator=(const User& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    this->userID = other.userID;
+    this->userName = other.userName;
+    this->posts = other.posts;
+
+    if (following)
+    {
+        delete following;
+    }
+
+    this->following = other.following;
+    
+    return *this;
     
 }
 
 // Move constructor
-User::User(User&& other) noexcept {
+User::User(User&& other) noexcept
+{
+    following = other.following;
+    other.following = nullptr;
 }
 
 // Move assignment operator
-User& User::operator=(User&& other) noexcept {
+User& User::operator=(User&& other) noexcept
+{
+    if (following)
+    {
+        delete following;
+    }
+    
+    following = other.following;
+    other.following = nullptr;
    
+    return *this;
 }
 
-User::~User() {
+User::~User()
+{
+    delete following;
     
 }
 
-void User::addPost(int postID, const string& category) {
+void User::addPost(int postID, const string& category)
+{
+    Post p = Post(postID, category, 0, "");
+    posts.addPost(p);
     
 }
 
-void User::followUser(User* otherUser) {
-    
+void User::followUser(User* otherUser)
+{
+    following->addFollowing(otherUser);
 }
 
-void User::displayFollowing() const {
-    
+void User::displayFollowing() const
+{
+    following->displayFollowing();
 }
