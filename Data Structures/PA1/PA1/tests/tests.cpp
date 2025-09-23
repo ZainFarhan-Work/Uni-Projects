@@ -52,76 +52,76 @@ public:
         std::cout << Color::BLUE << "===================================" << Color::RESET << std::endl;
     }
     
-    // void testUserManager() {
-    //     std::cout << "\n" << Color::YELLOW << "=== TESTING USER MANAGER ===" << Color::RESET << std::endl;
-    //     UserManager um;
+    void testUserManager() {
+        std::cout << "\n" << Color::YELLOW << "=== TESTING USER MANAGER ===" << Color::RESET << std::endl;
+        UserManager um;
         
-    //     auto user1 = um.createUser(1, "alice");
-    //     auto user2 = um.createUser(2, "bob");
-    //     runTest("UserManager::createUser - valid users", user1 != nullptr && user2 != nullptr);
+        auto user1 = um.createUser(1, "alice");
+        auto user2 = um.createUser(2, "bob");
+        runTest("UserManager::createUser - valid users", user1 != nullptr && user2 != nullptr);
         
-    //     auto duplicateUser = um.createUser(1, "charlie");
-    //     runTest("UserManager::createUser - reject duplicate ID", duplicateUser == nullptr);
+        auto duplicateUser = um.createUser(1, "charlie");
+        runTest("UserManager::createUser - reject duplicate ID", duplicateUser == nullptr);
         
-    //     auto duplicateName = um.createUser(3, "alice");
-    //     runTest("UserManager::createUser - reject duplicate name", duplicateName == nullptr);
+        auto duplicateName = um.createUser(3, "alice");
+        runTest("UserManager::createUser - reject duplicate name", duplicateName == nullptr);
         
-    //     auto foundUser = um.findUserByID(1);
-    //     runTest("UserManager::findUserByID - existing user", foundUser != nullptr && foundUser->data.userID == 1);
+        auto foundUser = um.findUserByID(1);
+        runTest("UserManager::findUserByID - existing user", foundUser != nullptr && foundUser->data.userID == 1);
         
-    //     auto notFoundUser = um.findUserByID(999);
-    //     runTest("UserManager::findUserByID - non-existing user", notFoundUser == nullptr);
+        auto notFoundUser = um.findUserByID(999);
+        runTest("UserManager::findUserByID - non-existing user", notFoundUser == nullptr);
         
-    //     auto foundByName = um.findUserByName("bob");
-    //     runTest("UserManager::findUserByName - existing user", foundByName != nullptr && foundByName->data.userName == "bob");
+        auto foundByName = um.findUserByName("bob");
+        runTest("UserManager::findUserByName - existing user", foundByName != nullptr && foundByName->data.userName == "bob");
         
-    //     auto notFoundByName = um.findUserByName("nonexistent");
-    //     runTest("UserManager::findUserByName - non-existing user", notFoundByName == nullptr);
+        auto notFoundByName = um.findUserByName("nonexistent");
+        runTest("UserManager::findUserByName - non-existing user", notFoundByName == nullptr);
         
-    //     bool followResult = um.follow(1, 2);
-    //     runTest("UserManager::follow - valid follow", followResult);
+        bool followResult = um.follow(1, 2);
+        runTest("UserManager::follow - valid follow", followResult);
         
-    //     bool isFollowingResult = um.isFollowing(1, 2);
-    //     runTest("UserManager::isFollowing - after follow", isFollowingResult);
+        bool isFollowingResult = um.isFollowing(1, 2);
+        runTest("UserManager::isFollowing - after follow", isFollowingResult);
         
-    //     bool selfFollowResult = um.follow(1, 1);
-    //     runTest("UserManager::follow - prevent self-follow", !selfFollowResult);
+        bool selfFollowResult = um.follow(1, 1);
+        runTest("UserManager::follow - prevent self-follow", !selfFollowResult);
         
-    //     bool duplicateFollowResult = um.follow(1, 2);
-    //     runTest("UserManager::follow - prevent duplicate follow", !duplicateFollowResult);
+        bool duplicateFollowResult = um.follow(1, 2);
+        runTest("UserManager::follow - prevent duplicate follow", !duplicateFollowResult);
         
-    //     bool unfollowResult = um.unfollow(1, 2);
-    //     runTest("UserManager::unfollow - valid unfollow", unfollowResult);
+        bool unfollowResult = um.unfollow(1, 2);
+        runTest("UserManager::unfollow - valid unfollow", unfollowResult);
         
-    //     bool isNotFollowingResult = !um.isFollowing(1, 2);
-    //     runTest("UserManager::isFollowing - after unfollow", isNotFollowingResult);
+        bool isNotFollowingResult = !um.isFollowing(1, 2);
+        runTest("UserManager::isFollowing - after unfollow", isNotFollowingResult);
         
-    //     bool invalidUnfollowResult = um.unfollow(1, 2);
-    //     runTest("UserManager::unfollow - invalid unfollow", !invalidUnfollowResult);
+        bool invalidUnfollowResult = um.unfollow(1, 2);
+        runTest("UserManager::unfollow - invalid unfollow", !invalidUnfollowResult);
         
-    //     auto userNode = um.findUserByID(1);
-    //     if (userNode) {
-    //         userNode->data.addPost(101, "tech");
-    //         Post* foundPost = userNode->data.posts.findPost(101);
-    //         runTest("UserManager - post operations via User", foundPost != nullptr);
+        auto userNode = um.findUserByID(1);
+        if (userNode) {
+            userNode->data.addPost(101, "tech");
+            Post* foundPost = userNode->data.posts.findPost(101);
+            runTest("UserManager - post operations via User", foundPost != nullptr);
             
-    //         bool deletePostResult = userNode->data.posts.removePost(101);
-    //         runTest("UserManager - delete post via User", deletePostResult);
-    //     } else {
-    //         runTest("UserManager - post operations via User", false);
-    //         runTest("UserManager - delete post via User", false);
-    //     }
+            bool deletePostResult = userNode->data.posts.removePost(101);
+            runTest("UserManager - delete post via User", deletePostResult);
+        } else {
+            runTest("UserManager - post operations via User", false);
+            runTest("UserManager - delete post via User", false);
+        }
         
-    //     um.createUser(3, "charlie");
-    //     um.follow(3, 1);
-    //     bool deleteUserResult = um.deleteUser(3);
-    //     runTest("UserManager::deleteUser - valid user", deleteUserResult);
+        um.createUser(3, "charlie");
+        um.follow(3, 1);
+        bool deleteUserResult = um.deleteUser(3);
+        runTest("UserManager::deleteUser - valid user", deleteUserResult);
         
-    //     auto deletedUser = um.findUserByID(3);
-    //     runTest("UserManager::deleteUser - user removed", deletedUser == nullptr);
+        auto deletedUser = um.findUserByID(3);
+        runTest("UserManager::deleteUser - user removed", deletedUser == nullptr);
         
-    //     testCSVOperations(um);
-    // }
+        // testCSVOperations(um);
+    }
     
     // void testCSVOperations(UserManager& um) {
     //     std::cout << "\n" << Color::YELLOW << "=== TESTING CSV OPERATIONS ===" << Color::RESET << std::endl;
@@ -327,10 +327,6 @@ public:
         user.followUser(&user2);
         User* foundFollowee = user.following->findFollowing(2);
 
-        if (foundFollowee == nullptr)
-        {
-            user.following->displayFollowing();
-        }
         runTest("User::followUser", foundFollowee != nullptr && foundFollowee->userID == 2);
         
         bool removeResult = user.following->removeFollowing(2);
@@ -363,7 +359,7 @@ public:
         testLinkedList();
         testPostPool();
         testIngestQueue();
-        // testUserManager();
+        testUserManager();
         // testUndoRedoManager();
         testAuxiliaryStructures();
         

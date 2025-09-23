@@ -2,7 +2,7 @@
 #include <cstddef> // size_t
 using namespace std;
 
-UndoRedoManager::UndoRedoManager(UserManager& um, PostPool& pool) {}
+UndoRedoManager::UndoRedoManager(UserManager& um, PostPool& pool) : userManager(um), postPool(pool) {}
     
 
 void UndoRedoManager::beginTransaction() {
@@ -21,10 +21,14 @@ void UndoRedoManager::record(const OpFrame& f) {
     
 }
 
-bool UndoRedoManager::undo() {
+bool UndoRedoManager::undo()
+{
     
+    return false;
 }
 
-bool UndoRedoManager::redo() {
-    
+bool UndoRedoManager::redo()
+{
+
+    return false;
 }
