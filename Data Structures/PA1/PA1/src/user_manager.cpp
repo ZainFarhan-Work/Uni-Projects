@@ -276,16 +276,141 @@ void UserManager::exportUsersCSV(const string& path) const
 
         outputFile << ",";
 
+        FollowNode* followNode = curr->data.following->head;
+
+        while (followNode)
+        {   
+            outputFile << followNode->user->userID;
+
+            followNode = followNode->next;
+
+            if (followNode)
+            {
+                outputFile << "|";
+            }
+            
+        }
+
+        outputFile << ",";
+
         // Print Posts
+
+        PostNode* postNode = curr->data.posts.head;
+
+        while (postNode)
+        {   
+            outputFile << postNode->post->postID << ":" << postNode->post->category << ":" << postNode->post->views;
+
+            postNode = postNode->next;
+
+            if (postNode)
+            {
+                outputFile << "|";
+            }
+            
+        }
 
         outputFile << "\n";
     }
-    
+
+    outputFile.close();
     
 }
 
 void UserManager::importUsersCSV(const string& path)
 {
+    ifstream inputFile(path);
+
+    if (!inputFile.is_open())
+    {
+        return;
+    }
+
+    users.clear();
+
+    vector<string> lines;
+    string line;
+
+    while (getline(inputFile, line))
+    {
+        if (!line.empty())
+        {
+            lines.push_back(line);
+        }
+    }
+
+    inputFile.close();
+
+    for (const string& l : lines)
+    {
+        stringstream ss(l);
+        string userIDStr, username, followeesStr, postsStr;
+
+        getline(ss, userIDStr, ',');
+        getline(ss, username, ',');
+        getline(ss, followeesStr, ',');
+        getline(ss, postsStr);
+
+        int userID = stoi(userIDStr);
+
+        // Create user
+        User user = User(userID, username);
+        
+
+        // Add posts if not empty
+        if (!postsStr.empty())
+        {
+            stringstream postStream(postsStr);
+            string postEntry;
+
+            while (getline(postStream, postEntry, '|'))
+            {
+                stringstream entryStream(postEntry);
+                string postIDStr, category, viewsStr;
+
+                getline(entryStream, postIDStr, ':');
+                getline(entryStream, category, ':');
+                getline(entryStream, viewsStr);
+
+                int postID = stoi(postIDStr);
+                int views = stoi(viewsStr);
+
+                user.addPost(postID, category);
+            }
+        }
+
+        users.push_front(user);
+    }
+
+    // -------- PASS 2: Establish follow relationships --------
+    for (const string& l : lines)
+    {
+        stringstream ss(l);
+        string userIDStr, username, followeesStr, postsStr;
+
+        getline(ss, userIDStr, ',');
+        getline(ss, username, ',');
+        getline(ss, followeesStr, ',');
+        getline(ss, postsStr);
+
+        int userID = stoi(userIDStr);
+        User user = findUserByID(userID)->data;
+
+        if (!followeesStr.empty())
+        {
+            stringstream followStream(followeesStr);
+            string followeeIDStr;
+
+            while (getline(followStream, followeeIDStr, '|'))
+            {
+                if (!followeeIDStr.empty())
+                {
+                    int followeeID = stoi(followeeIDStr);
+                    follow(userID, followeeID);
+                }
+            }
+        }
+    }
     
 }
 
