@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
 using namespace std;
 
 UserManager::UserManager() {}
@@ -314,6 +315,25 @@ void UserManager::exportUsersCSV(const string& path) const
     }
 
     outputFile.close();
+
+    ifstream inputFile(path);
+
+    if (!inputFile.is_open())
+    {
+        return;
+    }
+
+    string line;
+
+    while (getline(inputFile, line))
+    {
+        if (!line.empty())
+        {
+            cout << "\n" << line << endl;
+        }
+    }
+
+    inputFile.close();
     
 }
 
@@ -327,90 +347,37 @@ void UserManager::importUsersCSV(const string& path)
     }
 
     users.clear();
+    cout << "\n\n----- Import -----\n\n";
 
-    vector<string> lines;
     string line;
+    vector<string> tokens;
 
+
+    // First Pass
     while (getline(inputFile, line))
     {
         if (!line.empty())
         {
-            lines.push_back(line);
+            stringstream temp(line);
+            string tempString;
+            
+            while (getline(temp, tempString, ','))
+            {
+                tokens.push_back(tempString);
+                cout << "\n" << tokens.back() << endl;
+            }
+            
+            User user = User(stoi(tokens[0]), tokens[1]);
+
+            users.push_back(user);
+
+            temp.clear();
+            tokens.clear();
+            
         }
     }
 
     inputFile.close();
-
-    for (const string& l : lines)
-    {
-        stringstream ss(l);
-        string userIDStr, username, followeesStr, postsStr;
-
-        getline(ss, userIDStr, ',');
-        getline(ss, username, ',');
-        getline(ss, followeesStr, ',');
-        getline(ss, postsStr);
-
-        int userID = stoi(userIDStr);
-
-        // Create user
-        User user = User(userID, username);
-        
-
-        // Add posts if not empty
-        if (!postsStr.empty())
-        {
-            stringstream postStream(postsStr);
-            string postEntry;
-
-            while (getline(postStream, postEntry, '|'))
-            {
-                stringstream entryStream(postEntry);
-                string postIDStr, category, viewsStr;
-
-                getline(entryStream, postIDStr, ':');
-                getline(entryStream, category, ':');
-                getline(entryStream, viewsStr);
-
-                int postID = stoi(postIDStr);
-                int views = stoi(viewsStr);
-
-                user.addPost(postID, category);
-            }
-        }
-
-        users.push_front(user);
-    }
-
-    // -------- PASS 2: Establish follow relationships --------
-    for (const string& l : lines)
-    {
-        stringstream ss(l);
-        string userIDStr, username, followeesStr, postsStr;
-
-        getline(ss, userIDStr, ',');
-        getline(ss, username, ',');
-        getline(ss, followeesStr, ',');
-        getline(ss, postsStr);
-
-        int userID = stoi(userIDStr);
-        User user = findUserByID(userID)->data;
-
-        if (!followeesStr.empty())
-        {
-            stringstream followStream(followeesStr);
-            string followeeIDStr;
-
-            while (getline(followStream, followeeIDStr, '|'))
-            {
-                if (!followeeIDStr.empty())
-                {
-                    int followeeID = stoi(followeeIDStr);
-                    follow(userID, followeeID);
-                }
-            }
-        }
-    }
     
 }
 
