@@ -99,26 +99,18 @@ Post* PostList::findPost(int postID)
 
 void PostList::displayPosts() const
 {
-    if (isEmpty())
-    {
-        cout << "<EMPTY>" << endl;
-    }
+    PostNode* postNode = head;
 
-    PostNode* node = head;
+    while (postNode)
+    {   
+        cout << postNode->post->postID << ":" << postNode->post->category << ":" << postNode->post->views;
 
-    while (node)
-    {
-        cout << endl;
+        postNode = postNode->next;
 
-
-        cout << "ID: " << node->post->postID << endl;
-        cout << "Category: " << node->post->category << endl;
-        cout << "Views: " << node->post->views << endl;
-        cout << "Content: " << node->post->content << endl;
-
-        cout << endl;
-
-        node = node->next;
+        if (postNode)
+        {
+            cout << "|";
+        }
         
     }
 }

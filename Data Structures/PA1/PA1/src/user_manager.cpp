@@ -31,9 +31,9 @@ LinkedList<User>::Node* UserManager::createUser(int userID, const string& userna
         return nullptr;
     }
     
-    User newUser = User(userID, username);
+    User newUser(userID, username);
 
-    return users.push_front(newUser);
+    return users.push_back(newUser);
     
 }
 
@@ -188,7 +188,7 @@ bool UserManager::addPost(int userID, Post* post)
 
     if (u)
     {
-        // u->data.posts.addPost(*post); // THis is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
+        // u->data.posts.addPost(*post); // This is so stupid, I have to do this since u->data.addPost only takes id and ctegory as parameters
         u->data.addPost(post->postID, post->category); // This just leaves the views and content blank for now
         return true;
     }
@@ -260,6 +260,10 @@ LinkedList<User>::Node* UserManager::findUserByName(const string& username)
 
 void UserManager::exportUsersCSV(const string& path) const
 {
+    cout << "--------------" << endl;
+    dumpAllUsers(cout);
+    cout << "--------------" << endl;
+
     ofstream outputFile(path);
 
     if (!outputFile.is_open())
@@ -271,7 +275,7 @@ void UserManager::exportUsersCSV(const string& path) const
 
     for (size_t i = 0; i < users.size(); i++)
     {
-        outputFile << curr->data.userID << "," << curr->data.userName << ",";
+        outputFile << curr->data.userID << "," << curr->data.userName;
 
         // Print Followers
 
@@ -312,28 +316,11 @@ void UserManager::exportUsersCSV(const string& path) const
         }
 
         outputFile << "\n";
+
+        curr = curr->next;
     }
 
     outputFile.close();
-
-    ifstream inputFile(path);
-
-    if (!inputFile.is_open())
-    {
-        return;
-    }
-
-    string line;
-
-    while (getline(inputFile, line))
-    {
-        if (!line.empty())
-        {
-            cout << "\n" << line << endl;
-        }
-    }
-
-    inputFile.close();
     
 }
 
@@ -347,34 +334,114 @@ void UserManager::importUsersCSV(const string& path)
     }
 
     users.clear();
-    cout << "\n\n----- Import -----\n\n";
+    cout << "\n----- Import -----\n";
 
     string line;
-    vector<string> tokens;
+    vector<string> lines;
 
 
     // First Pass
     while (getline(inputFile, line))
     {
+        vector<string> tokens;
+
         if (!line.empty())
         {
-            stringstream temp(line);
-            string tempString;
+            lines.push_back(line);
+
+            size_t start = 0;
+            size_t pos;
             
-            while (getline(temp, tempString, ','))
+            while ((pos = line.find(',', start)) != string::npos)
             {
-                tokens.push_back(tempString);
-                cout << "\n" << tokens.back() << endl;
+                tokens.push_back(line.substr(start, pos - start));
+                start = pos + 1;
             }
-            
-            User user = User(stoi(tokens[0]), tokens[1]);
+            tokens.push_back(line.substr(start));
 
-            users.push_back(user);
+            createUser(stoi(tokens[0]), tokens[1]);
 
-            temp.clear();
             tokens.clear();
             
         }
+    }
+
+    inputFile.close();
+
+    // Second Pass
+    for (size_t i = 0; i < lines.size(); i++)
+    {
+        vector<string> tokens;
+        
+        size_t start = 0;
+        size_t pos;
+        
+        while ((pos = lines[i].find(',', start)) != string::npos)
+        {
+            tokens.push_back(lines[i].substr(start, pos - start));
+            start = pos + 1;
+        }
+        tokens.push_back(lines[i].substr(start));
+
+        start = 0;
+        
+        while ((pos = tokens[2].find('|', start)) != string::npos)
+        {
+            follow(stoi(tokens[0]), stoi(tokens[2].substr(start, pos - start)));
+            start = pos + 1;
+        }
+        if (tokens[2] != "") follow(stoi(tokens[0]), stoi(tokens[2].substr(start)));
+
+        start = 0;
+        
+        while ((pos = tokens[3].find('|', start)) != string::npos)
+        {
+            string postString = tokens[3].substr(start, pos - start);
+            vector<string> post;
+
+            size_t postStart = 0;
+            size_t postPos;
+
+            while ((postPos = postString.find(':', postStart)) != string::npos)
+            {
+                post.push_back(postString.substr(postStart, postPos - postStart));
+                
+                postStart = postPos + 1;
+            }
+            post.push_back(postString.substr(postStart));
+
+            start = pos + 1;
+
+            Post p(stoi(post[0]), post[1], stoi(post[2]), "");
+
+            addPost(stoi(tokens[0]), &p);
+        }
+        if (tokens[3] != "")
+        {
+            string postString = tokens[3].substr(start, pos - start);
+            vector<string> post;
+
+            size_t postStart = 0;
+            size_t postPos;
+
+            while ((postPos = postString.find(':', postStart)) != string::npos)
+            {
+                post.push_back(postString.substr(postStart, postPos - postStart));
+                
+                postStart = postPos + 1;
+            }
+            post.push_back(postString.substr(postStart));
+
+            start = pos + 1;
+
+            Post p(stoi(post[0]), post[1], stoi(post[2]), "");
+
+            addPost(stoi(tokens[0]), &p);
+        }
+
+
+
+        tokens.clear();
     }
 
     inputFile.close();
@@ -383,5 +450,56 @@ void UserManager::importUsersCSV(const string& path)
 
 void UserManager::dumpAllUsers(ostream& out) const
 {
+    LinkedList<User>::Node* temp = users.head();
+    
+    for (int i = 0; i < users.size(); i++)
+    {
+
+        out << "Id: " << temp->data.userID << ", ";
+        out << "Name: " << temp->data.userName << ", ";
+        out << "Follower: ";
+        
+        // Print Followers
+
+        FollowNode* followNode = temp->data.following->head;
+
+        while (followNode)
+        {   
+            out << followNode->user->userID;
+
+            followNode = followNode->next;
+
+            if (followNode)
+            {
+                out << "|";
+            }
+            
+        }
+
+        out << ", Posts: ";
+
+        // Print Posts
+
+        PostNode* postNode = temp->data.posts.head;
+
+        while (postNode)
+        {   
+            out << postNode->post->postID << ":" << postNode->post->category << ":" << postNode->post->views;
+
+            postNode = postNode->next;
+
+            if (postNode)
+            {
+                out << "|";
+            }
+            
+        }
+
+        out << "\n";
+
+        temp = temp->next;
+
+    }
+    
     
 }

@@ -110,5 +110,18 @@ void User::followUser(User* otherUser)
 
 void User::displayFollowing() const
 {
-    following->displayFollowing();
+    FollowNode* followNode = this->following->head;
+
+    while (followNode)
+    {   
+        cout << followNode->user->userID;
+
+        followNode = followNode->next;
+
+        if (followNode)
+        {
+            cout << "|";
+        }
+        
+    }
 }
