@@ -36,7 +36,7 @@ bool IngestQueue::enqueue(Post* p)
     {
         tail_idx = 0;
     }
-
+    
     if (tail_idx == head_idx && count >= capacity)
     {
         return false;
@@ -74,7 +74,7 @@ Post* IngestQueue::dequeue()
 
 size_t IngestQueue::size() const { return count; }
 
-bool IngestQueue::empty() const { return count >= 10 || head_idx == tail_idx && count == 0; }
+bool IngestQueue::empty() const { return head_idx == tail_idx && count == 0; }
 
 size_t IngestQueue::dequeueBatch(Post** out_array, size_t max_k)
 {

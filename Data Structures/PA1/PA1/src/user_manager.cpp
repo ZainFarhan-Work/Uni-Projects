@@ -95,11 +95,11 @@ bool UserManager::follow(int followerID, int followeeID)
         return false;
     }
 
+    
     if (follower->data.following->findFollowing(followee->data.userID))
     {
         return false;
     }
-
 
     follower->data.followUser(&followee->data);
     
@@ -184,6 +184,8 @@ bool UserManager::isFollowing(int followerID, int followeeID) const
 
 bool UserManager::addPost(int userID, Post* post)
 {
+    if (post == nullptr) return false;
+
     LinkedList<User>::Node* u = findUserByID(userID);
 
     if (u)
@@ -205,7 +207,10 @@ bool UserManager::deletePost(int userID, PostID postID)
 
     if (u)
     {
+        if (!u->data.posts.findPost(postID)) return false;
+
         u->data.posts.removePost(postID);
+        
         return true;
     }
     
@@ -260,9 +265,6 @@ LinkedList<User>::Node* UserManager::findUserByName(const string& username)
 
 void UserManager::exportUsersCSV(const string& path) const
 {
-    cout << "--------------" << endl;
-    dumpAllUsers(cout);
-    cout << "--------------" << endl;
 
     ofstream outputFile(path);
 
@@ -334,7 +336,6 @@ void UserManager::importUsersCSV(const string& path)
     }
 
     users.clear();
-    cout << "\n----- Import -----\n";
 
     string line;
     vector<string> lines;

@@ -1,4 +1,5 @@
 #include "../include/post_pool.h"
+#include <iostream>
 using namespace std;
 
 PostPool::PostPool(size_t block_size)
@@ -47,13 +48,14 @@ Post* PostPool::allocPost()
 
 void PostPool::freePost(Post* p)
 {
-    int i = 0;
-    while (i <= current_block_index)
+    if (p == nullptr)
     {
-        for (int j = 0; j < block_size; j++)
-        {
-            if (blocks[i] + j == p)
-            {
+        return;
+    }
+
+    for (int i = 0; i <= current_block_index; i++) {
+        for (int j = 0; j < block_size; j++) {
+            if (blocks[i] + j == p) {
                 p->postID = 0;
                 p->category = "";
                 p->views = 0;
@@ -61,11 +63,29 @@ void PostPool::freePost(Post* p)
                 free_list.push_back(p);
                 return;
             }
-            
         }
-        
     }
     
+    // int i = 0;
+
+    // while (i < current_block_index)
+    // {
+    //     for (int j = 0; j < block_size; j++)
+    //     {
+    //         if (blocks[i] + j == p)
+    //         {
+    //             p->postID = 0;
+    //             p->category = "";
+    //             p->views = 0;
+    //             p->content = "";
+    //             free_list.push_back(p);
+    //             return;
+    //         }
+            
+    //     }
+
+    //     i++;
+    // }
    
 }
 

@@ -86,7 +86,6 @@ User* FollowList::findFollowing(int userID)
 
     while (node && node->user->userID != userID)
     {
-        cout << "\nUserID in List: " << node->user->userID << "\n";
         node = node->next;
 
         if (node && node->user->userID == userID)
@@ -96,7 +95,13 @@ User* FollowList::findFollowing(int userID)
         
     }
 
-    return node->user;
+    if (node)
+    {
+        return node->user;
+    }
+    
+
+    return nullptr;
     
 }
 

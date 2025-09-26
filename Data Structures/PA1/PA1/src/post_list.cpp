@@ -93,7 +93,9 @@ Post* PostList::findPost(int postID)
         
     }
 
-    return node->post;
+    if (node) return node->post;
+
+    return nullptr;
     
 }
 

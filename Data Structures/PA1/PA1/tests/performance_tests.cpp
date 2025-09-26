@@ -282,6 +282,9 @@ int main() {
     stress_test_large_user_list(runner);
     stress_test_bulk_post_ingestion(runner);
 
+
+    cout << "\nhere 3\n";
+
     runner.printFinalReport();
 
     return 0;
