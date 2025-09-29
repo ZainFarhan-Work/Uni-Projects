@@ -277,6 +277,102 @@
     \end{aligned}
     \right\}
     \]
+
+\end{enumerate}
+
+\section*{Problem 7}
+\begin{enumerate}
+    \item %A
+
+    It's a valid claim, as you add the elements of A and B, \\
+    then from that you subract the elements of A, which will naturally result \\
+    in the elements of B. \\
+    However it won't always hold true, as it doesn't take into account for repetion (but for multisets, it would). \\
+    
+    \medskip
+
+    For example, suppose:
+    \[
+    A = \{1, 2\}, \quad B = \{2, 3\}
+    \]
+
+    Then:
+    \[
+    A \cup B = \{1, 2, 3\}
+    \]
+    \[
+    (A \cup B) \setminus A = \{3\}
+    \]
+    \[
+    B = \{2, 3\}
+    \]
+
+    So:
+    \[
+    (A \cup B) \setminus A = \{3\} \ne \{2, 3\} = B
+    \]
+
+    Proof:
+    \begin{align*}
+        (A \cup B) \setminus A &= (A \cup B) \cap \overline{A} \\
+        &= B \cap \overline{A} \\
+        &= B \setminus A
+    \end{align*}
+
+    \item %B
+    
+    In this very specific context, she is correct. As there will be no overlap between \\
+    discrete math and narrative essays, it will indeed be equal, as we have already \\
+    observed from the example above.
+
+    \item %C
+    
+    \begin{align*}
+    A &= \{1, 2\} \\
+    B &= \{2, 3\} \\
+    C &= \{3, 4\} \\
+    \\
+    A \cap B &= \{2\} \\
+    B \cap C &= \{3\} \\
+    C \cap A &= \emptyset \\
+    \\
+    \text{LHS} &= (A \cap B) \cup (B \cap C) \cup (C \cap A) \\
+            &= \{2\} \cup \{3\} \cup \emptyset = \{2, 3\} \\
+    \\
+    A \cup B \cup C &= \{1, 2, 3, 4\} \\
+    A \cap B \cap C &= \emptyset \\
+    \\
+    \text{RHS} &= (A \cup B \cup C) \setminus (A \cap B \cap C) \\
+            &= \{1, 2, 3, 4\} \setminus \emptyset = \{1, 2, 3, 4\} \\
+    \\
+    \text{Conclusion:} &\quad \text{LHS} = \{2, 3\} \ne \{1, 2, 3, 4\} = \text{RHS}
+    \end{align*}
+
+    Since, The LHS contains elements in at least two sets, \\
+    while the RHS contains elements in any set, except those in all three.
+
+\end{enumerate}
+
+\section*{Problem 8}
+\begin{enumerate}
+    \item %A
+    
+    Considering every element in U, if it is in A then it is also in B.
+
+    Example:
+    \begin{align*}
+    U &= \{1, 2, 3, 4, 5, 6\} \\
+    A &= \{1, 2, 3, 4\} \\
+    B &= \{1, 2\}
+    \end{align*}
+    For the Sets above, this holds true.
+
+    \item %B
+    We are taking U as our Universe of Discourse, and then stating the definition of a Subset.
+    \[
+    A \subset B \equiv \forall x (\ x \in A \to x \in B)
+    \]
+    Hence it is equivalent.
     
 \end{enumerate}
 
