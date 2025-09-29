@@ -119,6 +119,165 @@
 \begin{enumerate}
     \item %A
     
+    \begin{align*}
+    & (P \cap Q \cap R \cap Y) \cup (P \cap R) \cup (Q \cap R) \cup (R \cap Y) \\
+    =\, & R \cap \left[ (P \cap Q \cap Y) \cup P \cup Q \cup Y \right] \quad \text{(Factor out } R \text{ from each term)} \\
+    =\, & R \cap (P \cup Q \cup Y) \quad \text{(Since } (P \cap Q \cap Y) \subseteq P \cup Q \cup Y \text{)} \\
+    =\, & R \quad \text{(Because } R \cap (P \cup Q \cup Y) = R \text{ when } R \subseteq P \cup Q \cup Y \text{)}
+    \end{align*}
+
+\end{enumerate}
+
+\section*{Problem 4}
+\begin{enumerate}
+    \item %A
+
+    \begin{align*}
+    (X \setminus Y) \setminus Z 
+    &= (X \cap \overline{Y}) \cap \overline{Z} \quad \text{(since } A \setminus B \equiv A \cap \overline{B}) \\
+    &= X \cap \overline{Y} \cap \overline{Z} \\
+    &= X \cap \overline{(Y \cup Z)} \quad \text{(De Morgan’s law)} \\
+    &= X \setminus (Y \cup Z)
+    \end{align*}
+
+    \begin{center}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|c||c|c|c|}
+    \hline
+    $x \in X$ & $x \in Y$ & $x \in Z$ & $x \in (X \setminus Y) \setminus Z$ & $x \in X \setminus (Y \cup Z)$ \\
+    \hline
+    0 & 0 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 0 & 0 \\
+    0 & 1 & 0 & 0 & 0 \\
+    0 & 1 & 1 & 0 & 0 \\
+    1 & 0 & 0 & 1 & 1 \\
+    1 & 0 & 1 & 0 & 0 \\
+    1 & 1 & 0 & 0 & 0 \\
+    1 & 1 & 1 & 0 & 0 \\
+    \hline
+    \end{tabular}
+    \end{center}
+
+    \item %B
+    
+    \begin{align*}
+    \overline{(\overline{X \cap Y}) \cup (X \cap \overline{Z})}
+    &= \overline{\overline{X \cap Y} \cup (X \cap \overline{Z})} \\
+    &= \overline{\overline{X \cap Y}} \cap \overline{X \cap \overline{Z}} \quad \text{(De Morgan)} \\
+    &= (X \cap Y) \cap \overline{X \cap \overline{Z}} \quad \text{(Double Negation)} \\
+    &= (X \cap Y) \cap (\overline{X} \cup Z) \quad \text{(De Morgan)} \\
+    &= (X \cap Y \cap \overline{X}) \cup (X \cap Y \cap Z) \quad \text{(Distributive Law)} \\
+    &= \emptyset \cup (X \cap Y \cap Z) \quad \text{(Since } X \cap \overline{X} = \emptyset) \\
+    &= X \cap Y \cap Z
+    \end{align*}
+
+    \renewcommand{\arraystretch}{1.2}
+    \begin{center}
+    \begin{tabular}{|c|c|c||c|c||c|c|}
+    \hline
+    $x \in X$ & $x \in Y$ & $x \in Z$ & $\overline{X \cap Y}$ & $X \cap \overline{Z}$ & LHS & RHS \\
+    \hline
+    0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & 1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 1 & 0 & 0 & 0 \\
+    0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+    1 & 0 & 0 & 1 & 1 & 0 & 0 \\
+    1 & 0 & 1 & 1 & 0 & 0 & 0 \\
+    1 & 1 & 0 & 1 & 1 & 0 & 0 \\
+    1 & 1 & 1 & 0 & 0 & 1 & 1 \\
+    \hline
+    \end{tabular}
+    \end{center}
+    
+\end{enumerate}
+
+\section*{Promblem 5}
+\begin{enumerate}
+    \item 
+    \begin{align*}
+    D \times E \times F = \{\, & (p,7,r), (p,7,s), (p,7,t), \\
+                              & (p,8,r), (p,8,s), (p,8,t), \\
+                              & (q,7,r), (q,7,s), (q,7,t), \\
+                              & (q,8,r), (q,8,s), (q,8,t) \,\}
+    \end{align*}
+
+    \item
+    \begin{align*}
+    E \times E \times D = \{\, & (7,7,p), (7,7,q), \\
+                              & (7,8,p), (7,8,q), \\
+                              & (8,7,p), (8,7,q), \\
+                              & (8,8,p), (8,8,q) \,\}
+    \end{align*}
+
+    \item
+    \begin{align*}
+    D \times D \times D = \{\, & (p,p,p), (p,p,q), \\
+                              & (p,q,p), (p,q,q), \\
+                              & (q,p,p), (q,p,q), \\
+                              & (q,q,p), (q,q,q) \,\}
+    \end{align*}
+    
+
+\end{enumerate}
+
+\section*{Problem 6}
+\begin{enumerate}
+    \item %A
+
+    \begin{align*}
+    \emptyset &= \text{the empty set} \\
+    \mathcal{P}(\emptyset) &= \{ \emptyset \} \\
+    A &= \mathcal{P}(\mathcal{P}(\emptyset)) = \mathcal{P}(\{ \emptyset \}) = \{ \emptyset, \{ \emptyset \} \}
+    \end{align*}
+
+    \vspace{1em}
+
+    Now compute:
+
+    \begin{align*}
+    B = \mathcal{P}(A) &= \mathcal{P}(\{ \emptyset, \{ \emptyset \} \}) \\
+    &= \left\{
+        \begin{aligned}
+        &\emptyset, \\
+        &\{ \emptyset \}, \\
+        &\{ \{ \emptyset \} \}, \\
+        &\{ \emptyset, \{ \emptyset \} \}
+        \end{aligned}
+    \right\}
+    \end{align*}
+
+    \vspace{1em}
+
+    Define:
+    \[
+    \begin{aligned}
+    b_1 &= \emptyset \\
+    b_2 &= \{ \emptyset \} \\
+    b_3 &= \{ \{ \emptyset \} \} \\
+    b_4 &= \mathcal{P}(A) = \{ \emptyset, \{ \emptyset \} \}
+    \end{aligned}
+    \]
+
+    So we can write:
+    \[
+    B = \{ b_1, b_2, b_3, b_4 \}
+    \]
+
+    \vspace{1em}
+
+    Now compute:
+    \[
+    C = \mathcal{P}(B) = \left\{
+    \begin{aligned}
+    & \emptyset, \\
+    & \{ b_1 \}, \{ b_2 \}, \{ b_3 \}, \{ b_4 \}, \\
+    & \{ b_1, b_2 \}, \{ b_1, b_3 \}, \{ b_1, b_4 \}, \{ b_2, b_3 \}, \{ b_2, b_4 \}, \{ b_3, b_4 \}, \\
+    & \{ b_1, b_2, b_3 \}, \{ b_1, b_2, b_4 \}, \{ b_1, b_3, b_4 \}, \{ b_2, b_3, b_4 \}, \\
+    & \{ b_1, b_2, b_3, b_4 \}
+    \end{aligned}
+    \right\}
+    \]
+    
 \end{enumerate}
 
 \end{document}
